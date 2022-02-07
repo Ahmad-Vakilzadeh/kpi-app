@@ -113,7 +113,7 @@ class _PageMangeState extends State<PageMange>
                   color: kShadeDarkColor,
                 ),
                 title: const Text(
-                  "در باره ما",
+                  "درباره ما",
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     color: kShadeDarkColor,

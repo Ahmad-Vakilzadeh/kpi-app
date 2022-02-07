@@ -46,7 +46,6 @@ class InputSelector extends StatelessWidget {
         ),
         Container(
           height: 60,
-          width: 150,
           decoration: BoxDecoration(
             border: Border.all(color: kShadeDarkColor),
             borderRadius: BorderRadius.circular(15),

@@ -190,7 +190,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           children: [
                             DropDownIntroWidgets(
                               isOpen: isLastOneOpen,
-                              name: "در باره ما",
+                              name: "درباره ما",
                               desc: "در مورد شرکت ما بدانید.",
                               iconPath: Icons.business_center_outlined,
                             ),

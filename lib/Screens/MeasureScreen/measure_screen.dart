@@ -332,31 +332,97 @@ class _MeasureScreenState extends State<MeasureScreen>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        var data = await SqfL.open();
-                                        List<Map<String, dynamic>> exdiaData =
-                                            await data.rawQuery(
-                                                "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber");
-                                        List<Map<String, dynamic>> allData =
-                                            await data.rawQuery(
-                                                "SELECT DISTINCT exdia FROM pe");
-                                        showModalBottomSheet(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            context: context,
-                                            builder: (context) {
-                                              return SingleChildScrollView(
-                                                child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          var data = await SqfL.open();
+                                          List<Map<String, dynamic>> exdiaData =
+                                              await data.rawQuery(
+                                                  "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber");
+                                          List<Map<String, dynamic>> allData =
+                                              await data.rawQuery(
+                                                  "SELECT DISTINCT exdia FROM pe");
+                                          showModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              context: context,
+                                              builder: (context) {
+                                                return SingleChildScrollView(
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(15),
+                                                          child: const Text(
+                                                            "قطر لوله را انتخاب کنید",
+                                                            style: TextStyle(
+                                                                fontSize: 24,
+                                                                color:
+                                                                    kShadeDarkColor,
+                                                                fontFamily:
+                                                                    "Vazir"),
+                                                          ),
+                                                        ),
+                                                        const Divider(
+                                                            height: 10,
+                                                            color:
+                                                                kShadeLiteColor),
+                                                        Column(
+                                                          children:
+                                                              widgetReturnerExdia(
+                                                            allData,
+                                                            notAvalibleResultExdia(
+                                                                allData,
+                                                                exdiaData),
+                                                          ),
+                                                        )
+                                                      ]),
+                                                );
+                                              });
+                                        },
+                                        child: InputSelector(
+                                          icon:
+                                              Icons.playlist_add_check_outlined,
+                                          text: exdia.toString(),
+                                          name: "قطر لوله",
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          var data = await SqfL.open();
+                                          List<Map<String, dynamic>> allData =
+                                              await data.rawQuery(
+                                                  "SELECT DISTINCT pressure FROM pe");
+                                          List<Map<String, dynamic>>
+                                              pressureData =
+                                              await data.rawQuery(
+                                                  "SELECT DISTINCT pressure FROM pe WHERE PE = $peNumber AND exdia= $exdia");
+                                          showModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              context: context,
+                                              builder: (context) {
+                                                return SingleChildScrollView(
+                                                  child: Column(
                                                     children: [
                                                       Container(
                                                         margin: const EdgeInsets
                                                             .all(15),
                                                         child: const Text(
-                                                          "قطر لوله را انتخاب کنید",
+                                                          "فشار نامی را انتخاب کنید",
                                                           style: TextStyle(
                                                               fontSize: 24,
                                                               color:
@@ -366,81 +432,28 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                         ),
                                                       ),
                                                       const Divider(
-                                                          height: 10,
-                                                          color:
-                                                              kShadeLiteColor),
+                                                        height: 10,
+                                                        color: kShadeDarkColor,
+                                                      ),
                                                       Column(
                                                         children:
-                                                            widgetReturnerExdia(
-                                                          allData,
-                                                          notAvalibleResultExdia(
-                                                              allData,
-                                                              exdiaData),
-                                                        ),
+                                                            widgetRetunerPressure(
+                                                                allData,
+                                                                notAvalibleResult(
+                                                                    allData,
+                                                                    pressureData)),
                                                       )
-                                                    ]),
-                                              );
-                                            });
-                                      },
-                                      child: InputSelector(
-                                        icon: Icons.playlist_add_check_outlined,
-                                        text: exdia.toString(),
-                                        name: "قطر لوله",
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        var data = await SqfL.open();
-                                        List<Map<String, dynamic>> allData =
-                                            await data.rawQuery(
-                                                "SELECT DISTINCT pressure FROM pe");
-                                        List<Map<String, dynamic>>
-                                            pressureData = await data.rawQuery(
-                                                "SELECT DISTINCT pressure FROM pe WHERE PE = $peNumber AND exdia= $exdia");
-                                        showModalBottomSheet(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            context: context,
-                                            builder: (context) {
-                                              return SingleChildScrollView(
-                                                child: Column(
-                                                  children: [
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                              15),
-                                                      child: const Text(
-                                                        "فشار نامی را انتخاب کنید",
-                                                        style: TextStyle(
-                                                            fontSize: 24,
-                                                            color:
-                                                                kShadeDarkColor,
-                                                            fontFamily:
-                                                                "Vazir"),
-                                                      ),
-                                                    ),
-                                                    const Divider(
-                                                      height: 10,
-                                                      color: kShadeDarkColor,
-                                                    ),
-                                                    Column(
-                                                      children:
-                                                          widgetRetunerPressure(
-                                                              allData,
-                                                              notAvalibleResult(
-                                                                  allData,
-                                                                  pressureData)),
-                                                    )
-                                                  ],
-                                                ),
-                                              );
-                                            });
-                                      },
-                                      child: InputSelector(
-                                        icon: Icons.playlist_add_check_outlined,
-                                        text: pressure.toString(),
-                                        name: "فشار نامی",
+                                                    ],
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        child: InputSelector(
+                                          icon:
+                                              Icons.playlist_add_check_outlined,
+                                          text: pressure.toString(),
+                                          name: "فشار نامی",
+                                        ),
                                       ),
                                     )
                                   ],

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:kpi_app/Engine/measuring.dart';
 import 'package:kpi_app/constants.dart';
@@ -119,9 +121,16 @@ class FutrueListStandards extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {
         return SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: createListOfStandards(context, snapshot.data!),
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: createListOfStandards(context, snapshot.data!),
+              ),
+              const SizedBox(
+                height: 96,
+              ),
+            ],
           ),
         );
       },
