@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+import '../constants.dart';
+
+class InputMeasure extends StatefulWidget {
+  const InputMeasure({
+    required this.hintText,
+    required this.icon,
+    required this.name,
+    required this.customController,
+    required this.onChange,
+    Key? key,
+  }) : super(key: key);
+
+  final String name;
+  final IconData icon;
+  final String hintText;
+  final TextEditingController customController;
+  final Function onChange;
+
+  @override
+  State<InputMeasure> createState() => _InputMeasureState();
+}
+
+class _InputMeasureState extends State<InputMeasure> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              widget.name,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: kShadeDarkColor,
+                fontFamily: "Vazir",
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Icon(
+              widget.icon,
+              color: kPrimaryColor,
+              size: 24,
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        TextFormField(
+          onChanged: (value) {
+            if (widget.onChange != null) widget.onChange();
+          },
+          controller: widget.customController,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: const BorderSide(
+                color: kShadeDarkColor,
+                width: 1,
+              ),
+            ),
+            hintText: widget.hintText,
+            hintTextDirection: TextDirection.rtl,
+            hintStyle: const TextStyle(
+              color: Colors.grey,
+              fontFamily: "Vazir",
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}

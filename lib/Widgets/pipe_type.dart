@@ -1,0 +1,140 @@
+import 'package:flutter/material.dart';
+import 'package:kpi_app/Screens/MeasureScreen/measure_screen.dart';
+
+import '../constants.dart';
+
+class PipeTypeWidget extends StatefulWidget {
+  PipeTypeWidget({
+    required this.peNumber,
+    required this.onTapOne,
+    required this.onTapTwo,
+    required this.onTapFour,
+    required this.onTapThree,
+  });
+  late int peNumber;
+  Function onTapOne;
+  Function onTapTwo;
+  Function onTapThree;
+  Function onTapFour;
+
+  @override
+  State<PipeTypeWidget> createState() => _PipeTypeWidgetState();
+}
+
+class _PipeTypeWidgetState extends State<PipeTypeWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 65,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xffC6E0E8),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: widget.peNumber == 80
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.onTapOne();
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "PE80",
+                        style: TextStyle(
+                          color: kShadeDarkColor,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Vaizr",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTapTwo();
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "PE100",
+                        style: TextStyle(
+                          color: Color(0xff5795A1),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Vaizr",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.onTapThree();
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "PE80",
+                        style: TextStyle(
+                          color: Color(0xff5795A1),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Vaizr",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTapFour();
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "PE100",
+                        style: TextStyle(
+                          color: kShadeDarkColor,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Vaizr",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}

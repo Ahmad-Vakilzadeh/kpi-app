@@ -1,0 +1,15 @@
+import 'package:flutter/material.dart';
+
+class InheritedDataProvider extends InheritedWidget {
+  final ScrollController scrollController;
+  // ignore: use_key_in_widget_constructors
+  const InheritedDataProvider({
+    required Widget child,
+    required this.scrollController,
+  }) : super(child: child);
+  @override
+  bool updateShouldNotify(InheritedDataProvider oldWidget) =>
+      scrollController != oldWidget.scrollController;
+  static InheritedDataProvider of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedDataProvider>()!;
+}
