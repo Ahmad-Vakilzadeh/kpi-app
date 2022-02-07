@@ -17,15 +17,15 @@ dependencies:
   rive_loading:
   sqflite:
 
-  cupertino_icons: ^1.0.2
-  rive: ^0.7.33
-  shared_preferences: ^2.0.12
+  cupertino_icons: ^1.0.4
+  rive: ^0.8.1
+  shared_preferences: ^2.0.13
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: ^1.0.4
   flutter_launcher_icons: ^0.9.2
 
 flutter_icons:
