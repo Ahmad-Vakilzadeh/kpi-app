@@ -136,7 +136,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               isOpen: isSecondOneOpen,
                               name: "استاندارد",
                               //Standard
-                              desc: "از استاندارد های روز لوله .",
+                              desc: "از استاندارد های روز لوله.",
                               iconPath: Icons.document_scanner_outlined,
                             ),
                             !isSecondOneOpen
@@ -409,13 +409,17 @@ class DropDownIntroWidgets extends StatelessWidget {
                         color: kShadeDarkColor,
                       ),
                     ),
-                    Text(
-                      desc,
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: "Vazir",
-                        color: kShadeDarkColor,
+                    Expanded(
+                      child: Text(
+                        desc,
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.right,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontFamily: "Vazir",
+                          color: kShadeDarkColor,
+                        ),
                       ),
                     ),
                   ],

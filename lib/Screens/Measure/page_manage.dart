@@ -63,6 +63,7 @@ class _PageMangeState extends State<PageMange>
             "پلی اتیلن کرمان",
             style: TextStyle(
               color: kShadeDarkColor,
+              fontFamily: "Vazir",
             ),
           ),
           backgroundColor: Colors.white,

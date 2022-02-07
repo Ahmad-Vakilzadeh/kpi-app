@@ -35,6 +35,8 @@ class _MeasureScreenState extends State<MeasureScreen>
   late TextEditingController moneyCount;
   late TextEditingController lengthCount;
   // controllers for exida and preesure
+  bool pressureIsReset = false;
+  bool exdiaIsReset = false;
 
   @override
   void initState() {
@@ -73,9 +75,7 @@ class _MeasureScreenState extends State<MeasureScreen>
     var data = await SqfL.open();
     calculatedAnswer = await data.rawQuery(
         "SELECT DISTINCT * FROM pe WHERE PE = $peNumber AND exdia= $exdia AND pressure = $pressure");
-    if (data.rawQuery(
-            "SELECT DISTINCT * FROM pe WHERE PE = $peNumber AND exdia= $exdia AND pressure = $pressure") ==
-        null) {
+    if (calculatedAnswer.isEmpty) {
       return [];
     } else {
       return calculatedAnswer;
@@ -106,7 +106,7 @@ class _MeasureScreenState extends State<MeasureScreen>
   widgetReturnerExdia(
       List<Map<String, dynamic>> allData, List<String> notAvalible) {
     List<Widget> mainResult = [];
-    allData.forEach((element) {
+    for (var element in allData) {
       if (notAvalible.contains(element["exdia"].toString())) {
         mainResult.add(ListTile(
           leading: const Icon(Icons.circle_outlined),
@@ -118,6 +118,8 @@ class _MeasureScreenState extends State<MeasureScreen>
             setState(() {
               errorStateExdia = true;
               exdia = element["exdia"];
+              exdiaIsReset = false;
+              pressureIsReset = true;
               Navigator.pop(context);
             });
           },
@@ -133,29 +135,30 @@ class _MeasureScreenState extends State<MeasureScreen>
             setState(() {
               errorStateExdia = false;
               exdia = element["exdia"];
+              exdiaIsReset = false;
               Navigator.pop(context);
             });
           },
         ));
       }
-    });
+    }
     return mainResult;
   }
 
   notAvalibleResultExdia(List<Map<String, dynamic>> selectedListOne,
       List<Map<String, dynamic>> selectedListTwo) {
     List<String> khers = [];
-    selectedListOne.forEach((element1) {
+    for (var element1 in selectedListOne) {
       bool isSame = false;
-      selectedListTwo.forEach((element2) {
+      for (var element2 in selectedListTwo) {
         if (element1["exdia"] == element2["exdia"]) {
           isSame = true;
         }
-      });
+      }
       if (!isSame) {
         khers.add(element1["exdia"].toString());
       }
-    });
+    }
 
     return khers;
   }
@@ -163,7 +166,7 @@ class _MeasureScreenState extends State<MeasureScreen>
   widgetRetunerPressure(
       List<Map<String, dynamic>> allData, List<String> notAvalible) {
     List<Widget> mainResult = [];
-    allData.forEach((element) {
+    for (var element in allData) {
       if (notAvalible.contains(element["pressure"].toString())) {
         mainResult.add(ListTile(
           leading: const Icon(Icons.circle_outlined),
@@ -175,6 +178,8 @@ class _MeasureScreenState extends State<MeasureScreen>
             setState(() {
               errorStatepressure = true;
               pressure = double.tryParse(element["pressure"].toString());
+              pressureIsReset = false;
+              exdiaIsReset = true;
               Navigator.pop(context);
             });
           },
@@ -190,29 +195,31 @@ class _MeasureScreenState extends State<MeasureScreen>
             setState(() {
               errorStatepressure = false;
               pressure = double.tryParse(element["pressure"].toString());
+              pressureIsReset = false;
+              exdiaIsReset = true;
               Navigator.pop(context);
             });
           },
         ));
       }
-    });
+    }
     return mainResult;
   }
 
   notAvalibleResult(List<Map<String, dynamic>> selectedListOne,
       List<Map<String, dynamic>> selectedListTwo) {
     List<String> khers = [];
-    selectedListOne.forEach((element1) {
+    for (var element1 in selectedListOne) {
       bool isSame = false;
-      selectedListTwo.forEach((element2) {
+      for (var element2 in selectedListTwo) {
         if (element1["pressure"] == element2["pressure"]) {
           isSame = true;
         }
-      });
+      }
       if (!isSame) {
         khers.add(element1["pressure"].toString());
       }
-    });
+    }
 
     return khers;
   }
@@ -301,21 +308,29 @@ class _MeasureScreenState extends State<MeasureScreen>
                                   onTapOne: () {
                                     setState(() {
                                       peNumber = 80;
+                                      pressureIsReset = true;
+                                      exdiaIsReset = true;
                                     });
                                   },
                                   onTapTwo: () {
                                     setState(() {
                                       peNumber = 100;
+                                      pressureIsReset = true;
+                                      exdiaIsReset = true;
                                     });
                                   },
                                   onTapThree: () {
                                     setState(() {
                                       peNumber = 80;
+                                      pressureIsReset = true;
+                                      exdiaIsReset = true;
                                     });
                                   },
                                   onTapFour: () {
                                     setState(() {
                                       peNumber = 100;
+                                      pressureIsReset = true;
+                                      exdiaIsReset = true;
                                     });
                                   },
                                   peNumber: peNumber,
@@ -338,10 +353,10 @@ class _MeasureScreenState extends State<MeasureScreen>
                                           var data = await SqfL.open();
                                           List<Map<String, dynamic>> exdiaData =
                                               await data.rawQuery(
-                                                  "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber");
+                                                  "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber order by exdia");
                                           List<Map<String, dynamic>> allData =
                                               await data.rawQuery(
-                                                  "SELECT DISTINCT exdia FROM pe");
+                                                  "SELECT DISTINCT exdia FROM pe order by exdia");
                                           showModalBottomSheet(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -389,7 +404,9 @@ class _MeasureScreenState extends State<MeasureScreen>
                                         child: InputSelector(
                                           icon:
                                               Icons.playlist_add_check_outlined,
-                                          text: exdia.toString(),
+                                          text: exdiaIsReset
+                                              ? "انتخاب کنید"
+                                              : exdia.toString(),
                                           name: "قطر لوله",
                                         ),
                                       ),
@@ -403,11 +420,13 @@ class _MeasureScreenState extends State<MeasureScreen>
                                           var data = await SqfL.open();
                                           List<Map<String, dynamic>> allData =
                                               await data.rawQuery(
-                                                  "SELECT DISTINCT pressure FROM pe");
+                                                  "SELECT DISTINCT pressure FROM pe order by pressure");
+                                          print(
+                                              "query : SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
                                           List<Map<String, dynamic>>
                                               pressureData =
                                               await data.rawQuery(
-                                                  "SELECT DISTINCT pressure FROM pe WHERE PE = $peNumber AND exdia= $exdia");
+                                                  "SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
                                           showModalBottomSheet(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -451,7 +470,9 @@ class _MeasureScreenState extends State<MeasureScreen>
                                         child: InputSelector(
                                           icon:
                                               Icons.playlist_add_check_outlined,
-                                          text: pressure.toString(),
+                                          text: pressureIsReset
+                                              ? "انتخاب کنید"
+                                              : pressure.toString(),
                                           name: "فشار نامی",
                                         ),
                                       ),
@@ -505,221 +526,215 @@ class _MeasureScreenState extends State<MeasureScreen>
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Container(
+                            width: double.infinity,
                             margin: const EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 20,
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const Text(
-                                  "مقادیر محاسبه شده",
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: kShadeDarkColor,
-                                    fontFamily: "Vazir",
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
+                                if (pressureIsReset || exdiaIsReset)
+                                  const Text(
+                                    "لطفا فشار نامی و یا قطر لوله را اصلاح کنید",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: "Vazir",
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 12,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      errorStateExdia
-                                          ? "ضخامت را عوض کنید"
-                                          : errorStatepressure
-                                              ? "فشار را عوص کنید"
-                                              : snapshot.data[0]["thicknessmm"]
-                                                  .toString(),
-                                      style: const TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                if (!pressureIsReset && !exdiaIsReset)
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const Text(
+                                        "مقادیر محاسبه شده",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: kShadeDarkColor,
+                                          fontFamily: "Vazir",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                        ),
                                       ),
-                                    ),
-                                    const Text(
-                                      "ضخامت لوله",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
+                                      const SizedBox(
+                                        height: 20,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      errorStateExdia
-                                          ? "ضخامت را عوض کنید"
-                                          : errorStatepressure
-                                              ? "فشار را عوص کنید"
-                                              : snapshot.data[0]["weight"]
-                                                  .toStringAsFixed(4),
-                                      style: const TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            getField(snapshot.data,
+                                                    "thicknessmm")
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Text(
+                                            "ضخامت لوله",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    const Text(
-                                      "وزن هر متر لوله",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            getField(snapshot.data, "weight")
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Text(
+                                            "وزن هر متر لوله",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      errorStateExdia
-                                          ? "ضخامت را عوض کنید"
-                                          : errorStatepressure
-                                              ? "فشار را عوص کنید"
-                                              : (snapshot.data[0]["weight"] *
-                                                      getNumberFromController(
-                                                          lengthCount))
-                                                  .toStringAsFixed(4),
-                                      style: const TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            (getField(snapshot.data, "weight") *
+                                                    getNumberFromController(
+                                                        lengthCount))
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Text(
+                                            "وزن مجموع تراز",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    const Text(
-                                      "وزن مجموع تراز",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            (getField(snapshot.data, "exdia") /
+                                                    getField(snapshot.data,
+                                                        "thicknessmm"))
+                                                .toStringAsFixed(2),
+                                            style: const TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Text(
+                                            "نسبت قطر به ضخامت",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      errorStateExdia
-                                          ? "ضخامت را عوض کنید"
-                                          : errorStatepressure
-                                              ? "فشار را عوص کنید"
-                                              : (snapshot.data[0]["exdia"] /
-                                                          snapshot.data[0]
-                                                              ["thicknessmm"]
-                                                      as double)
-                                                  .toStringAsFixed(2),
-                                      style: const TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        height: 3,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            color: kPrimaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
                                       ),
-                                    ),
-                                    const Text(
-                                      "نسبت قطر به ضخامت",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            (getField(snapshot.data, "weight") *
+                                                    getNumberFromController(
+                                                        moneyCount))
+                                                .toStringAsFixed(2),
+                                            style: const TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Text(
+                                            "قیمت هر متر لوله",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  height: 3,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      color: kPrimaryColor,
-                                      borderRadius: BorderRadius.circular(15)),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      errorStateExdia
-                                          ? "ضخامت را عوض کنید"
-                                          : errorStatepressure
-                                              ? "فشار را عوص کنید"
-                                              : (snapshot.data[0]["weight"] *
-                                                      getNumberFromController(
-                                                          moneyCount))
-                                                  .toStringAsFixed(2),
-                                      style: const TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            (getNumberFromController(
+                                                        lengthCount) *
+                                                    getField(snapshot.data,
+                                                        "weight") *
+                                                    getNumberFromController(
+                                                        moneyCount))
+                                                .toStringAsFixed(4),
+                                            style: const TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Text(
+                                            "قیمت مجموع متراژ",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: kShadeDarkColor,
+                                              fontFamily: "Vazir",
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    const Text(
-                                      "قیمت هر متر لوله",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      errorStateExdia
-                                          ? "ضخامت را عوض کنید"
-                                          : errorStatepressure
-                                              ? "فشار را عوص کنید"
-                                              : (getNumberFromController(
-                                                          lengthCount) *
-                                                      snapshot.data[0]
-                                                          ["weight"] *
-                                                      getNumberFromController(
-                                                          moneyCount))
-                                                  .toStringAsFixed(4),
-                                      style: const TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "قیمت مجموع متراژ",
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
                               ],
                             ),
                           ),
@@ -742,4 +757,9 @@ class _MeasureScreenState extends State<MeasureScreen>
           }
         });
   }
+}
+
+double getField(List data, String fieldName) {
+  if (data.isEmpty) return -1.0;
+  return double.parse(data[0][fieldName].toString());
 }

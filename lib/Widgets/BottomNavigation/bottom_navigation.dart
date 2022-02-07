@@ -176,13 +176,13 @@ class _BottomBarState extends State<BottomBar>
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Material(
-                    color: widget.barColor,
+                  width: MediaQuery.of(context).size.width * 1,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     child: TabBar(
                       indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
                       controller: widget.tabController,
@@ -194,8 +194,8 @@ class _BottomBarState extends State<BottomBar>
                             ? Container(
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
                                 decoration: BoxDecoration(
                                   color: kPrimaryColor,
                                   borderRadius: BorderRadius.circular(15),

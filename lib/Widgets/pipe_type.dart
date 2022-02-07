@@ -36,47 +36,49 @@ class _PipeTypeWidgetState extends State<PipeTypeWidget> {
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    widget.onTapOne();
-                  },
-                  child: Container(
-                    width: 150,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "PE80",
-                        style: TextStyle(
-                          color: kShadeDarkColor,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Vazir",
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.onTapOne();
+                    },
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "PE80",
+                          style: TextStyle(
+                            color: kShadeDarkColor,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Vazir",
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    widget.onTapTwo();
-                  },
-                  child: Container(
-                    width: 150,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "PE100",
-                        style: TextStyle(
-                          color: Color(0xff5795A1),
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Vaizr",
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.onTapTwo();
+                    },
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "PE100",
+                          style: TextStyle(
+                            color: Color(0xff5795A1),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Vaizr",
+                          ),
                         ),
                       ),
                     ),

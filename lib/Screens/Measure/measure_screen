@@ -20,6 +20,7 @@ class MmeasureScreenState extends State<MeasureScreen>
   late bool isCalculatedd = false;
   late ScrollController _controller;
 
+
   @override
   void initState() {
     super.initState();
@@ -511,7 +512,7 @@ class MmeasureScreenState extends State<MeasureScreen>
                               child: InputSelector(
                                 icon: Icons.playlist_add_check_outlined,
                                 name: "فشار نامی",
-                                text: pressure.toString(),
+                                text: pressureIsReset?"انتخاب کنید": pressure.toString(),
                               ),
                             ),
                             const SizedBox(
