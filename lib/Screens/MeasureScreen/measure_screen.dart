@@ -644,9 +644,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            (getField(snapshot.data, "exdia") /
-                                                    getField(snapshot.data,
-                                                        "thicknessmm"))
+                                            getField(snapshot.data, "SDR")
                                                 .toStringAsFixed(2),
                                             style: const TextStyle(
                                               color: kShadeDarkColor,
