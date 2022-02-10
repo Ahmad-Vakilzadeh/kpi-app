@@ -95,6 +95,73 @@ class _MeasureScreenState extends State<MeasureScreen>
   }
   // returner for TXTFROM
 
+  widgetReturnerAllPipes(List<Map<String, dynamic>> allData) {
+    List<Widget> mainResult = [];
+    for (var element in allData) {
+      mainResult.add(GestureDetector(
+        onTap: () {
+          setState(() {
+            peNumber = element["PE"];
+            pressure = double.tryParse(element["pressure"].toString());
+            exdia = element["exdia"];
+            Navigator.of(context).pop();
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+              border: Border.all(color: kShadeDarkColor),
+              borderRadius: BorderRadius.circular(15)),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: [
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Center(
+                    child: Text(
+                      "${element["PE"]}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Vazir",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Center(
+                    child: Text(
+                      "${element["pressure"]}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Vazir",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Center(
+                    child: Text(
+                      "${element["exdia"]}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Vazir",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      ));
+    }
+    return mainResult;
+  }
+
   //bottom sheet exdia
   widgetReturnerExdia(List<Map<String, dynamic>> allData) {
     List<Widget> mainResult = [];
@@ -425,7 +492,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     child: Text(
-                                      "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید.",
+                                      "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید. لطفا فهرست همه لوله ها را ملاحضه بفرمایید.",
                                       softWrap: true,
                                       textDirection: TextDirection.rtl,
                                       style: const TextStyle(
@@ -442,6 +509,169 @@ class _MeasureScreenState extends State<MeasureScreen>
                                   height: 12,
                                 ),
                               ],
+                              GestureDetector(
+                                onTap: () async {
+                                  var data = await SqfL.open();
+                                  List<
+                                      Map<String,
+                                          dynamic>> allData = await data.rawQuery(
+                                      "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY PE,pressure,exdia");
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return SingleChildScrollView(
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                              vertical: 16,
+                                              horizontal: 16,
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                const Text(
+                                                  "فرست لوله های قابل تولید در شرکت پلی اتیلن کرمان",
+                                                  textAlign: TextAlign.center,
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  style: TextStyle(
+                                                    color: kShadeDarkColor,
+                                                    fontFamily: "Vazir",
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                const Text(
+                                                  "برای انتخاب هر یک  از لوله ها روی آن بزنید",
+                                                  textAlign: TextAlign.center,
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  style: TextStyle(
+                                                    color: kShadeDarkColor,
+                                                    fontFamily: "Vazir",
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 16),
+                                                Row(
+                                                  children: [
+                                                    SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                        child: const Center(
+                                                          child: Text(
+                                                            "PE",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  kShadeDarkColor,
+                                                              fontFamily:
+                                                                  "Vazir",
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        )),
+                                                    SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                        child: const Center(
+                                                          child: Text(
+                                                            "فشار نامی",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  kShadeDarkColor,
+                                                              fontFamily:
+                                                                  "Vazir",
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        )),
+                                                    SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                        child: const Center(
+                                                          child: Text(
+                                                            "قطر",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  kShadeDarkColor,
+                                                              fontFamily:
+                                                                  "Vazir",
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                          ),
+                                                        ))
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children:
+                                                      widgetReturnerAllPipes(
+                                                          allData),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                    padding: const EdgeInsets.all(12),
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: kShadeDarkColor,
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "فهرست تمامی لوله ها",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Vazir",
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
                               Container(
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 20),
@@ -498,7 +728,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                           margin: const EdgeInsets.symmetric(
                                               horizontal: 16),
                                           child: Text(
-                                            "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید.",
+                                            "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید. لطفا فهرست همه لوله ها را ملاحضه بفرمایید.",
                                             softWrap: true,
                                             textDirection: TextDirection.rtl,
                                             style: const TextStyle(
