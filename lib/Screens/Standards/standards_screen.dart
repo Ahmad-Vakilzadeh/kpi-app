@@ -50,7 +50,7 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                   borderRadius: BorderRadius.circular(15)),
               child: const Icon(
                 Icons.document_scanner_outlined,
-                color: kShadeDarkColor,
+                color: Colors.white,
                 size: 24,
               ),
             )

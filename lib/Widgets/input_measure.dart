@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../constants.dart';
 
@@ -57,6 +58,9 @@ class _InputMeasureState extends State<InputMeasure> {
           onChanged: (value) {
             if (widget.onChange != null) widget.onChange();
           },
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r'^\d+(?:\.\d+)?$')),
+          ],
           controller: widget.customController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(

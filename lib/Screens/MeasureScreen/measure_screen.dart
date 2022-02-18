@@ -110,8 +110,10 @@ class _MeasureScreenState extends State<MeasureScreen>
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-              border: Border.all(color: kShadeDarkColor),
-              borderRadius: BorderRadius.circular(15)),
+            // border: Border.all(color: kShadeDarkColor),
+            borderRadius: BorderRadius.circular(15),
+            color: const Color(0xffC6E0E8),
+          ),
           margin: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
@@ -121,10 +123,10 @@ class _MeasureScreenState extends State<MeasureScreen>
                     child: Text(
                       "${element["PE"]}",
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: kShadeDarkColor,
                         fontFamily: "Vazir",
                         fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   )),
@@ -134,10 +136,10 @@ class _MeasureScreenState extends State<MeasureScreen>
                     child: Text(
                       "${element["pressure"]}",
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: kShadeDarkColor,
                         fontFamily: "Vazir",
                         fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   )),
@@ -147,10 +149,10 @@ class _MeasureScreenState extends State<MeasureScreen>
                     child: Text(
                       "${element["exdia"]}",
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: kShadeDarkColor,
                         fontFamily: "Vazir",
                         fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ))
@@ -517,6 +519,9 @@ class _MeasureScreenState extends State<MeasureScreen>
                                           dynamic>> allData = await data.rawQuery(
                                       "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY PE,pressure,exdia");
                                   showModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)
+                                    ),
                                       context: context,
                                       builder: (context) {
                                         return SingleChildScrollView(
@@ -550,7 +555,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                   style: TextStyle(
                                                     color: kShadeDarkColor,
                                                     fontFamily: "Vazir",
-                                                    fontSize: 12,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
@@ -634,8 +639,11 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                                       .w400,
                                                             ),
                                                           ),
-                                                        ))
+                                                        )),
                                                   ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
                                                 ),
                                                 Column(
                                                   children:
