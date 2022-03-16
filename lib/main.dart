@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
           future: _isShownChecker(),
           builder: (context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasData) {
-              print("hello this is working ******");
               return SplashScreen.navigate(
                 name: "assets/animation/kp_splash.riv",
                 backgroundColor: kPrimaryColor,
@@ -37,7 +36,6 @@ class MyApp extends StatelessWidget {
                 startAnimation: 'Animation 1',
               );
             } else {
-              print("hello this is not working");
               return Container(
                 color: Colors.blue,
               );

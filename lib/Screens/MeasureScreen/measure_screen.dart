@@ -366,9 +366,9 @@ class _MeasureScreenState extends State<MeasureScreen>
                                       child: GestureDetector(
                                         onTap: () async {
                                           var data = await SqfL.open();
-                                          List<Map<String, dynamic>> exdiaData =
-                                              await data.rawQuery(
-                                                  "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber order by exdia");
+                                          // List<Map<String, dynamic>> exdiaData =
+                                              // await data.rawQuery(
+                                                  // "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber order by exdia");
                                           List<Map<String, dynamic>> allData =
                                               await data.rawQuery(
                                                   "SELECT DISTINCT exdia FROM pe order by exdia");
@@ -431,12 +431,10 @@ class _MeasureScreenState extends State<MeasureScreen>
                                           List<Map<String, dynamic>> allData =
                                               await data.rawQuery(
                                                   "SELECT DISTINCT pressure FROM pe order by pressure");
-                                          print(
-                                              "query : SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
-                                          List<Map<String, dynamic>>
-                                              pressureData =
-                                              await data.rawQuery(
-                                                  "SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
+                                          // List<Map<String, dynamic>>
+                                              // pressureData =
+                                              // await data.rawQuery(
+                                                  // "SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
                                           showModalBottomSheet(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:

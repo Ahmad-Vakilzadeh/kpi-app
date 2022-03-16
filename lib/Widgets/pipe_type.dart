@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:kpi_app/Screens/MeasureScreen/measure_screen.dart';
 
 import '../constants.dart';
 
+// ignore: must_be_immutable
 class PipeTypeWidget extends StatefulWidget {
-  PipeTypeWidget({
+  PipeTypeWidget({Key? key, 
     required this.peNumber,
     required this.onTapOne,
     required this.onTapTwo,
     required this.onTapFour,
     required this.onTapThree,
-  });
+  }) : super(key: key);
   late int peNumber;
   Function onTapOne;
   Function onTapTwo;
