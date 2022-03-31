@@ -367,8 +367,8 @@ class _MeasureScreenState extends State<MeasureScreen>
                                         onTap: () async {
                                           var data = await SqfL.open();
                                           // List<Map<String, dynamic>> exdiaData =
-                                              // await data.rawQuery(
-                                                  // "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber order by exdia");
+                                          // await data.rawQuery(
+                                          // "SELECT DISTINCT exdia FROM pe WHERE pressure = $pressure AND PE =$peNumber order by exdia");
                                           List<Map<String, dynamic>> allData =
                                               await data.rawQuery(
                                                   "SELECT DISTINCT exdia FROM pe order by exdia");
@@ -432,9 +432,9 @@ class _MeasureScreenState extends State<MeasureScreen>
                                               await data.rawQuery(
                                                   "SELECT DISTINCT pressure FROM pe order by pressure");
                                           // List<Map<String, dynamic>>
-                                              // pressureData =
-                                              // await data.rawQuery(
-                                                  // "SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
+                                          // pressureData =
+                                          // await data.rawQuery(
+                                          // "SELECT DISTINCT pressure FROM pe WHERE PE =$peNumber AND exdia=$exdia order by pressure");
                                           showModalBottomSheet(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -515,11 +515,11 @@ class _MeasureScreenState extends State<MeasureScreen>
                                   List<
                                       Map<String,
                                           dynamic>> allData = await data.rawQuery(
-                                      "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY PE,pressure,exdia");
+                                      "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY exdia,pressure,exdia");
                                   showModalBottomSheet(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
                                       context: context,
                                       builder: (context) {
                                         return SingleChildScrollView(
