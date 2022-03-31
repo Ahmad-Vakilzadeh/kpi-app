@@ -59,7 +59,7 @@ class _InputMeasureState extends State<InputMeasure> {
             if (widget.onChange != null) widget.onChange();
           },
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp(r'^\d+(?:\.\d+)?$')),
+            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
           ],
           controller: widget.customController,
           keyboardType: TextInputType.number,
