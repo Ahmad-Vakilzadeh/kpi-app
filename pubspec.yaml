@@ -20,6 +20,7 @@ dependencies:
   cupertino_icons: ^1.0.4
   rive: ^0.8.1
   shared_preferences: ^2.0.13
+  intl: ^0.17.0
   
 
 dev_dependencies:

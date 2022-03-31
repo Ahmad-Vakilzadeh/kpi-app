@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kpi_app/Screens/AboutUs/about_us.dart';
 import 'package:kpi_app/Screens/MeasureScreen/measure_screen.dart';
+import 'package:kpi_app/Screens/OnBoardingScreens/on_boarding.dart';
 import 'package:kpi_app/Screens/Standards/standards_screen.dart';
 import 'package:kpi_app/Widgets/BottomNavigation/bottom_navigation.dart';
 import 'package:kpi_app/constants.dart';
@@ -104,8 +105,10 @@ class _PageMangeState extends State<PageMange>
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const AboutUs()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const OnBoardingScreen()));
                 },
               ),
               ListTile(

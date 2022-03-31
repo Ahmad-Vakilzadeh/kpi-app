@@ -99,7 +99,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                               CrossAxisAlignment.end,
                                           children: const [
                                             Text(
-                                              "در صفحه اندازه گیری مشقخصات لوله های مورد نظر را وارد نموده و جواب بگیرید",
+                                              "در صفحه اندازه گیری میتونید مشخصات لوله مورد نظر خود را وارد نموده و نتیجه آن را ملاحظه نمایید",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 color: kShadeDarkColor,
@@ -136,7 +136,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               isOpen: isSecondOneOpen,
                               name: "استاندارد",
                               //Standard
-                              desc: "از استاندارد های روز لوله.",
+                              desc: "استاندارد های  لوله",
                               iconPath: Icons.document_scanner_outlined,
                             ),
                             !isSecondOneOpen
@@ -153,12 +153,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(15)),
                                         child: Container(
+                                          width: double.infinity,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 30),
                                           child: Column(
                                             children: const [
                                               Text(
-                                                "از تمامی استاندارد های لوله های پلی اتیلن با خبر باشید",
+                                                "از تمام استاندارد های لوله های پلی اتیلن باخبر شوید",
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,

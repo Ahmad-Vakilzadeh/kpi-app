@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:kpi_app/Engine/measuring.dart';
 import 'package:kpi_app/Widgets/input_measure.dart';
 import 'package:kpi_app/Widgets/input_selector.dart';
@@ -10,6 +11,7 @@ import 'package:kpi_app/constants.dart';
 int peNumber = 100;
 int exdia = 250;
 double? pressure = 4;
+var formatter = intl.NumberFormat('#,##,000');
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({Key? key}) : super(key: key);
@@ -531,7 +533,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             child: Column(
                                               children: [
                                                 const Text(
-                                                  "فرست لوله های قابل تولید در شرکت پلی اتیلن کرمان",
+                                                  "فهرست لوله های قابل سفارش در شرکت صنایع",
                                                   textAlign: TextAlign.center,
                                                   textDirection:
                                                       TextDirection.rtl,
@@ -542,18 +544,42 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
                                                 const Text(
-                                                  "برای انتخاب هر یک  از لوله ها روی آن بزنید",
+                                                  "پلی اتیلن کرمان",
                                                   textAlign: TextAlign.center,
                                                   textDirection:
                                                       TextDirection.rtl,
                                                   style: TextStyle(
                                                     color: kShadeDarkColor,
                                                     fontFamily: "Vazir",
-                                                    fontSize: 16,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                const Text(
+                                                  "برای انتخاب هر یک  از لوله ها",
+                                                  textAlign: TextAlign.center,
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: "Vazir",
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                const Text(
+                                                  "روی ردیف مورد نظر بزنید",
+                                                  textAlign: TextAlign.center,
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: "Vazir",
+                                                    fontSize: 18,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
@@ -825,7 +851,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                             "weight") *
                                                         getNumberFromController(
                                                             lengthCount))
-                                                    .toString(),
+                                                    .toStringAsFixed(2),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
                                                   fontFamily: "Vazir",
@@ -850,7 +876,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             children: [
                                               Text(
                                                 getField(snapshot.data, "SDR")
-                                                    .toStringAsFixed(2),
+                                                    .toStringAsFixed(0),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
                                                   fontFamily: "Vazir",
@@ -859,7 +885,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 ),
                                               ),
                                               const Text(
-                                                "نسبت قطر به ضخامت",
+                                                "(SDR)نسبت قطر به ضخامت",
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
@@ -884,11 +910,11 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                (getField(snapshot.data,
-                                                            "weight") *
-                                                        getNumberFromController(
-                                                            moneyCount))
-                                                    .toStringAsFixed(2),
+                                                formatter.format((getField(
+                                                        snapshot.data,
+                                                        "weight") *
+                                                    getNumberFromController(
+                                                        moneyCount))),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
                                                   fontFamily: "Vazir",
@@ -912,13 +938,13 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                (getNumberFromController(
+                                                formatter.format(
+                                                    (getNumberFromController(
                                                             lengthCount) *
                                                         getField(snapshot.data,
                                                             "weight") *
                                                         getNumberFromController(
-                                                            moneyCount))
-                                                    .toStringAsFixed(4),
+                                                            moneyCount))),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
                                                   fontFamily: "Vazir",
