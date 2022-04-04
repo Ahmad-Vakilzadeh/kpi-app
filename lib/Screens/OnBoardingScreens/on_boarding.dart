@@ -39,7 +39,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
               ),
               const Text(
-                " پارامتر های لوله مخصوص خود مانند قیمت وزن اندازه کلفتی و جنس ان را بسنجید و محصول مناسبخود را پیدا کنید.",
+                "کاربر گرامی شما در این برنامه میتوانید پارامترهای مختلف لوله مورد نظر خود که شامل وزن, اندازه, صخامت و جنس لوله میباشد را سنجش و مناسب ترین محصول را انتخاب نمایید",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   color: kShadeDarkColor,

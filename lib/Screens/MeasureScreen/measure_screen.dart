@@ -11,7 +11,7 @@ import 'package:kpi_app/constants.dart';
 int peNumber = 100;
 int exdia = 250;
 double? pressure = 4;
-var formatter = intl.NumberFormat('#,##,000');
+var formatter = intl.NumberFormat('###,###,###');
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({Key? key}) : super(key: key);
