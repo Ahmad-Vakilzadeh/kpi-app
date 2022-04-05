@@ -39,7 +39,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
               ),
               const Text(
-                "کاربر گرامی شما در این برنامه میتوانید پارامترهای مختلف لوله مورد نظر خود که شامل وزن, اندازه, صخامت و جنس لوله میباشد را سنجش و مناسب ترین محصول را انتخاب نمایید",
+                "کاربر گرامی شما در این برنامه میتوانید پارامترهای مختلف لوله مورد نظر خود که شامل وزن, اندازه, ضخامت و جنس لوله میباشد را سنجش و مناسب ترین محصول را انتخاب نمایید",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   color: kShadeDarkColor,
@@ -99,7 +99,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                               CrossAxisAlignment.end,
                                           children: const [
                                             Text(
-                                              "در صفحه اندازه گیری میتونید مشخصات لوله مورد نظر خود را وارد نموده و نتیجه آن را ملاحظه نمایید",
+                                              "در صفحه اندازه گیری میتوانید مشخصات لوله مورد نظر خود را وارد نموده و نتیجه آن را ملاحظه نمایید",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                 color: kShadeDarkColor,
@@ -330,15 +330,6 @@ class RowWidgetOnBoarding extends StatelessWidget {
         ),
         const SizedBox(
           width: 10,
-        ),
-        Text(
-          textHighLight,
-          textAlign: TextAlign.right,
-          style: const TextStyle(
-            color: kShadeLiteColor,
-            fontFamily: "Vazir",
-            fontSize: 14,
-          ),
         ),
         const SizedBox(
           width: 20,
