@@ -61,7 +61,7 @@ class _PageMangeState extends State<PageMange>
           centerTitle: true,
           iconTheme: const IconThemeData(color: kShadeDarkColor),
           title: const Text(
-            "پلی اتیلن کرمان",
+            "صنایع پلی اتیلن کرمان",
             style: TextStyle(
               color: kShadeDarkColor,
               fontFamily: "Vazir",

@@ -560,7 +560,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                   height: 15,
                                                 ),
                                                 const Text(
-                                                  "برای انتخاب هر یک  از لوله ها",
+                                                  "برای انتخاب هر یک  از لوله ها روی ردیف مورد نظر بزنید",
                                                   textAlign: TextAlign.center,
                                                   textDirection:
                                                       TextDirection.rtl,
@@ -568,18 +568,6 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                     color: Colors.black,
                                                     fontFamily: "Vazir",
                                                     fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                                const Text(
-                                                  "روی ردیف مورد نظر بزنید",
-                                                  textAlign: TextAlign.center,
-                                                  textDirection:
-                                                      TextDirection.rtl,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontFamily: "Vazir",
-                                                    fontSize: 18,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),

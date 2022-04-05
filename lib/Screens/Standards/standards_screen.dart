@@ -64,21 +64,25 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: Container(
-                    padding: const EdgeInsets.all(15),
-                    height: MediaQuery.of(context).size.height / 2,
-                    child: Center(
-                        child: Column(
+              return Container(
+                  padding: const EdgeInsets.all(15),
+                  height: MediaQuery.of(context).size.height / 4 * 5,
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  child: Center(
+                      child: SingleChildScrollView(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           "${element["title"]}",
                           style: const TextStyle(
                             fontSize: 24,
-                            color: kShadeDarkColor,
+                            color: Colors.black,
                             fontFamily: "Vazir",
                           ),
+                        ),
+                        SizedBox(
+                          height: 20,
                         ),
                         Text(
                           "${element["desc"]}",
@@ -89,8 +93,8 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                               fontSize: 18),
                         ),
                       ],
-                    ))),
-              );
+                    ),
+                  )));
             });
       },
     ));
@@ -119,18 +123,34 @@ class FutrueListStandards extends StatelessWidget {
       future: getDataFromFile(),
       initialData: "loading",
       builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: createListOfStandards(context, snapshot.data!),
-              ),
-              const SizedBox(
-                height: 96,
-              ),
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 15),
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 25,
+                color: Color(0x200D6472),
+              )
             ],
+          ),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: createListOfStandards(context, snapshot.data!),
+                  ),
+                  const SizedBox(
+                    height: 96,
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
