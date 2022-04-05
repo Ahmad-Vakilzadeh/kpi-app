@@ -494,7 +494,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     child: Text(
-                                      "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید. لطفا فهرست همه لوله ها را ملاحضه بفرمایید.",
+                                      "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید. لطفا فهرست همه لوله ها را ملاحظه بفرمایید.",
                                       softWrap: true,
                                       textDirection: TextDirection.rtl,
                                       style: const TextStyle(
@@ -708,7 +708,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: InputMeasure(
-                                  hintText: "متراز لوله به متر",
+                                  hintText: "متراژ لوله به متر",
                                   icon: Icons.select_all_outlined,
                                   name: "متراژ لوله",
                                   customController: lengthCount,
