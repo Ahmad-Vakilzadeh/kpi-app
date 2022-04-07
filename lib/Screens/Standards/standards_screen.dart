@@ -22,7 +22,10 @@ Future<List<Map<String, dynamic>>> getDataFromFile() async {
 List<Widget> createListOfStandards(BuildContext context, Object ret) {
   List<Widget> fields = <Widget>[];
   // ignore: unused_local_variable
-  var returnedList = ret as List<Map<String, dynamic>>;
+  if (ret is! List<Map<String, dynamic>>) {
+    return [Container()];
+  }
+  var returnedList = ret;
   // ignore: avoid_function_literals_in_foreach_calls
   ret.forEach((element) {
     return fields.add(GestureDetector(
@@ -37,6 +40,7 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
           children: [
             Text(
               "${element["title"]}",
+              textAlign: TextAlign.right,
               style: const TextStyle(
                   fontFamily: "Vazir", color: kShadeDarkColor, fontSize: 18),
             ),
@@ -75,6 +79,7 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                       children: [
                         Text(
                           "${element["title"]}",
+                          textAlign:TextAlign.right,
                           style: const TextStyle(
                             fontSize: 24,
                             color: Colors.black,
@@ -87,6 +92,7 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                         Text(
                           "${element["desc"]}",
                           textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
                           style: const TextStyle(
                               fontFamily: "Vazir",
                               color: kShadeDarkColor,
