@@ -16,7 +16,7 @@ class SqfL {
     var dbPath = await databasePath();
     var f = File(dbPath);
     if (f.existsSync()) {
-      return;
+      f.deleteSync();
     }
     final data = await rootBundle.load('assets/database/poly.db');
     final bytes =
