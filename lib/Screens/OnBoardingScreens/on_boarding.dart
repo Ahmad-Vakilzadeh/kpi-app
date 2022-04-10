@@ -234,7 +234,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                             ),
                                             RowWidgetOnBoarding(
                                               textHighLight: "شرکت",
-                                              desc: "۰۳۴۳-۲۱۳-۱۲۳۱",
+                                              desc: "۰۳۴۳۲۷۵۰۱۹۷",
                                               icon: Icons.call_outlined,
                                             ),
                                             SizedBox(
@@ -242,7 +242,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                             ),
                                             RowWidgetOnBoarding(
                                               textHighLight: "منشی",
-                                              desc: "PLE@gmail.com",
+                                              desc: "mailto:Info@kpico.co",
                                               icon: Icons.email_outlined,
                                             ),
                                           ],
