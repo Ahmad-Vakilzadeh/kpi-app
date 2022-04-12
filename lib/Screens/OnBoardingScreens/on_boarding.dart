@@ -242,7 +242,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                             ),
                                             RowWidgetOnBoarding(
                                               textHighLight: "منشی",
-                                              desc: "mailto:Info@kpico.co",
+                                              desc: "Info@kpico.co",
                                               icon: Icons.email_outlined,
                                             ),
                                           ],
