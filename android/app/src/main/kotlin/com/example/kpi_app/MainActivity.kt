@@ -1,4 +1,4 @@
-package com.example.kpi_app
+package app.standard.kp.co.kppe
 
 import io.flutter.embedding.android.FlutterActivity
 
