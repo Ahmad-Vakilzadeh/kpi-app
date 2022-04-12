@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.standard.kp.co.kppe">
    <application
-        android:label="kpi_app"
+        android:label="KPI"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
