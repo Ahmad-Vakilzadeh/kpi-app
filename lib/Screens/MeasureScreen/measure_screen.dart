@@ -863,8 +863,17 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                getField(snapshot.data, "SDR")
-                                                    .toStringAsFixed(0),
+                                                getField(snapshot.data,
+                                                            "SDR") ==
+                                                        getField(snapshot.data,
+                                                                "SDR")
+                                                            .roundToDouble()
+                                                    ? getField(snapshot.data,
+                                                            "SDR")
+                                                        .toStringAsFixed(0)
+                                                    : getField(snapshot.data,
+                                                            "SDR")
+                                                        .toString(),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
                                                   fontFamily: "Vazir",
