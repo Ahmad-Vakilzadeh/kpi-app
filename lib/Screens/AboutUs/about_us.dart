@@ -7,6 +7,11 @@ class AboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(onPressed: (){Navigator.pop(context); }, icon: const Icon(Icons.arrow_back,color: kShadeDarkColor,)),
+      ),
       body: SafeArea(
         child: Column(
           children: [
