@@ -38,11 +38,13 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Row(
           children: [
-            Text(
-              "${element["title"]}",
-              textAlign: TextAlign.right,
-              style: const TextStyle(
-                  fontFamily: "Vazir", color: kShadeDarkColor, fontSize: 18),
+            FittedBox(
+              child: Text(
+                "${element["title"]}",
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                    fontFamily: "Vazir", color: kShadeDarkColor, fontSize: 18),
+              ),
             ),
             const SizedBox(
               width: 20,
