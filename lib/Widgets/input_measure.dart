@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:intl/intl.dart' as intl;
+import 'package:kpi_app/Widgets/utils.dart';
 import '../constants.dart';
 
 class InputMeasure extends StatefulWidget {
@@ -22,6 +25,8 @@ class InputMeasure extends StatefulWidget {
   @override
   State<InputMeasure> createState() => _InputMeasureState();
 }
+
+var formatter = intl.NumberFormat('###,###,###');
 
 class _InputMeasureState extends State<InputMeasure> {
   @override
@@ -60,6 +65,8 @@ class _InputMeasureState extends State<InputMeasure> {
           },
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+            LengthLimitingTextInputFormatter(12),
+            ThousandsFormatter(),
           ],
           controller: widget.customController,
           keyboardType: TextInputType.number,
@@ -83,5 +90,35 @@ class _InputMeasureState extends State<InputMeasure> {
         )
       ],
     );
+  }
+}
+
+class ThousandsFormatter extends TextInputFormatter {
+  final String separator;
+
+  ThousandsFormatter({this.separator = ','});
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return textManipulation(
+      oldValue,
+      newValue,
+      textInputFormatter: FilteringTextInputFormatter.digitsOnly,
+      formatPattern: (String filteredString) {
+        int offset = 0;
+        StringBuffer buffer = StringBuffer();
+        for (int i = min(4, filteredString.length);
+            i <= filteredString.length;
+            i += min(4, max(1, filteredString.length - i))) {
+          buffer.write(filteredString.substring(offset, i));
+          if (i < filteredString.length) {
+            buffer.write(separator);
+          }
+          offset = i;
+        }
+        return buffer.toString();
+      },
+    ); 
   }
 }
