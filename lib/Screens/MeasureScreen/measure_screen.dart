@@ -848,7 +848,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 ),
                                               ),
                                               const Text(
-                                                "وزن مجموع تراز",
+                                                "وزن مجموع متراژ",
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
