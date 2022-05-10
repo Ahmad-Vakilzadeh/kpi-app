@@ -19,6 +19,7 @@ Future<List<Map<String, dynamic>>> getDataFromFile() async {
   return ret;
 }
 
+
 List<Widget> createListOfStandards(BuildContext context, Object ret) {
   List<Widget> fields = <Widget>[];
   // ignore: unused_local_variable
@@ -38,10 +39,11 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Row(
           children: [
-            FittedBox(
+            Expanded(
               child: Text(
                 "${element["title"]}",
                 textAlign: TextAlign.right,
+                softWrap: true,
                 style: const TextStyle(
                     fontFamily: "Vazir", color: kShadeDarkColor, fontSize: 18),
               ),
@@ -92,7 +94,7 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                           height: 20,
                         ),
                         Text(
-                          "${element["desc"]}",
+                          replaceArabicYeh(element["desc"]),
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: const TextStyle(
@@ -108,6 +110,10 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
     ));
   });
   return fields;
+}
+
+String replaceArabicYeh(String t) {
+  return t.replaceAll("ي", "ی").replaceAll("‌", " ").replaceAll("‍", "");
 }
 
 class _StandardsScreenState extends State<StandardsScreen> {
@@ -148,6 +154,7 @@ class FutrueListStandards extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  snapshot.data==null ? Container():
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
