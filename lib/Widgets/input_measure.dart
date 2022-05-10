@@ -108,9 +108,9 @@ class ThousandsFormatter extends TextInputFormatter {
       formatPattern: (String filteredString) {
         int offset = 0;
         StringBuffer buffer = StringBuffer();
-        for (int i = min(4, filteredString.length);
+        for (int i = min(3, filteredString.length);
             i <= filteredString.length;
-            i += min(4, max(1, filteredString.length - i))) {
+            i += min(3, max(1, filteredString.length - i))) {
           buffer.write(filteredString.substring(offset, i));
           if (i < filteredString.length) {
             buffer.write(separator);

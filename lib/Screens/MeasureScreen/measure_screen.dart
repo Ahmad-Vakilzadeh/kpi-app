@@ -92,7 +92,7 @@ class _MeasureScreenState extends State<MeasureScreen>
     if (c.text == "") {
       return 0;
     } else {
-      return double.parse(c.text);
+      return double.parse(c.text.replaceAll(",", ""));
     }
   }
   // returner for TXTFROM
