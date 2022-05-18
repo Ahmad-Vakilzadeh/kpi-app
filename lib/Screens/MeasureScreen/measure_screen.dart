@@ -78,7 +78,7 @@ class _MeasureScreenState extends State<MeasureScreen>
   }
   // Loading data for future
 
-// for general function
+  // for general function
   // for tabController
   void changePage(int newPage) {
     setState(() {
