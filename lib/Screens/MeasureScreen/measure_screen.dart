@@ -532,6 +532,18 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             ),
                                             child: Column(
                                               children: [
+                                                Container(
+                                                  width: double.infinity,
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                        GestureDetector(
+                                                          onTap: () { Navigator.pop(context);},
+                                                          child: Icon(Icons.close,color: kShadeDarkColor,),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                                 const Text(
                                                   "فهرست لوله های قابل سفارش در شرکت صنایع",
                                                   textAlign: TextAlign.center,
