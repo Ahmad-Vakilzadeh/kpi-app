@@ -26,7 +26,6 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
   if (ret is! List<Map<String, dynamic>>) {
     return [Container()];
   }
-  var returnedList = ret;
   // ignore: avoid_function_literals_in_foreach_calls
   ret.forEach((element) {
     return fields.add(GestureDetector(
@@ -69,7 +68,7 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
       onTap: () {
         showModalBottomSheet(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: const Radius.circular(15),topRight: const Radius.circular(15),)),
             context: context,
             builder: (context) {
               return Container(
@@ -81,6 +80,17 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        Container(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(onTap: (){
+                                Navigator.pop(context);
+                              },child: Icon(Icons.close,color: kShadeDarkColor,)),
+                            ],
+                          ),
+                        ),
                         Text(
                           "${element["title"]}",
                           textAlign:TextAlign.right,

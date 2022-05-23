@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,6 +60,7 @@ class _InputMeasureState extends State<InputMeasure> {
         ),
         TextFormField(
           onChanged: (value) {
+            print("$value");
             if (widget.onChange != null) widget.onChange();
           },
           inputFormatters: [
@@ -106,18 +106,13 @@ class ThousandsFormatter extends TextInputFormatter {
       newValue,
       textInputFormatter: FilteringTextInputFormatter.digitsOnly,
       formatPattern: (String filteredString) {
-        int offset = 0;
-        StringBuffer buffer = StringBuffer();
-        for (int i = min(3, filteredString.length);
-            i <= filteredString.length;
-            i += min(3, max(1, filteredString.length - i))) {
-          buffer.write(filteredString.substring(offset, i));
-          if (i < filteredString.length) {
-            buffer.write(separator);
+        var output="";
+        for (int i=filteredString.length;i>0;i--)
+          {
+            if (i<filteredString.length && (filteredString.length-i)%3==0) output=","+output;
+            output=filteredString[i-1]+output;
           }
-          offset = i;
-        }
-        return buffer.toString();
+        return output=="0"?"":output;
       },
     ); 
   }

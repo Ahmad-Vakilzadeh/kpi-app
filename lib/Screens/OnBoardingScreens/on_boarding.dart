@@ -281,6 +281,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(width: 25,),
                     const Text(
                       "ورود به برنامه",
                       textAlign: TextAlign.right,
