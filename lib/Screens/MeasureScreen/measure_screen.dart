@@ -535,11 +535,20 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 Container(
                                                   width: double.infinity,
                                                   child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                        GestureDetector(
-                                                          onTap: () { Navigator.pop(context);},
-                                                          child: Icon(Icons.close,color: kShadeDarkColor,),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Icon(
+                                                          Icons.close,
+                                                          color:
+                                                              kShadeDarkColor,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -760,7 +769,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                           margin: const EdgeInsets.symmetric(
                                               horizontal: 16),
                                           child: Text(
-                                            "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید. لطفا فهرست همه لوله ها را ملاحضه بفرمایید.",
+                                            "لوله‌ای از نوع PE$peNumber با فشارنامی $pressure و قطر ${exdia}mm موجود نیست، لطفا لوله دیگری انتخاب بفرمایید. لطفا فهرست همه لوله ها را ملاحظه بفرمایید.",
                                             softWrap: true,
                                             textDirection: TextDirection.rtl,
                                             style: const TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kpi_app/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutUs extends StatelessWidget {
   const AboutUs({Key? key}) : super(key: key);
@@ -10,7 +11,14 @@ class AboutUs extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: IconButton(onPressed: (){Navigator.pop(context); }, icon: const Icon(Icons.arrow_back,color: kShadeDarkColor,)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: kShadeDarkColor,
+            )),
       ),
       body: SafeArea(
         child: Column(
@@ -52,17 +60,28 @@ class AboutUs extends StatelessWidget {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            "03432750197",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              color: kShadeDarkColor,
-                              fontSize: 20,
-                              fontFamily: "Vazir",
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              var url = Uri.parse("tel: 03432750197");
+                              // var url = Uri(path: "03432750197", scheme: "tel");
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            },
+                            child: const Text(
+                              "03432750197",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                color: kShadeDarkColor,
+                                fontSize: 20,
+                                fontFamily: "Vazir",
+                              ),
                             ),
                           ),
-                          Text(
+                          const Text(
                             "تلفن کارخانه",
                             textAlign: TextAlign.right,
                             style: TextStyle(
@@ -104,17 +123,28 @@ class AboutUs extends StatelessWidget {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            "info@kpico.co",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: kShadeDarkColor,
-                              fontSize: 20,
-                              fontFamily: "Vazir",
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              var url =
+                                  Uri(path: "info@kpico.co", scheme: "mailto");
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            },
+                            child: const Text(
+                              "info@kpico.co",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: kShadeDarkColor,
+                                fontSize: 20,
+                                fontFamily: "Vazir",
+                              ),
                             ),
                           ),
-                          Text(
+                          const Text(
                             "ایمیل",
                             textAlign: TextAlign.right,
                             style: TextStyle(
