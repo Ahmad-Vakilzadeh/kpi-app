@@ -4,6 +4,7 @@ import 'package:kpi_app/Screens/AboutUs/about_us.dart';
 import 'package:kpi_app/Screens/MeasureScreen/measure_screen.dart';
 import 'package:kpi_app/Screens/OnBoardingScreens/on_boarding.dart';
 import 'package:kpi_app/Screens/Standards/standards_screen.dart';
+import 'package:kpi_app/Screens/factorCreate/factor_create.dart';
 import 'package:kpi_app/Widgets/BottomNavigation/bottom_navigation.dart';
 import 'package:kpi_app/constants.dart';
 
@@ -89,6 +90,27 @@ class _PageMangeState extends State<PageMange>
               const Divider(
                 color: kShadeDarkColor,
                 height: 6,
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.receipt_long_rounded,
+                  color: kShadeDarkColor,
+                ),
+                title: const Text(
+                  "پیشنهاد قیمت",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: kShadeDarkColor,
+                    fontSize: 18,
+                    fontFamily: "Vazir",
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FactorCreate()));
+                },
               ),
               ListTile(
                 leading: const Icon(

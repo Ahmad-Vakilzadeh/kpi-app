@@ -532,7 +532,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             ),
                                             child: Column(
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: double.infinity,
                                                   child: Row(
                                                     crossAxisAlignment:
