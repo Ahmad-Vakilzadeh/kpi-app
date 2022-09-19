@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
 import "package:pdf/pdf.dart";
@@ -59,6 +60,11 @@ class PdfServices {
           prodcut["priceToal"].toString(),
         ),
     ];
+
+    var data = await rootBundle.load("assets/fonts/Vazir_Regular_UI.ttf");
+    pw.Font vazirFont = pw.Font.ttf(data);
+    print(vazirFont);
+
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -73,6 +79,8 @@ class PdfServices {
                     children: [
                       pw.Text(
                         "پیشنهاد قیمت",
+                        style:pw.TextStyle(font: vazirFont),
+                        textDirection: pw.TextDirection.rtl,
                       ),
                       pw.SizedBox(height: 10),
                       pw.Container(

@@ -50,7 +50,4 @@ flutter:
   fonts:
     - family: Vazir
       fonts:
-        - asset: assets/fonts/Vazir-Regular-UI.ttf
-        - asset: assets/fonts/Vazir-Bold-Ui.ttf
-          weight: 700
-        - asset: assets/fonts/Vazir-Black-Ui.ttf
+        - asset: assets/fonts/Vazir_Regular_UI.ttf
