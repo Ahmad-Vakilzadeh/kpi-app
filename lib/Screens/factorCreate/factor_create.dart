@@ -820,7 +820,6 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
     return GestureDetector(
       onTap: () async {
         loadingDataForList();
-
         final data = await service.createInvoice(calculatedAnswer);
         service.savePdfFile("invoice_$number", data);
         number++;
