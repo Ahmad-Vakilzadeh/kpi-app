@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
 import "package:pdf/pdf.dart";
@@ -51,11 +52,11 @@ class PdfServices {
           "مبلغ کل"),
       for (var prodcut in soldProducts)
         CustomRow(
-          prodcut["peNumber"],
-          prodcut["meter"],
-          prodcut["priceEachMeter"],
-          prodcut["priceEachMeter"],
-          prodcut["priceToal"],
+          prodcut["peNumber"].toString(),
+          prodcut["meter"].toString(),
+          prodcut["priceEachMeter"].toString(),
+          prodcut["priceEachMeter"].toString(),
+          prodcut["priceToal"].toString(),
         ),
     ];
     pdf.addPage(
@@ -63,26 +64,40 @@ class PdfServices {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
             children: [
               pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
                   pw.Column(
                     children: [
-                      pw.Text("Customar name"),
-                      pw.Text("Customar name"),
-                      pw.Text("Customar name"),
-                    ],
-                  ),
-                  pw.Column(
-                    children: [
-                      pw.Text("Customar name"),
-                      pw.Text("Customar name"),
-                      pw.Text("Customar name"),
+                      pw.Text(
+                        "پیشنهاد قیمت",
+                      ),
+                      pw.SizedBox(height: 10),
+                      pw.Container(
+                        width: 100,
+                        height: 3,
+                        color: PdfColor(0.1, 0.1, 0.1),
+                      ),
+                      pw.SizedBox(height: 30),
                     ],
                   ),
                 ],
-              )
+              ),
+              pw.Container(
+                decoration: pw.BoxDecoration(
+                    border: pw.Border.all(
+                  width: 1,
+                )),
+                child: pw.Column(
+                  children: [
+                    pw.Text("مشخصات فروشنده"),
+                    pw.Container(width: double.infinity, height: 2),
+                    SellersData()
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -90,4 +105,26 @@ class PdfServices {
     );
     return pdf.save();
   }
+
+  pw.Row SellersData() => pw.Row(
+        children: [
+          pw.Column(
+            children: [
+              pw.Text(
+                "نام شخص حقیقی / حقوقی: صنایع پلی اتیلن کرمان",
+                style: pw.TextStyle(
+                  fontFallback: [],
+                ),
+              ),
+              pw.Row(
+                children: [
+                  pw.Text("نشانی: کرمان - کیلومتر 5 جاده زرند"),
+                  pw.Text("صندوق پستی : 613-76135"),
+                ],
+              ),
+              pw.Text("  پستی محل صندوق 7613836178کد"),
+            ],
+          ),
+        ],
+      );
 }

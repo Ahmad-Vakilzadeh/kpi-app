@@ -789,7 +789,6 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
           "SELECT DISTINCT * FROM pe WHERE PE = ${element["peNumber"]} AND exdia= ${element["exdia"]} AND pressure = ${element["pressure"]}");
       // calculatedAnswer.add(forLoopList[index]);
       double weight = getField(forLoopList, "weight");
-
       double lenght =
           double.parse(element["meter"].toString().replaceAll(",", ""));
       double eachMeterPrice = weight * widget.moneyCount;
@@ -822,7 +821,7 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
       onTap: () async {
         loadingDataForList();
 
-        final data = await service.createHelworld();
+        final data = await service.createInvoice(calculatedAnswer);
         service.savePdfFile("invoice_$number", data);
         number++;
       },
