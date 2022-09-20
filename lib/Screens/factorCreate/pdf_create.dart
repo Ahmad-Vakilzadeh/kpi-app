@@ -46,7 +46,7 @@ class PdfServices {
   }
 
   Future<Uint8List> createInvoice(
-      List<Map<String, dynamic>> soldProducts) async {
+      List<Map<String, dynamic>> soldProducts, String date) async {
     final pdf = pw.Document();
     final List<CustomRow> elements = [
       CustomRow("شرح کالا یا خدمت", "تعداد / مقدار", "مبلغ واحد", "ارزش افزوده",
@@ -61,7 +61,7 @@ class PdfServices {
         ),
     ];
 
-    var data = await rootBundle.load("assets/fonts/Vazir_Regular_UI.ttf");
+    var data = await rootBundle.load("assets/fonts/Vazir.ttf");
     pw.Font vazirFont = pw.Font.ttf(data);
     print(vazirFont);
 
@@ -73,20 +73,23 @@ class PdfServices {
             crossAxisAlignment: pw.CrossAxisAlignment.center,
             children: [
               pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
+                  pw.Container(
+                    margin: const pw.EdgeInsets.only(right: 100),
+                    child: DateText(date, vazirFont),
+                  ),
                   pw.Column(
                     children: [
                       pw.Text(
                         "پیشنهاد قیمت",
-                        style:pw.TextStyle(font: vazirFont),
+                        style: pw.TextStyle(font: vazirFont),
                         textDirection: pw.TextDirection.rtl,
                       ),
                       pw.SizedBox(height: 10),
                       pw.Container(
                         width: 100,
-                        height: 3,
-                        color: PdfColor(0.1, 0.1, 0.1),
+                        height: 2,
+                        color: const PdfColor(0.1, 0.1, 0.1),
                       ),
                       pw.SizedBox(height: 30),
                     ],
@@ -100,9 +103,17 @@ class PdfServices {
                 )),
                 child: pw.Column(
                   children: [
-                    pw.Text("مشخصات فروشنده"),
-                    pw.Container(width: double.infinity, height: 2),
-                    SellersData()
+                    pw.Text(
+                      "مشخصات فروشنده",
+                      style: pw.TextStyle(font: vazirFont),
+                      textDirection: pw.TextDirection.rtl,
+                    ),
+                    pw.Container(
+                      width: double.infinity,
+                      height: 2,
+                      color: const PdfColor(0.1, 0.1, 0.1),
+                    ),
+                    // SellersData(vazirFont),
                   ],
                 ),
               ),
@@ -114,15 +125,33 @@ class PdfServices {
     return pdf.save();
   }
 
-  pw.Row SellersData() => pw.Row(
+  pw.Text DateText(String date, pw.Font vazirFont) {
+    String persianDate = date.replaceAll("0", "۰");
+    persianDate = persianDate.replaceAll("1", "۱");
+    persianDate = persianDate.replaceAll("2", "۲");
+    persianDate = persianDate.replaceAll("3", "۳");
+    persianDate = persianDate.replaceAll("4", "۴");
+    persianDate = persianDate.replaceAll("5", "۵");
+    persianDate = persianDate.replaceAll("6", "۶");
+    persianDate = persianDate.replaceAll("7", "۷");
+    persianDate = persianDate.replaceAll("8", "۸");
+    persianDate = persianDate.replaceAll("9", "۹");
+
+    return pw.Text(
+      persianDate,
+      style: pw.TextStyle(font: vazirFont),
+      textDirection: pw.TextDirection.rtl,
+    );
+  }
+
+  pw.Row SellersData(pw.Font font) => pw.Row(
         children: [
           pw.Column(
             children: [
               pw.Text(
                 "نام شخص حقیقی / حقوقی: صنایع پلی اتیلن کرمان",
-                style: pw.TextStyle(
-                  fontFallback: [],
-                ),
+                style: pw.TextStyle(font: font),
+                textDirection: pw.TextDirection.rtl,
               ),
               pw.Row(
                 children: [

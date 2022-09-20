@@ -5,6 +5,7 @@ import 'package:kpi_app/Screens/factorCreate/pdf_create.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'package:kpi_app/Widgets/input_measure.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 import '../../Engine/measuring.dart';
 import '../../constants.dart';
@@ -70,7 +71,7 @@ class _FactorCreateState extends State<FactorCreate> {
                     child: Text(
                       element["meter"].toString(),
                       style: TextStyle(
-                        fontFamily: "Vazir",
+                        fontFamily: "Vazir_Regular_UI",
                         color: kShadeDarkColor.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                       ),
@@ -122,7 +123,7 @@ class _FactorCreateState extends State<FactorCreate> {
           "صدور پیش فاکتور",
           style: TextStyle(
             color: kShadeDarkColor,
-            fontFamily: "Vazir",
+            fontFamily: "Vazir_Regular_UI",
           ),
         ),
       ),
@@ -161,7 +162,7 @@ class _FactorCreateState extends State<FactorCreate> {
                         style: TextStyle(
                           color: kShadeDarkColor,
                           fontSize: 24,
-                          fontFamily: "Vazir",
+                          fontFamily: "Vazir_Regular_UI",
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -315,7 +316,7 @@ class _AddingRowState extends State<AddingRow> {
                         "${element["PE"]}",
                         style: const TextStyle(
                           color: kShadeDarkColor,
-                          fontFamily: "Vazir",
+                          fontFamily: "Vazir_Regular_UI",
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -328,7 +329,7 @@ class _AddingRowState extends State<AddingRow> {
                         "${element["pressure"]}",
                         style: const TextStyle(
                           color: kShadeDarkColor,
-                          fontFamily: "Vazir",
+                          fontFamily: "Vazir_Regular_UI",
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -341,7 +342,7 @@ class _AddingRowState extends State<AddingRow> {
                         "${element["exdia"]}",
                         style: const TextStyle(
                           color: kShadeDarkColor,
-                          fontFamily: "Vazir",
+                          fontFamily: "Vazir_Regular_UI",
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -421,7 +422,7 @@ class _AddingRowState extends State<AddingRow> {
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                   color: kShadeDarkColor,
-                                  fontFamily: "Vazir",
+                                  fontFamily: "Vazir_Regular_UI",
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -432,7 +433,7 @@ class _AddingRowState extends State<AddingRow> {
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                   color: kShadeDarkColor,
-                                  fontFamily: "Vazir",
+                                  fontFamily: "Vazir_Regular_UI",
                                   fontSize: 20,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -446,7 +447,7 @@ class _AddingRowState extends State<AddingRow> {
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontFamily: "Vazir",
+                                  fontFamily: "Vazir_Regular_UI",
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -465,7 +466,7 @@ class _AddingRowState extends State<AddingRow> {
                                       textDirection: TextDirection.rtl,
                                       style: TextStyle(
                                         color: kShadeDarkColor,
-                                        fontFamily: "Vazir",
+                                        fontFamily: "Vazir_Regular_UI",
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -481,7 +482,7 @@ class _AddingRowState extends State<AddingRow> {
                                         textDirection: TextDirection.rtl,
                                         style: TextStyle(
                                           color: kShadeDarkColor,
-                                          fontFamily: "Vazir",
+                                          fontFamily: "Vazir_Regular_UI",
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -498,7 +499,7 @@ class _AddingRowState extends State<AddingRow> {
                                         textDirection: TextDirection.rtl,
                                         style: TextStyle(
                                           color: kShadeDarkColor,
-                                          fontFamily: "Vazir",
+                                          fontFamily: "Vazir_Regular_UI",
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -629,7 +630,7 @@ class _SearchBarState extends State<SearchBar> {
           hintTextDirection: TextDirection.rtl,
           hintStyle: TextStyle(
             color: kShadeDarkColor.withOpacity(0.5),
-            fontFamily: "Vazir",
+            fontFamily: "Vazir_Regular_UI",
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -730,7 +731,7 @@ class PipeMeterField extends StatelessWidget {
         hintTextDirection: TextDirection.rtl,
         hintStyle: const TextStyle(
           color: Colors.grey,
-          fontFamily: "Vazir",
+          fontFamily: "Vazir_Regular_UI",
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
@@ -754,7 +755,7 @@ class PipeDropDownText extends StatelessWidget {
         color: isActive ? kShadeDarkColor : kShadeDarkColor.withOpacity(0.8),
         fontWeight: FontWeight.bold,
         fontSize: 14,
-        fontFamily: "Vazir",
+        fontFamily: "Vazir_Regular_UI",
       ),
     );
   }
@@ -820,7 +821,16 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
     return GestureDetector(
       onTap: () async {
         loadingDataForList();
-        final data = await service.createInvoice(calculatedAnswer);
+        DateTime dt = DateTime.now();
+        Jalali j = dt.toJalali();
+        final data = await service.createInvoice(
+            calculatedAnswer,
+            "تاریخ: " +
+                j.year.toString() +
+                "/" +
+                j.month.toString() +
+                "/" +
+                j.day.toString());
         service.savePdfFile("invoice_$number", data);
         number++;
       },
@@ -844,7 +854,7 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
               color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              fontFamily: "Vazir",
+              fontFamily: "Vazir_Regular_UI",
             ),
           ),
         ),
