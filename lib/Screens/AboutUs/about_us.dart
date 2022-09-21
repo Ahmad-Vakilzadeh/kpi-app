@@ -42,7 +42,7 @@ class AboutUs extends StatelessWidget {
                         style: TextStyle(
                           color: kShadeDarkColor,
                           fontSize: 34,
-                          fontFamily: "Vazir_Regular_UI",
+                          fontFamily: "Vazir",
                         ),
                       ),
                       const SizedBox(
@@ -77,7 +77,7 @@ class AboutUs extends StatelessWidget {
                               style: TextStyle(
                                 color: kShadeDarkColor,
                                 fontSize: 20,
-                                fontFamily: "Vazir_Regular_UI",
+                                fontFamily: "Vazir",
                               ),
                             ),
                           ),
@@ -87,7 +87,7 @@ class AboutUs extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 20,
-                              fontFamily: "Vazir_Regular_UI",
+                              fontFamily: "Vazir",
                             ),
                           ),
                         ],
@@ -104,7 +104,7 @@ class AboutUs extends StatelessWidget {
                             style: TextStyle(
                               color: kShadeDarkColor,
                               fontSize: 20,
-                              fontFamily: "Vazir_Regular_UI",
+                              fontFamily: "Vazir",
                             ),
                           ),
                           Text(
@@ -113,7 +113,7 @@ class AboutUs extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 20,
-                              fontFamily: "Vazir_Regular_UI",
+                              fontFamily: "Vazir",
                             ),
                           ),
                         ],
@@ -140,7 +140,7 @@ class AboutUs extends StatelessWidget {
                               style: TextStyle(
                                 color: kShadeDarkColor,
                                 fontSize: 20,
-                                fontFamily: "Vazir_Regular_UI",
+                                fontFamily: "Vazir",
                               ),
                             ),
                           ),
@@ -150,7 +150,7 @@ class AboutUs extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 20,
-                              fontFamily: "Vazir_Regular_UI",
+                              fontFamily: "Vazir",
                             ),
                           ),
                         ],

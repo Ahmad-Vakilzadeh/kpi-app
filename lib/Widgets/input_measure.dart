@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
@@ -12,9 +11,10 @@ class InputMeasure extends StatefulWidget {
     required this.name,
     required this.customController,
     required this.onChange,
+    required this.numberOnly,
     Key? key,
   }) : super(key: key);
-
+  final bool numberOnly;
   final String name;
   final IconData icon;
   final String hintText;
@@ -64,12 +64,14 @@ class _InputMeasureState extends State<InputMeasure> {
             if (widget.onChange != null) widget.onChange();
           },
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+            if (widget.numberOnly) ThousandsFormatter(),
+            if (widget.numberOnly)
+              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
             LengthLimitingTextInputFormatter(12),
-            ThousandsFormatter(),
           ],
           controller: widget.customController,
-          keyboardType: TextInputType.number,
+          keyboardType:
+              widget.numberOnly ? TextInputType.number : TextInputType.name,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
@@ -106,14 +108,14 @@ class ThousandsFormatter extends TextInputFormatter {
       newValue,
       textInputFormatter: FilteringTextInputFormatter.digitsOnly,
       formatPattern: (String filteredString) {
-        var output="";
-        for (int i=filteredString.length;i>0;i--)
-          {
-            if (i<filteredString.length && (filteredString.length-i)%3==0) output=","+output;
-            output=filteredString[i-1]+output;
-          }
-        return output=="0"?"":output;
+        var output = "";
+        for (int i = filteredString.length; i > 0; i--) {
+          if (i < filteredString.length && (filteredString.length - i) % 3 == 0)
+            output = "," + output;
+          output = filteredString[i - 1] + output;
+        }
+        return output == "0" ? "" : output;
       },
-    ); 
+    );
   }
 }

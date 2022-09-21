@@ -126,7 +126,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                       "${element["PE"]}",
                       style: const TextStyle(
                         color: kShadeDarkColor,
-                        fontFamily: "Vazir_Regular_UI",
+                        fontFamily: "Vazir",
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -139,7 +139,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                       "${element["pressure"]}",
                       style: const TextStyle(
                         color: kShadeDarkColor,
-                        fontFamily: "Vazir_Regular_UI",
+                        fontFamily: "Vazir",
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -152,7 +152,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                       "${element["exdia"]}",
                       style: const TextStyle(
                         color: kShadeDarkColor,
-                        fontFamily: "Vazir_Regular_UI",
+                        fontFamily: "Vazir",
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -292,7 +292,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                   style: TextStyle(
                                     color: kShadeDarkColor,
                                     fontSize: 24,
-                                    fontFamily: "Vazir_Regular_UI",
+                                    fontFamily: "Vazir",
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -310,7 +310,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                         color: kShadeDarkColor,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        fontFamily: "Vazir_Regular_UI",
+                                        fontFamily: "Vazir",
                                       ),
                                     ),
                                     SizedBox(
@@ -398,7 +398,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                                 color:
                                                                     kShadeDarkColor,
                                                                 fontFamily:
-                                                                    "Vazir_Regular_UI"),
+                                                                    "Vazir"),
                                                           ),
                                                         ),
                                                         const Divider(
@@ -457,7 +457,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                               color:
                                                                   kShadeDarkColor,
                                                               fontFamily:
-                                                                  "Vazir_Regular_UI"),
+                                                                  "Vazir"),
                                                         ),
                                                       ),
                                                       const Divider(
@@ -499,7 +499,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                       textDirection: TextDirection.rtl,
                                       style: const TextStyle(
                                         color: Colors.red,
-                                        fontFamily: "Vazir_Regular_UI",
+                                        fontFamily: "Vazir",
                                         fontWeight: FontWeight.w900,
                                         fontSize: 12,
                                       ),
@@ -560,8 +560,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                       TextDirection.rtl,
                                                   style: TextStyle(
                                                     color: kShadeDarkColor,
-                                                    fontFamily:
-                                                        "Vazir_Regular_UI",
+                                                    fontFamily: "Vazir",
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w400,
                                                   ),
@@ -573,8 +572,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                       TextDirection.rtl,
                                                   style: TextStyle(
                                                     color: kShadeDarkColor,
-                                                    fontFamily:
-                                                        "Vazir_Regular_UI",
+                                                    fontFamily: "Vazir",
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.w400,
                                                   ),
@@ -589,8 +587,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                       TextDirection.rtl,
                                                   style: TextStyle(
                                                     color: Colors.black,
-                                                    fontFamily:
-                                                        "Vazir_Regular_UI",
+                                                    fontFamily: "Vazir",
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w400,
                                                   ),
@@ -616,7 +613,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                               color:
                                                                   kShadeDarkColor,
                                                               fontFamily:
-                                                                  "Vazir_Regular_UI",
+                                                                  "Vazir",
                                                               fontSize: 16,
                                                               fontWeight:
                                                                   FontWeight
@@ -642,7 +639,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                               color:
                                                                   kShadeDarkColor,
                                                               fontFamily:
-                                                                  "Vazir_Regular_UI",
+                                                                  "Vazir",
                                                               fontSize: 16,
                                                               fontWeight:
                                                                   FontWeight
@@ -668,7 +665,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                               color:
                                                                   kShadeDarkColor,
                                                               fontFamily:
-                                                                  "Vazir_Regular_UI",
+                                                                  "Vazir",
                                                               fontSize: 16,
                                                               fontWeight:
                                                                   FontWeight
@@ -707,7 +704,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: "Vazir_Regular_UI",
+                                          fontFamily: "Vazir",
                                           fontSize: 16,
                                         ),
                                       ),
@@ -720,6 +717,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: InputMeasure(
+                                  numberOnly: true,
                                   hintText: "متراژ لوله به متر",
                                   icon: Icons.select_all_outlined,
                                   name: "متراژ لوله",
@@ -736,6 +734,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: InputMeasure(
+                                  numberOnly: true,
                                   hintText: "قیمت هر کیلوگرم لوله",
                                   icon: Icons.money_outlined,
                                   name: "قیمت هر کیلوگرم لوله",
@@ -777,7 +776,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             textDirection: TextDirection.rtl,
                                             style: const TextStyle(
                                               color: Colors.red,
-                                              fontFamily: "Vazir_Regular_UI",
+                                              fontFamily: "Vazir",
                                               fontWeight: FontWeight.w900,
                                               fontSize: 12,
                                             ),
@@ -794,7 +793,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
                                               color: kShadeDarkColor,
-                                              fontFamily: "Vazir_Regular_UI",
+                                              fontFamily: "Vazir",
                                               fontWeight: FontWeight.bold,
                                               fontSize: 24,
                                             ),
@@ -812,8 +811,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                     .toString(),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -823,8 +821,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                 ),
                                               ),
@@ -840,8 +837,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                     .toString(),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -851,8 +847,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                 ),
                                               ),
@@ -870,8 +865,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                     .toStringAsFixed(2),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -881,8 +875,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                 ),
                                               ),
@@ -906,8 +899,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                         .toString(),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -917,8 +909,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                 ),
                                               ),
@@ -946,8 +937,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                         moneyCount))),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -957,8 +947,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                 ),
                                               ),
@@ -978,8 +967,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                             moneyCount))),
                                                 style: const TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -989,8 +977,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: kShadeDarkColor,
-                                                  fontFamily:
-                                                      "Vazir_Regular_UI",
+                                                  fontFamily: "Vazir",
                                                   fontSize: 14,
                                                 ),
                                               ),

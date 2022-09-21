@@ -45,25 +45,12 @@ class PdfServices {
     await OpenDocument.openDocument(filePath: filePath);
   }
 
-  Future<Uint8List> createInvoice(
-      List<Map<String, dynamic>> soldProducts, String date) async {
+  Future<Uint8List> createInvoice(List<Map<String, dynamic>> soldProducts,
+      String date, String buyername) async {
     final pdf = pw.Document();
-    final List<CustomRow> elements = [
-      CustomRow("شرح کالا یا خدمت", "تعداد / مقدار", "مبلغ واحد", "ارزش افزوده",
-          "مبلغ کل"),
-      for (var prodcut in soldProducts)
-        CustomRow(
-          prodcut["peNumber"].toString(),
-          prodcut["meter"].toString(),
-          prodcut["priceEachMeter"].toString(),
-          prodcut["priceEachMeter"].toString(),
-          prodcut["priceToal"].toString(),
-        ),
-    ];
 
-    var data = await rootBundle.load("assets/fonts/Vazir.ttf");
-    pw.Font vazirFont = pw.Font.ttf(data);
-    print(vazirFont);
+    var data2 = await rootBundle.load("assets/fonts/Iran_sans.ttf");
+    pw.Font iranSansFont = pw.Font.ttf(data2);
 
     pdf.addPage(
       pw.Page(
@@ -76,13 +63,13 @@ class PdfServices {
                 children: [
                   pw.Container(
                     margin: const pw.EdgeInsets.only(right: 100),
-                    child: DateText(date, vazirFont),
+                    child: dateText(date, iranSansFont),
                   ),
                   pw.Column(
                     children: [
                       pw.Text(
                         "پیشنهاد قیمت",
-                        style: pw.TextStyle(font: vazirFont),
+                        style: pw.TextStyle(font: iranSansFont),
                         textDirection: pw.TextDirection.rtl,
                       ),
                       pw.SizedBox(height: 10),
@@ -105,15 +92,427 @@ class PdfServices {
                   children: [
                     pw.Text(
                       "مشخصات فروشنده",
-                      style: pw.TextStyle(font: vazirFont),
+                      style: pw.TextStyle(font: iranSansFont),
                       textDirection: pw.TextDirection.rtl,
                     ),
                     pw.Container(
                       width: double.infinity,
-                      height: 2,
+                      height: 1,
                       color: const PdfColor(0.1, 0.1, 0.1),
                     ),
-                    // SellersData(vazirFont),
+                    pw.Container(
+                      margin: const pw.EdgeInsets.symmetric(horizontal: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.end,
+                            children: [
+                              pw.Text(
+                                "شماره تلفن / نمابر: ۰۳۴۳۲۷۵۰۱۹۷۹",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                              pw.Text(
+                                "کد پستی: ۷۶۱۴۹۱۴۸۸۸",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ],
+                          ),
+                          pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.end,
+                            children: [
+                              pw.Text(
+                                "نام شخص حقیقی / حقوقی: صنایع پلی اتیلن کرمان",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                              pw.Row(
+                                children: [
+                                  pw.Text(
+                                    "صندوق پستی : ۷۶۱۳۵-۶۱۳",
+                                    style: pw.TextStyle(
+                                      font: iranSansFont,
+                                      fontSize: 8,
+                                    ),
+                                    textDirection: pw.TextDirection.rtl,
+                                  ),
+                                  pw.SizedBox(width: 10),
+                                  pw.Text(
+                                    "نشانی: کرمان - کیلومتر ۵ جاده زرند",
+                                    style: pw.TextStyle(
+                                      font: iranSansFont,
+                                      fontSize: 8,
+                                    ),
+                                    textDirection: pw.TextDirection.rtl,
+                                  ),
+                                ],
+                              ),
+                              pw.Text(
+                                "کد پستی صندوق ۷۶۱۳۸۳۶۲۷۸",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    pw.Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: const PdfColor(0.1, 0.1, 0.1),
+                    ),
+                    pw.Text(
+                      "مشخصات خریدار",
+                      style: pw.TextStyle(font: iranSansFont),
+                      textDirection: pw.TextDirection.rtl,
+                    ),
+                    pw.Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: const PdfColor(0.1, 0.1, 0.1),
+                    ),
+                    pw.Container(
+                      margin: const pw.EdgeInsets.symmetric(horizontal: 5),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text(
+                            "شماره تلفن/ نمابر: /",
+                            style: pw.TextStyle(
+                              font: iranSansFont,
+                              fontSize: 8,
+                            ),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                          pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.end,
+                            children: [
+                              pw.Text(
+                                "نام شخص حقیقی / حقوقی: $buyername",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    pw.Container(
+                      width: double.infinity,
+                      height: 1,
+                      color: const PdfColor(0.1, 0.1, 0.1),
+                    ),
+                    pw.Text(
+                      "مشخصات کالا یا خدمات مورد معامله",
+                      style: pw.TextStyle(font: iranSansFont),
+                      textDirection: pw.TextDirection.rtl,
+                    ),
+                    pw.Container(
+                      decoration: pw.BoxDecoration(
+                        border: pw.Border.all(
+                          width: 2,
+                          color: const PdfColor(0.1, 0.1, 0.1),
+                        ),
+                      ),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.end,
+                        children: [
+                          pw.Expanded(
+                            child: pw.Container(
+                              decoration: pw.BoxDecoration(
+                                border: pw.Border.all(
+                                  color: const PdfColor(0.1, 0.1, 0.1),
+                                ),
+                              ),
+                              height: 30,
+                              width: 20,
+                              child: pw.Center(
+                                child: pw.Text(
+                                  "مبلغ کل ریال",
+                                  style: pw.TextStyle(
+                                    font: iranSansFont,
+                                    fontSize: 8,
+                                  ),
+                                  textDirection: pw.TextDirection.rtl,
+                                ),
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 70,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "ارزش افزوده ریال",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 70,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "مبلغ واحد ریال",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 40,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "واحد  \nاندازه گیری",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 6,
+                                ),
+                                textAlign: pw.TextAlign.center,
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 40,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "تعداد /\n مقدار",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 130,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "شرح کالا یا خدمت",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 50,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "کد کالا",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            height: 30,
+                            width: 25,
+                            child: pw.Center(
+                              child: pw.Text(
+                                "ردیف",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    listOfSoldItems(soldProducts, iranSansFont),
+                    pw.Container(
+                      padding: const pw.EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.end,
+                        children: [
+                          pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.end,
+                            children: [
+                              pw.Text(
+                                "شرایط تحویل: درب کارخانه",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                              pw.SizedBox(width: 100),
+                              pw.Text(
+                                "نحوه پرداخت: نقدي",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ],
+                          ),
+                          pw.Text(
+                            "در صورت تایید، فاکتور طرح بنام بهره بردار صادر میگردد و قابل تغییر نمیباشد.",
+                            style: pw.TextStyle(
+                              font: iranSansFont,
+                              fontSize: 8,
+                            ),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                          pw.Text(
+                            "زمان آماده شدن سفارش 10 روزه میباشد و چنانچه سریعتر تولید شود براي شما ارسال خواهد شد.",
+                            style: pw.TextStyle(
+                              font: iranSansFont,
+                              fontSize: 8,
+                            ),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                          pw.Text(
+                            "در صورت عدم پاسخ گویی جهت ارسال پس از یک هفته سفارش شما لغو می شود.",
+                            style: pw.TextStyle(
+                              font: iranSansFont,
+                              fontSize: 8,
+                            ),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                          pw.SizedBox(height: 20),
+                          pw.Text(
+                            "تاریخ اعتبار پیش فاکتور1 روز می باشد.",
+                            style: pw.TextStyle(
+                              font: iranSansFont,
+                              fontSize: 8,
+                            ),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                          pw.Text(
+                            "احتراما خواهشمند است پیش فاکتور فوق را تائید بفرمایید.",
+                            style: pw.TextStyle(
+                              font: iranSansFont,
+                              fontWeight: pw.FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                        ],
+                      ),
+                    ),
+                    pw.Row(
+                      children: [
+                        pw.Expanded(
+                          child: pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                width: 2,
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            padding: const pw.EdgeInsets.all(5),
+                            child: pw.Text(
+                              "امضاء فروشنده:",
+                              style: pw.TextStyle(
+                                font: iranSansFont,
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                              ),
+                              textDirection: pw.TextDirection.rtl,
+                            ),
+                          ),
+                        ),
+                        pw.Expanded(
+                          child: pw.Container(
+                            decoration: pw.BoxDecoration(
+                              border: pw.Border.all(
+                                width: 2,
+                                color: const PdfColor(0.1, 0.1, 0.1),
+                              ),
+                            ),
+                            padding: const pw.EdgeInsets.all(5),
+                            child: pw.Text(
+                              "محل تائید خریدار:",
+                              style: pw.TextStyle(
+                                font: iranSansFont,
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                              ),
+                              textDirection: pw.TextDirection.rtl,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -125,7 +524,309 @@ class PdfServices {
     return pdf.save();
   }
 
-  pw.Text DateText(String date, pw.Font vazirFont) {
+  pw.Column listOfSoldItems(
+      List<Map<String, dynamic>> soldItems, pw.Font iranSansFont) {
+    int rowNumber = 0;
+    double totalPriceTax = 0;
+    double totalPrice = 0;
+
+    List<pw.Widget> widgets = [];
+    for (var element in soldItems) {
+      rowNumber++;
+      totalPrice = totalPrice + double.parse(element["totalPrice"]);
+      print(totalPrice);
+      print(element["priceEachMeter"]);
+      widgets.add(
+        pw.Row(
+          children: [
+            pw.Expanded(
+              child: pw.Container(
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(
+                    color: const PdfColor(0.1, 0.1, 0.1),
+                  ),
+                ),
+                height: 30,
+                width: 20,
+                child: pw.Center(
+                  child: pw.Text(
+                    element["totalPrice"]
+                        .toString()
+                        .replaceAll("1", "۱")
+                        .replaceAll("2", "۲")
+                        .replaceAll("3", "۳")
+                        .replaceAll("4", "۴")
+                        .replaceAll("5", "۵")
+                        .replaceAll("6", "۶")
+                        .replaceAll("7", "۷")
+                        .replaceAll("8", "۸")
+                        .replaceAll("9", "۹")
+                        .replaceAll("0", "۰"),
+                    style: pw.TextStyle(
+                      font: iranSansFont,
+                      fontSize: 8,
+                    ),
+                    textDirection: pw.TextDirection.rtl,
+                  ),
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 70,
+              child: pw.Center(
+                child: pw.Text(
+                  "ارزش افزوده ریال",
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 70,
+              child: pw.Center(
+                child: pw.Text(
+                  element["priceEachMeter"]
+                      .toString()
+                      .replaceAll("1", "۱")
+                      .replaceAll("2", "۲")
+                      .replaceAll("3", "۳")
+                      .replaceAll("4", "۴")
+                      .replaceAll("5", "۵")
+                      .replaceAll("6", "۶")
+                      .replaceAll("7", "۷")
+                      .replaceAll("8", "۸")
+                      .replaceAll("9", "۹")
+                      .replaceAll("0", "۰"),
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 40,
+              child: pw.Center(
+                child: pw.Text(
+                  "متر",
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 6,
+                  ),
+                  textAlign: pw.TextAlign.center,
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 40,
+              child: pw.Center(
+                child: pw.Text(
+                  element["meter"]
+                      .toString()
+                      .replaceAll("1", "۱")
+                      .replaceAll("2", "۲")
+                      .replaceAll("3", "۳")
+                      .replaceAll("4", "۴")
+                      .replaceAll("5", "۵")
+                      .replaceAll("6", "۶")
+                      .replaceAll("7", "۷")
+                      .replaceAll("8", "۸")
+                      .replaceAll("9", "۹")
+                      .replaceAll("0", "۰"),
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 130,
+              child: pw.Center(
+                child: pw.Text(
+                  element["peNumber"].toString() +
+                      "سایز" +
+                      element["exdia"].toString() +
+                      element["pressure"].toString() +
+                      " بار",
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 50,
+              child: pw.Center(
+                child: pw.Text(
+                  "کد کالا",
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 25,
+              child: pw.Center(
+                child: pw.Text(
+                  rowNumber
+                      .toString()
+                      .replaceAll("1", "۱")
+                      .replaceAll("2", "۲")
+                      .replaceAll("3", "۳")
+                      .replaceAll("4", "۴")
+                      .replaceAll("5", "۵")
+                      .replaceAll("6", "۶")
+                      .replaceAll("7", "۷")
+                      .replaceAll("8", "۸")
+                      .replaceAll("9", "۹")
+                      .replaceAll("0", "۰"),
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return pw.Column(
+      children: [
+        pw.Column(children: widgets),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.end,
+          children: [
+            pw.Expanded(
+              child: pw.Container(
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(
+                    color: const PdfColor(0.1, 0.1, 0.1),
+                  ),
+                ),
+                height: 30,
+                width: 20,
+                child: pw.Center(
+                  child: pw.Text(
+                    totalPrice.toString(),
+                    style: pw.TextStyle(
+                      font: iranSansFont,
+                      fontSize: 8,
+                    ),
+                    textDirection: pw.TextDirection.rtl,
+                  ),
+                ),
+              ),
+            ),
+            pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              height: 30,
+              width: 70,
+              child: pw.Center(
+                child: pw.Text(
+                  "ارزش افزوده ریال",
+                  style: pw.TextStyle(
+                    font: iranSansFont,
+                    fontSize: 8,
+                  ),
+                  textDirection: pw.TextDirection.rtl,
+                ),
+              ),
+            ),
+            pw.Container(
+              padding: const pw.EdgeInsets.only(left: 10),
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(
+                  color: const PdfColor(0.1, 0.1, 0.1),
+                ),
+              ),
+              width: 355,
+              height: 30,
+              child: pw.Row(
+                children: [
+                  pw.Text(
+                    "جمع کل: ",
+                    style: pw.TextStyle(font: iranSansFont, fontSize: 10),
+                    textDirection: pw.TextDirection.rtl,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Row sellersData(pw.Font font) => pw.Row(
+        children: [
+          pw.Column(
+            children: [],
+          ),
+        ],
+      );
+
+  pw.Text dateText(String date, pw.Font VazirRegularUIFont) {
     String persianDate = date.replaceAll("0", "۰");
     persianDate = persianDate.replaceAll("1", "۱");
     persianDate = persianDate.replaceAll("2", "۲");
@@ -139,29 +840,8 @@ class PdfServices {
 
     return pw.Text(
       persianDate,
-      style: pw.TextStyle(font: vazirFont),
+      style: pw.TextStyle(font: VazirRegularUIFont),
       textDirection: pw.TextDirection.rtl,
     );
   }
-
-  pw.Row SellersData(pw.Font font) => pw.Row(
-        children: [
-          pw.Column(
-            children: [
-              pw.Text(
-                "نام شخص حقیقی / حقوقی: صنایع پلی اتیلن کرمان",
-                style: pw.TextStyle(font: font),
-                textDirection: pw.TextDirection.rtl,
-              ),
-              pw.Row(
-                children: [
-                  pw.Text("نشانی: کرمان - کیلومتر 5 جاده زرند"),
-                  pw.Text("صندوق پستی : 613-76135"),
-                ],
-              ),
-              pw.Text("  پستی محل صندوق 7613836178کد"),
-            ],
-          ),
-        ],
-      );
 }

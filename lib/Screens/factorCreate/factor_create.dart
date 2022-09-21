@@ -71,7 +71,7 @@ class _FactorCreateState extends State<FactorCreate> {
                     child: Text(
                       element["meter"].toString(),
                       style: TextStyle(
-                        fontFamily: "Vazir_Regular_UI",
+                        fontFamily: "Vazir",
                         color: kShadeDarkColor.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                       ),
@@ -123,7 +123,7 @@ class _FactorCreateState extends State<FactorCreate> {
           "صدور پیش فاکتور",
           style: TextStyle(
             color: kShadeDarkColor,
-            fontFamily: "Vazir_Regular_UI",
+            fontFamily: "Vazir",
           ),
         ),
       ),
@@ -162,7 +162,7 @@ class _FactorCreateState extends State<FactorCreate> {
                         style: TextStyle(
                           color: kShadeDarkColor,
                           fontSize: 24,
-                          fontFamily: "Vazir_Regular_UI",
+                          fontFamily: "Vazir",
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -170,6 +170,7 @@ class _FactorCreateState extends State<FactorCreate> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: InputMeasure(
+                          numberOnly: false,
                           hintText: "اسم کامل مشتری",
                           icon: Icons.account_circle_outlined,
                           name: "اسم مشتری",
@@ -182,6 +183,7 @@ class _FactorCreateState extends State<FactorCreate> {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: InputMeasure(
+                        numberOnly: true,
                         hintText: "قیمت هر کیلوگرم لوله",
                         icon: Icons.money_outlined,
                         name: "قیمت هر کیلوگرم لوله",
@@ -198,17 +200,19 @@ class _FactorCreateState extends State<FactorCreate> {
                         meterControllerSecondMain: meterControllerMain,
                         sBarControler: searchBarController,
                         addingFunction: () {
-                          setState(() {
-                            if (meterControllerMain.value.text != "متراژ" &&
-                                meterControllerMain.value.text != "") {
-                              reciptList.add({
-                                "meter": meterControllerMain.value.text,
-                                "peNumber": peNumber,
-                                "pressure": pressure,
-                                "exdia": exdia,
-                              });
-                            }
-                          });
+                          if (reciptList.length < 7) {
+                            setState(() {
+                              if (meterControllerMain.value.text != "متراژ" &&
+                                  meterControllerMain.value.text != "") {
+                                reciptList.add({
+                                  "meter": meterControllerMain.value.text,
+                                  "peNumber": peNumber,
+                                  "pressure": pressure,
+                                  "exdia": exdia,
+                                });
+                              }
+                            });
+                          }
                         },
                       ),
                     ),
@@ -231,7 +235,7 @@ class _FactorCreateState extends State<FactorCreate> {
               onTap: () {},
               child: _CompleteFactorButton(
                 moneyCount: getNumberFromController(moneyCount),
-                name: nameController.text,
+                name: nameController.value.text,
                 reciptListBottom: reciptList,
               ),
             ),
@@ -316,7 +320,7 @@ class _AddingRowState extends State<AddingRow> {
                         "${element["PE"]}",
                         style: const TextStyle(
                           color: kShadeDarkColor,
-                          fontFamily: "Vazir_Regular_UI",
+                          fontFamily: "Vazir",
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -329,7 +333,7 @@ class _AddingRowState extends State<AddingRow> {
                         "${element["pressure"]}",
                         style: const TextStyle(
                           color: kShadeDarkColor,
-                          fontFamily: "Vazir_Regular_UI",
+                          fontFamily: "Vazir",
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -342,7 +346,7 @@ class _AddingRowState extends State<AddingRow> {
                         "${element["exdia"]}",
                         style: const TextStyle(
                           color: kShadeDarkColor,
-                          fontFamily: "Vazir_Regular_UI",
+                          fontFamily: "Vazir",
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -384,6 +388,8 @@ class _AddingRowState extends State<AddingRow> {
               List<Map<String, dynamic>> allData = await data.rawQuery(
                   "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY exdia,pressure,exdia");
 
+              List<Map<String, dynamic>> searchData = [];
+
               showModalBottomSheet(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
@@ -422,7 +428,7 @@ class _AddingRowState extends State<AddingRow> {
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                   color: kShadeDarkColor,
-                                  fontFamily: "Vazir_Regular_UI",
+                                  fontFamily: "Vazir",
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -433,7 +439,7 @@ class _AddingRowState extends State<AddingRow> {
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                   color: kShadeDarkColor,
-                                  fontFamily: "Vazir_Regular_UI",
+                                  fontFamily: "Vazir",
                                   fontSize: 20,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -447,7 +453,7 @@ class _AddingRowState extends State<AddingRow> {
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontFamily: "Vazir_Regular_UI",
+                                  fontFamily: "Vazir",
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -466,7 +472,7 @@ class _AddingRowState extends State<AddingRow> {
                                       textDirection: TextDirection.rtl,
                                       style: TextStyle(
                                         color: kShadeDarkColor,
-                                        fontFamily: "Vazir_Regular_UI",
+                                        fontFamily: "Vazir",
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -482,7 +488,7 @@ class _AddingRowState extends State<AddingRow> {
                                         textDirection: TextDirection.rtl,
                                         style: TextStyle(
                                           color: kShadeDarkColor,
-                                          fontFamily: "Vazir_Regular_UI",
+                                          fontFamily: "Vazir",
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -499,7 +505,7 @@ class _AddingRowState extends State<AddingRow> {
                                         textDirection: TextDirection.rtl,
                                         style: TextStyle(
                                           color: kShadeDarkColor,
-                                          fontFamily: "Vazir_Regular_UI",
+                                          fontFamily: "Vazir",
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -516,16 +522,45 @@ class _AddingRowState extends State<AddingRow> {
                                 child: SearchBar(
                                   customController: widget.sBarControler,
                                   hintText: "جستجو...",
-                                  onChangeCustom: () {
+                                  onChangeCustom: () async {
                                     SearchText =
                                         widget.sBarControler.value.text;
+                                    if (widget
+                                        .sBarControler.value.text.isNotEmpty)
+                                      searchData = await data.rawQuery(
+                                          "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $SearchText ORDER By exdia,pressure,PE");
                                   },
                                 ),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Column(children: widgetReturnerAllPipes(allData))
+                              if (widget.sBarControler.value.text.isEmpty)
+                                Column(
+                                    children: widgetReturnerAllPipes(allData))
+                              else if (searchData.isEmpty)
+                                Column(
+                                  children: const [
+                                    SizedBox(
+                                      height: 70,
+                                    ),
+                                    Text(
+                                      "برای این سایز لوله ای موجود نیست",
+                                      textAlign: TextAlign.center,
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
+                                        color: kShadeDarkColor,
+                                        fontFamily: "Vazir",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Column(
+                                  children: widgetReturnerAllPipes(searchData),
+                                )
                             ],
                           ),
                         ),
@@ -630,7 +665,7 @@ class _SearchBarState extends State<SearchBar> {
           hintTextDirection: TextDirection.rtl,
           hintStyle: TextStyle(
             color: kShadeDarkColor.withOpacity(0.5),
-            fontFamily: "Vazir_Regular_UI",
+            fontFamily: "Vazir",
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -731,7 +766,7 @@ class PipeMeterField extends StatelessWidget {
         hintTextDirection: TextDirection.rtl,
         hintStyle: const TextStyle(
           color: Colors.grey,
-          fontFamily: "Vazir_Regular_UI",
+          fontFamily: "Vazir",
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
@@ -755,7 +790,7 @@ class PipeDropDownText extends StatelessWidget {
         color: isActive ? kShadeDarkColor : kShadeDarkColor.withOpacity(0.8),
         fontWeight: FontWeight.bold,
         fontSize: 14,
-        fontFamily: "Vazir_Regular_UI",
+        fontFamily: "Vazir",
       ),
     );
   }
@@ -823,16 +858,15 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
         loadingDataForList();
         DateTime dt = DateTime.now();
         Jalali j = dt.toJalali();
+
         final data = await service.createInvoice(
-            calculatedAnswer,
-            "تاریخ: " +
-                j.year.toString() +
-                "/" +
-                j.month.toString() +
-                "/" +
-                j.day.toString());
-        service.savePdfFile("invoice_$number", data);
+          calculatedAnswer,
+          "تاریخ: " + j.year.toString() + j.month.toString() + j.day.toString(),
+          widget.name,
+        );
+        service.savePdfFile("$j", data);
         number++;
+        calculatedAnswer = [];
       },
       child: Container(
         decoration: BoxDecoration(
@@ -854,7 +888,7 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
               color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              fontFamily: "Vazir_Regular_UI",
+              fontFamily: "Vazir",
             ),
           ),
         ),
