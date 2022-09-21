@@ -544,7 +544,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                                           Navigator.pop(
                                                               context);
                                                         },
-                                                        child: Icon(
+                                                        child: const Icon(
                                                           Icons.close,
                                                           color:
                                                               kShadeDarkColor,

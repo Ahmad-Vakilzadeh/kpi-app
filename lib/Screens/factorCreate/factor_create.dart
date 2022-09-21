@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kpi_app/Screens/MeasureScreen/measure_screen.dart';
+
 import 'package:kpi_app/Screens/factorCreate/pdf_create.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -361,7 +361,7 @@ class _AddingRowState extends State<AddingRow> {
     return mainResult;
   }
 
-  late String SearchText;
+  late String searchText;
 
   @override
   Widget build(BuildContext context) {
@@ -523,12 +523,13 @@ class _AddingRowState extends State<AddingRow> {
                                   customController: widget.sBarControler,
                                   hintText: "جستجو...",
                                   onChangeCustom: () async {
-                                    SearchText =
+                                    searchText =
                                         widget.sBarControler.value.text;
                                     if (widget
-                                        .sBarControler.value.text.isNotEmpty)
+                                        .sBarControler.value.text.isNotEmpty) {
                                       searchData = await data.rawQuery(
-                                          "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $SearchText ORDER By exdia,pressure,PE");
+                                          "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
+                                    }
                                   },
                                 ),
                               ),
@@ -776,7 +777,7 @@ class PipeMeterField extends StatelessWidget {
 }
 
 class PipeDropDownText extends StatelessWidget {
-  PipeDropDownText(
+  const PipeDropDownText(
       {Key? key, required this.pipeAtribute, required this.isActive})
       : super(key: key);
   final bool isActive;
@@ -849,9 +850,9 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
     return double.parse(data[0][fieldName].toString());
   }
 
-  @override
   final PdfServices service = PdfServices();
 
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {

@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
@@ -534,8 +532,7 @@ class PdfServices {
     for (var element in soldItems) {
       rowNumber++;
       totalPrice = totalPrice + double.parse(element["totalPrice"]);
-      print(totalPrice);
-      print(element["priceEachMeter"]);
+
       widgets.add(
         pw.Row(
           children: [
@@ -826,7 +823,7 @@ class PdfServices {
         ],
       );
 
-  pw.Text dateText(String date, pw.Font VazirRegularUIFont) {
+  pw.Text dateText(String date, pw.Font font) {
     String persianDate = date.replaceAll("0", "۰");
     persianDate = persianDate.replaceAll("1", "۱");
     persianDate = persianDate.replaceAll("2", "۲");
@@ -840,7 +837,7 @@ class PdfServices {
 
     return pw.Text(
       persianDate,
-      style: pw.TextStyle(font: VazirRegularUIFont),
+      style: pw.TextStyle(font: font),
       textDirection: pw.TextDirection.rtl,
     );
   }

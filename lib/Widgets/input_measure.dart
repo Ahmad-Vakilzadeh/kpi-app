@@ -60,8 +60,7 @@ class _InputMeasureState extends State<InputMeasure> {
         ),
         TextFormField(
           onChanged: (value) {
-            print("$value");
-            if (widget.onChange != null) widget.onChange();
+            widget.onChange();
           },
           inputFormatters: [
             if (widget.numberOnly) ThousandsFormatter(),
@@ -110,8 +109,10 @@ class ThousandsFormatter extends TextInputFormatter {
       formatPattern: (String filteredString) {
         var output = "";
         for (int i = filteredString.length; i > 0; i--) {
-          if (i < filteredString.length && (filteredString.length - i) % 3 == 0)
+          if (i < filteredString.length &&
+              (filteredString.length - i) % 3 == 0) {
             output = "," + output;
+          }
           output = filteredString[i - 1] + output;
         }
         return output == "0" ? "" : output;
