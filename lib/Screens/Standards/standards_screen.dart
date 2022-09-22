@@ -19,7 +19,6 @@ Future<List<Map<String, dynamic>>> getDataFromFile() async {
   return ret;
 }
 
-
 List<Widget> createListOfStandards(BuildContext context, Object ret) {
   List<Widget> fields = <Widget>[];
   // ignore: unused_local_variable
@@ -67,8 +66,11 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
       ),
       onTap: () {
         showModalBottomSheet(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: const Radius.circular(15),topRight: const Radius.circular(15),)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(15),
+              topRight: const Radius.circular(15),
+            )),
             context: context,
             builder: (context) {
               return Container(
@@ -80,20 +82,25 @@ List<Widget> createListOfStandards(BuildContext context, Object ret) {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              GestureDetector(onTap: (){
-                                Navigator.pop(context);
-                              },child: Icon(Icons.close,color: kShadeDarkColor,)),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: kShadeDarkColor,
+                                  )),
                             ],
                           ),
                         ),
                         Text(
                           "${element["title"]}",
-                          textAlign:TextAlign.right,
+                          textAlign: TextAlign.right,
                           style: const TextStyle(
                             fontSize: 24,
                             color: Colors.black,
@@ -164,12 +171,14 @@ class FutrueListStandards extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  snapshot.data==null ? Container():
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: createListOfStandards(context, snapshot.data!),
-                  ),
+                  snapshot.data == null
+                      ? Container()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children:
+                              createListOfStandards(context, snapshot.data!),
+                        ),
                   const SizedBox(
                     height: 96,
                   ),
