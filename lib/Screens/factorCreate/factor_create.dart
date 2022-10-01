@@ -856,7 +856,7 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        loadingDataForList();
+        await loadingDataForList();
         DateTime dt = DateTime.now();
         Jalali j = dt.toJalali();
 
@@ -865,7 +865,7 @@ class _CompleteFactorButtonState extends State<_CompleteFactorButton> {
           "تاریخ: " + j.year.toString() + j.month.toString() + j.day.toString(),
           widget.name,
         );
-        service.savePdfFile("$j", data);
+        service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
         number++;
         calculatedAnswer = [];
       },
