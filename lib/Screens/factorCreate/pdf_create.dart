@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:open_document/open_document.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import "package:pdf/pdf.dart";
 import 'package:pdf/widgets.dart' as pw;
@@ -40,7 +40,7 @@ class PdfServices {
     var filePath = "${output.path}/$fileName.pdf";
     final file = File(filePath);
     await file.writeAsBytes(byteList);
-    await OpenDocument.openDocument(filePath: filePath);
+    OpenFile.open(filePath);
   }
 
   Future<Uint8List> createInvoice(List<Map<String, dynamic>> soldProducts,

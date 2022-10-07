@@ -26,7 +26,7 @@ dependencies:
   url_launcher: ^6.1.6
   pdf: ^3.8.3
   path_provider: ^2.0.11
-  open_document: ^1.0.5
+  open_file: ^3.2.1
   shamsi_date: ^1.0.1
 
 dev_dependencies:
