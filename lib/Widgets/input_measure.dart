@@ -66,7 +66,7 @@ class _InputMeasureState extends State<InputMeasure> {
             if (widget.numberOnly) ThousandsFormatter(),
             if (widget.numberOnly)
               FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-            LengthLimitingTextInputFormatter(12),
+            if (widget.numberOnly) LengthLimitingTextInputFormatter(12),
           ],
           controller: widget.customController,
           keyboardType:

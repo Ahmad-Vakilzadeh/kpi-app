@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import "package:pdf/pdf.dart";
 import 'package:pdf/widgets.dart' as pw;
+import 'package:bidi/bidi.dart' as bidi;
 
 class CustomRow {
   final String itemName;
@@ -525,7 +527,7 @@ class PdfServices {
   pw.Column listOfSoldItems(
       List<Map<String, dynamic>> soldItems, pw.Font iranSansFont) {
     int rowNumber = 0;
-    double totalPriceTax = 0;
+    NumberFormat formatNumTemplate = NumberFormat.decimalPattern('en_us');
     double totalPrice = 0;
 
     List<pw.Widget> widgets = [];
@@ -547,7 +549,8 @@ class PdfServices {
                 width: 20,
                 child: pw.Center(
                   child: pw.Text(
-                    element["totalPrice"]
+                    formatNumTemplate
+                        .format(double.parse(element["totalPrice"]))
                         .toString()
                         .replaceAll("1", "۱")
                         .replaceAll("2", "۲")
@@ -597,7 +600,8 @@ class PdfServices {
               width: 70,
               child: pw.Center(
                 child: pw.Text(
-                  element["priceEachMeter"]
+                  formatNumTemplate
+                      .format(double.parse(element["priceEachMeter"]))
                       .toString()
                       .replaceAll("1", "۱")
                       .replaceAll("2", "۲")
@@ -647,7 +651,8 @@ class PdfServices {
               width: 40,
               child: pw.Center(
                 child: pw.Text(
-                  element["meter"]
+                  formatNumTemplate
+                      .format(double.parse(element["meter"]))
                       .toString()
                       .replaceAll("1", "۱")
                       .replaceAll("2", "۲")
@@ -677,11 +682,7 @@ class PdfServices {
               width: 130,
               child: pw.Center(
                 child: pw.Text(
-                  element["peNumber"].toString() +
-                      "سایز" +
-                      element["exdia"].toString() +
-                      element["pressure"].toString() +
-                      " بار",
+                  "${element["peNumber"]}سایز${element["exdia"]}${element["pressure"]} بار",
                   style: pw.TextStyle(
                     font: iranSansFont,
                     fontSize: 8,
@@ -761,7 +762,19 @@ class PdfServices {
                 width: 20,
                 child: pw.Center(
                   child: pw.Text(
-                    totalPrice.toString(),
+                    formatNumTemplate
+                        .format(totalPrice)
+                        .toString()
+                        .replaceAll("1", "۱")
+                        .replaceAll("2", "۲")
+                        .replaceAll("3", "۳")
+                        .replaceAll("4", "۴")
+                        .replaceAll("5", "۵")
+                        .replaceAll("6", "۶")
+                        .replaceAll("7", "۷")
+                        .replaceAll("8", "۸")
+                        .replaceAll("9", "۹")
+                        .replaceAll("0", "۰"),
                     style: pw.TextStyle(
                       font: iranSansFont,
                       fontSize: 8,

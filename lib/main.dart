@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
                 next: (context) => snapshot.data!
                     ? const PageMange()
                     : const OnBoardingScreen(),
-                until: () => Future.delayed(const Duration(seconds: 1)),
-                startAnimation: 'Animation 1',
+                until: () => Future.delayed(const Duration(milliseconds: 1500)),
+                startAnimation: 'icon animation',
               );
             } else {
               return Container(
