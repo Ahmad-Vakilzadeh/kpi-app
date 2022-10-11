@@ -566,7 +566,7 @@ class PdfServices {
                       font: iranSansFont,
                       fontSize: 8,
                     ),
-                    textDirection: pw.TextDirection.rtl,
+                    textDirection: pw.TextDirection.ltr,
                   ),
                 ),
               ),
@@ -617,7 +617,7 @@ class PdfServices {
                     font: iranSansFont,
                     fontSize: 8,
                   ),
-                  textDirection: pw.TextDirection.rtl,
+                  textDirection: pw.TextDirection.ltr,
                 ),
               ),
             ),
@@ -668,7 +668,7 @@ class PdfServices {
                     font: iranSansFont,
                     fontSize: 8,
                   ),
-                  textDirection: pw.TextDirection.rtl,
+                  textDirection: pw.TextDirection.ltr,
                 ),
               ),
             ),
@@ -681,8 +681,9 @@ class PdfServices {
               height: 30,
               width: 130,
               child: pw.Center(
-                child: pw.Text(
-                  "${element["peNumber"]}سایز${element["exdia"]}${element["pressure"]} بار",
+                child:
+                pw.Text(
+                  "${element["peNumber"]} سایز ${element["exdia"]}) ${element["pressure"]} بار(",
                   style: pw.TextStyle(
                     font: iranSansFont,
                     fontSize: 8,
@@ -736,7 +737,8 @@ class PdfServices {
                     font: iranSansFont,
                     fontSize: 8,
                   ),
-                  textDirection: pw.TextDirection.rtl,
+                  textDirection: pw.TextDirection.ltr,
+
                 ),
               ),
             ),
@@ -779,7 +781,7 @@ class PdfServices {
                       font: iranSansFont,
                       fontSize: 8,
                     ),
-                    textDirection: pw.TextDirection.rtl,
+                    textDirection: pw.TextDirection.ltr,
                   ),
                 ),
               ),
