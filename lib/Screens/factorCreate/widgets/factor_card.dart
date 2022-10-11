@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/delete_button.dart';
 import 'package:kpi_app/constants.dart';
 
@@ -14,10 +15,12 @@ class FactorCard extends StatefulWidget {
 
 class _FactorCardState extends State<FactorCard> {
   listWidgetReturner(List<Map<String, dynamic>> reciptData) {
+    NumberFormat formatNumTemplate = NumberFormat.decimalPattern('en_us');
+
     List<Widget> output = [];
-    for (var element in reciptData) {
-      final index =
-          widget.reciptList.indexWhere((element) => element == element);
+    for (var index = 0; index < reciptData.length; index++) {
+      final element = reciptData[index];
+      int indexString = index + 1;
       output.add(
         Container(
           height: 40,
@@ -27,15 +30,25 @@ class _FactorCardState extends State<FactorCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.reciptList.removeAt(index);
+                      });
+                    },
+                    child: const DeleteButton(),
+                  ),
+                  Row(
                     children: [
                       Row(
                         children: [
                           Text(
-                            element["meter"].toString(),
+                            formatNumTemplate
+                                .format(double.parse(element["meter"]))
+                                .toString(),
                             style: TextStyle(
                               fontFamily: "Vazir",
+                              fontSize: 16,
                               color: kShadeDarkColor.withOpacity(0.8),
                               fontWeight: FontWeight.bold,
                             ),
@@ -47,11 +60,15 @@ class _FactorCardState extends State<FactorCard> {
                             ":متراژ",
                             style: TextStyle(
                               fontFamily: "Vazir",
+                              fontSize: 16,
                               color: kShadeDarkColor.withOpacity(0.8),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        width: 20,
                       ),
                       Row(
                         children: [
@@ -59,6 +76,7 @@ class _FactorCardState extends State<FactorCard> {
                             "${element["exdia"]}/${element["peNumber"]}/${element["pressure"]}",
                             style: TextStyle(
                               fontFamily: "Vazir",
+                              fontSize: 16,
                               color: kShadeDarkColor.withOpacity(0.8),
                               fontWeight: FontWeight.bold,
                             ),
@@ -70,21 +88,25 @@ class _FactorCardState extends State<FactorCard> {
                             ":لوله",
                             style: TextStyle(
                               fontFamily: "Vazir",
+                              fontSize: 16,
                               color: kShadeDarkColor.withOpacity(0.8),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "${indexString++}".toString(),
+                        style: TextStyle(
+                            fontFamily: "Vazir",
+                            fontSize: 16,
+                            color: kShadeDarkColor.withOpacity(0.8),
+                            fontWeight: FontWeight.bold),
+                      ),
                     ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        widget.reciptList.removeAt(index);
-                      });
-                    },
-                    child: const DeleteButton(),
                   ),
                 ],
               ),

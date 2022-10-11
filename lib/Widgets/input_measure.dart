@@ -1,3 +1,4 @@
+import 'package:auto_direction/auto_direction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
@@ -15,6 +16,7 @@ class InputMeasure extends StatefulWidget {
     Key? key,
   }) : super(key: key);
   final bool numberOnly;
+
   final String name;
   final IconData icon;
   final String hintText;
@@ -28,6 +30,8 @@ class InputMeasure extends StatefulWidget {
 var formatter = intl.NumberFormat('###,###,###');
 
 class _InputMeasureState extends State<InputMeasure> {
+  late bool isTypingNumber = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,13 +63,23 @@ class _InputMeasureState extends State<InputMeasure> {
           height: 10,
         ),
         TextFormField(
+          textAlign: isTypingNumber ? TextAlign.left : TextAlign.right,
           onChanged: (value) {
             widget.onChange();
+            setState(() {
+              if (value.isNotEmpty) {
+                isTypingNumber = true;
+              } else if (value.isEmpty) {
+                isTypingNumber = false;
+                print("AAAAAAAAAAA");
+                print(value);
+              }
+            });
           },
           inputFormatters: [
-            if (widget.numberOnly) ThousandsFormatter(),
             if (widget.numberOnly)
               FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+            if (widget.numberOnly) ThousandsFormatter(),
             if (widget.numberOnly) LengthLimitingTextInputFormatter(12),
           ],
           controller: widget.customController,
@@ -111,7 +125,7 @@ class ThousandsFormatter extends TextInputFormatter {
         for (int i = filteredString.length; i > 0; i--) {
           if (i < filteredString.length &&
               (filteredString.length - i) % 3 == 0) {
-            output = "," + output;
+            output = ",$output";
           }
           output = filteredString[i - 1] + output;
         }

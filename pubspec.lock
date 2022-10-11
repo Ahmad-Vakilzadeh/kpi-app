@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  auto_direction:
+    dependency: "direct main"
+    description:
+      name: auto_direction
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   barcode:
     dependency: transitive
     description:
@@ -133,7 +140,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_launcher_icons:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"

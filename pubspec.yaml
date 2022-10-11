@@ -29,16 +29,17 @@ dependencies:
   open_file: ^3.2.1
   shamsi_date: ^1.0.1
   bidi: ^2.0.0
+  auto_direction: ^0.0.6
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
-  flutter_launcher_icons: ^0.10.0
 
 flutter_icons:
   android: true
-  image_path: "assets/images/LogoLowRes.jpg"
+  image_path: "assets/images/new_logo.png"
 
 flutter:
   uses-material-design: true
