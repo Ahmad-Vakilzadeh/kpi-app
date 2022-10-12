@@ -63,122 +63,124 @@ class _FactorCreateState extends State<FactorCreate> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 25,
-                    color: Color(0x200D6472),
-                  )
-                ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 15,
               ),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(
-                        top: 25,
-                        right: 20,
-                        bottom: 25,
-                      ),
-                      child: const Text(
-                        "پارامتر ها",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: kShadeDarkColor,
-                          fontSize: 24,
-                          fontFamily: "Vazir",
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: InputMeasure(
-                          numberOnly: false,
-                          hintText: "اسم کامل مشتری",
-                          icon: Icons.account_circle_outlined,
-                          name: "اسم مشتری",
-                          customController: nameController,
-                          onChange: () {}),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: InputMeasure(
-                        numberOnly: true,
-                        hintText: "قیمت هر کیلوگرم لوله",
-                        icon: Icons.money_outlined,
-                        name: "قیمت هر کیلوگرم لوله",
-                        customController: moneyCount,
-                        onChange: () {
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 25,
+                      color: Color(0x200D6472),
+                    )
                   ],
                 ),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 25,
+                          right: 20,
+                          bottom: 25,
+                        ),
+                        child: const Text(
+                          "پارامتر ها",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: kShadeDarkColor,
+                            fontSize: 24,
+                            fontFamily: "Vazir",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: InputMeasure(
+                            numberOnly: false,
+                            hintText: "اسم کامل مشتری",
+                            icon: Icons.account_circle_outlined,
+                            name: "اسم مشتری",
+                            customController: nameController,
+                            onChange: () {}),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: InputMeasure(
+                          numberOnly: true,
+                          hintText: "قیمت هر کیلوگرم لوله",
+                          icon: Icons.money_outlined,
+                          name: "قیمت هر کیلوگرم لوله",
+                          customController: moneyCount,
+                          onChange: () {
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            FactorCreateCard(
-              exdiaTextOne: exdia.toString(),
-              peNumberTextOne: peNumber.toString(),
-              pressureTextOne: pressure.toString(),
-              meterControllerMain: meterControllerMain,
-              addingFunction: () {
-                if (reciptList.length < 7) {
-                  setState(() {
-                    if (meterControllerMain.value.text != "متراژ" &&
-                        meterControllerMain.value.text != "") {
-                      reciptList.add({
-                        "meter": meterControllerMain.value.text
-                            .replaceAll(",", "")
-                            .toString(),
-                        "peNumber": peNumber,
-                        "pressure": pressure,
-                        "exdia": exdia,
-                      });
-                    }
-                  });
-                }
-              },
-              sBarController: searchBarController,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            FactorCard(reciptList: reciptList),
-            const SizedBox(
-              height: 20,
-            ),
-            CompleteFactorButton(
-              moneyCount: getNumberFromController(moneyCount),
-              name: nameController.value.text,
-              reciptListBottom: reciptList,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
+              const SizedBox(
+                height: 15,
+              ),
+              FactorCreateCard(
+                exdiaTextOne: exdia.toString(),
+                peNumberTextOne: peNumber.toString(),
+                pressureTextOne: pressure.toString(),
+                meterControllerMain: meterControllerMain,
+                addingFunction: () {
+                  if (reciptList.length < 7) {
+                    setState(() {
+                      if (meterControllerMain.value.text != "متراژ" &&
+                          meterControllerMain.value.text != "") {
+                        reciptList.add({
+                          "meter": meterControllerMain.value.text
+                              .replaceAll(",", "")
+                              .toString(),
+                          "peNumber": peNumber,
+                          "pressure": pressure,
+                          "exdia": exdia,
+                        });
+                      }
+                    });
+                  }
+                },
+                sBarController: searchBarController,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FactorCard(reciptList: reciptList),
+              const SizedBox(
+                height: 20,
+              ),
+              CompleteFactorButton(
+                moneyCount: getNumberFromController(moneyCount),
+                name: nameController.value.text,
+                reciptListBottom: reciptList,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -366,20 +366,40 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                       const SizedBox(
                         height: 10,
                       ),
-                      SizedBox(
-                        height: 45,
-                        child: SearchBar(
-                          customController: widget.sBarController,
-                          hintText: "جستجو...",
-                          onChangeCustom: () async {
-                            searchText = widget.sBarController.value.text
-                                .replaceAll(",", "");
-                            if (widget.sBarController.value.text.isNotEmpty) {
-                              searchData = await data.rawQuery(
-                                  "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
-                            }
-                          },
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 45,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: SearchBar(
+                              customController: widget.sBarController,
+                              hintText: "جستجو...",
+                              onChangeCustom: () async {
+                                searchText = widget.sBarController.value.text
+                                    .replaceAll(",", "");
+                                if (widget
+                                    .sBarController.value.text.isNotEmpty) {
+                                  searchData = await data.rawQuery(
+                                      "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
+                                }
+                              },
+                            ),
+                          ),
+                          Expanded(
+                              child: Center(
+                                  child: Text(
+                            "قطر",
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              color: kShadeDarkColor.withOpacity(0.6),
+                              fontFamily: "Vazir",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ))),
+                        ],
                       ),
                       const SizedBox(
                         height: 10,
