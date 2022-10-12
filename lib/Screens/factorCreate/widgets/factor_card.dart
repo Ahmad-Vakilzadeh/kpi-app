@@ -134,6 +134,7 @@ class _FactorCardState extends State<FactorCard> {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
               margin: const EdgeInsets.only(

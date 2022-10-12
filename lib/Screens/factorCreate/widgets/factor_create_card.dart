@@ -30,7 +30,8 @@ class FactorCreateCard extends StatefulWidget {
 }
 
 class _FactorCreateCardState extends State<FactorCreateCard> {
-  widgetReturnerAllPipes(List<Map<String, dynamic>> allData) {
+  widgetReturnerAllPipes(
+      List<Map<String, dynamic>> allData, TextEditingController controller) {
     List<Widget> mainResult = [];
     for (var element in allData) {
       mainResult.add(
@@ -41,6 +42,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                 peNumber = element["PE"];
                 pressure = double.tryParse(element["pressure"].toString());
                 exdia = element["exdia"];
+                controller.text = "";
                 Navigator.of(context).pop();
               },
             );
@@ -103,12 +105,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
   }
 
   late String searchText;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  late String meterText;
 
   @override
   Widget build(BuildContext context) {
@@ -145,30 +142,59 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                var data = await SqfL.open();
-                List<Map<String, dynamic>> allData = await data.rawQuery(
-                    "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY exdia,pressure,exdia");
-
-                List<Map<String, dynamic>> searchData = [];
-
-                await PipeModalBottomSheet(context, searchData, data, allData);
-              },
-              child: Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                height: 55,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: kShadeDarkColor.withOpacity(0.4),
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Text(
+                        "اضافه کردن لوله",
+                        style: TextStyle(
+                          color: kShadeDarkColor,
+                          fontSize: 14,
+                          fontFamily: "Vazir",
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Icon(
+                        Icons.add_outlined,
+                        color: kPrimaryColor,
+                      )
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(15),
                 ),
-                child: PIpeButtonContent(),
-              ),
+                GestureDetector(
+                  onTap: () async {
+                    var data = await SqfL.open();
+                    List<Map<String, dynamic>> allData = await data.rawQuery(
+                        "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY exdia,pressure,exdia");
+
+                    List<Map<String, dynamic>> searchData = [];
+
+                    await PipeModalBottomSheet(
+                        context, searchData, data, allData);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    height: 55,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: kShadeDarkColor.withOpacity(0.4),
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: PIpeButtonContent(),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -177,15 +203,33 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                 icon: Icons.numbers_outlined,
                 name: "متراژ لوله",
                 customController: widget.meterControllerMain,
-                onChange: () {},
+                onChange: () {
+                  setState(() {});
+                },
                 numberOnly: true,
               ),
             ),
             GestureDetector(
               onTap: () {
-                widget.addingFunction();
+                setState(() {
+                  widget.addingFunction();
+                  if (widget.meterControllerMain.value.text.isNotEmpty) {
+                    const snackBar = SnackBar(
+                      duration: Duration(milliseconds: 800),
+                      content: Text(
+                        'لوله اضافه شد',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Vazir",
+                            fontSize: 16),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {}
+                });
               },
-              child: const AddButton(),
+              child: AddButton(controller: widget.meterControllerMain),
             ),
           ],
         ),
@@ -204,167 +248,180 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
         isScrollControlled: true,
         builder: (context) {
           return Center(
-            child: SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(
+                                Icons.close,
+                                color: kShadeDarkColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const Text(
+                        "فهرست لوله های قابل سفارش در شرکت صنایع",
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          color: kShadeDarkColor,
+                          fontFamily: "Vazir",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const Text(
+                        "پلی اتیلن کرمان",
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          color: kShadeDarkColor,
+                          fontFamily: "Vazir",
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const Text(
+                        "برای انتخاب هر یک  از لوله ها روی ردیف مورد نظر بزنید",
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: "Vazir",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              Icons.close,
-                              color: kShadeDarkColor,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: const Text(
+                              "PE",
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                color: kShadeDarkColor,
+                                fontFamily: "Vazir",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: const Center(
+                              child: Text(
+                                "فشار نامی",
+                                textAlign: TextAlign.center,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  color: kShadeDarkColor,
+                                  fontFamily: "Vazir",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            child: const Center(
+                              child: Text(
+                                "قطر",
+                                textAlign: TextAlign.center,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  color: kShadeDarkColor,
+                                  fontFamily: "Vazir",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    const Text(
-                      "فهرست لوله های قابل سفارش در شرکت صنایع",
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                        color: kShadeDarkColor,
-                        fontFamily: "Vazir",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    const Text(
-                      "پلی اتیلن کرمان",
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                        color: kShadeDarkColor,
-                        fontFamily: "Vazir",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const Text(
-                      "برای انتخاب هر یک  از لوله ها روی ردیف مورد نظر بزنید",
-                      textAlign: TextAlign.center,
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Vazir",
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: const Text(
-                            "PE",
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              color: kShadeDarkColor,
-                              fontFamily: "Vazir",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+                      SizedBox(
+                        height: 45,
+                        child: SearchBar(
+                          customController: widget.sBarController,
+                          hintText: "جستجو...",
+                          onChangeCustom: () async {
+                            searchText = widget.sBarController.value.text
+                                .replaceAll(",", "");
+                            if (widget.sBarController.value.text.isNotEmpty) {
+                              searchData = await data.rawQuery(
+                                  "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
+                            }
+                          },
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                  if (widget.sBarController.value.text.isEmpty)
+                    Expanded(
+                      child: SingleChildScrollView(
+                          child: Column(
+                              children: widgetReturnerAllPipes(
+                                  allData, widget.sBarController))),
+                    )
+                  else if (searchData.isEmpty)
+                    Column(
+                      children: const [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: const Center(
-                            child: Text(
-                              "فشار نامی",
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                color: kShadeDarkColor,
-                                fontFamily: "Vazir",
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+                          height: 70,
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: const Center(
-                            child: Text(
-                              "قطر",
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                color: kShadeDarkColor,
-                                fontFamily: "Vazir",
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
+                        Text(
+                          "برای این سایز لوله ای موجود نیست",
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            color: kShadeDarkColor,
+                            fontFamily: "Vazir",
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 45,
-                      child: SearchBar(
-                        customController: widget.sBarController,
-                        hintText: "جستجو...",
-                        onChangeCustom: () async {
-                          searchText = widget.sBarController.value.text;
-                          if (widget.sBarController.value.text.isNotEmpty) {
-                            searchData = await data.rawQuery(
-                                "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
-                          }
-                        },
+                    )
+                  else
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: widgetReturnerAllPipes(
+                              searchData, widget.sBarController),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    if (widget.sBarController.value.text.isEmpty)
-                      Column(children: widgetReturnerAllPipes(allData))
-                    else if (searchData.isEmpty)
-                      Column(
-                        children: const [
-                          SizedBox(
-                            height: 70,
-                          ),
-                          Text(
-                            "برای این سایز لوله ای موجود نیست",
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              color: kShadeDarkColor,
-                              fontFamily: "Vazir",
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      Column(
-                        children: widgetReturnerAllPipes(searchData),
-                      )
-                  ],
-                ),
+                    )
+                ],
               ),
             ),
           );

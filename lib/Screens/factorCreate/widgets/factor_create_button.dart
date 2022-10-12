@@ -64,9 +64,9 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        DateTime dt = DateTime.now();
-        Jalali j = dt.toJalali();
-        if (widget.name != "" || widget.moneyCount.toString() != "0.0") {
+        if (widget.name != "" && widget.moneyCount.toString() != "0.0") {
+          DateTime dt = DateTime.now();
+          Jalali j = dt.toJalali();
           await loadingDataForList();
           final data = await service.createInvoice(
             calculatedAnswer,
@@ -77,11 +77,27 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
           service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
           number++;
           calculatedAnswer = [];
+        } else {
+          const snackBar = SnackBar(
+            content: Text(
+              'لطفا فرم هارا کامل کنید',
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Vazir",
+                  fontSize: 16),
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       },
       child: Container(
         decoration: BoxDecoration(
-          color: kPrimaryColor,
+          color: widget.name != "" &&
+                  widget.moneyCount.toString() != "0.0" &&
+                  widget.reciptListBottom.isNotEmpty
+              ? kPrimaryColor
+              : Colors.grey,
           boxShadow: [
             BoxShadow(
               blurRadius: 25,

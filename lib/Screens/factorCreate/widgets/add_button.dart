@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
 class AddButton extends StatelessWidget {
-  const AddButton({
+  AddButton({
     Key? key,
+    required this.controller,
   }) : super(key: key);
+  final TextEditingController controller;
 
+  late bool ifComplete = controller.value.text.isNotEmpty;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +21,7 @@ class AddButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: kPrimaryColor,
+        color: ifComplete ? kPrimaryColor : Colors.grey,
       ),
       child: const Center(
         child: Text(

@@ -150,7 +150,9 @@ class _FactorCreateState extends State<FactorCreate> {
                     if (meterControllerMain.value.text != "متراژ" &&
                         meterControllerMain.value.text != "") {
                       reciptList.add({
-                        "meter": meterControllerMain.value.text,
+                        "meter": meterControllerMain.value.text
+                            .replaceAll(",", "")
+                            .toString(),
                         "peNumber": peNumber,
                         "pressure": pressure,
                         "exdia": exdia,

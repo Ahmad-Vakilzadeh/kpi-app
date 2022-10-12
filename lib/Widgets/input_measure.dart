@@ -39,6 +39,13 @@ class _InputMeasureState extends State<InputMeasure> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            const Text(
+              "*",
+              style: TextStyle(color: Colors.red, fontSize: 16),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
             Text(
               widget.name,
               textAlign: TextAlign.right,
@@ -65,14 +72,12 @@ class _InputMeasureState extends State<InputMeasure> {
         TextFormField(
           textAlign: isTypingNumber ? TextAlign.left : TextAlign.right,
           onChanged: (value) {
-            widget.onChange();
             setState(() {
+              widget.onChange();
               if (value.isNotEmpty) {
                 isTypingNumber = true;
               } else if (value.isEmpty) {
                 isTypingNumber = false;
-                print("AAAAAAAAAAA");
-                print(value);
               }
             });
           },
