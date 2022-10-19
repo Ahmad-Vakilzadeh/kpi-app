@@ -52,6 +52,7 @@ class _SearchBarState extends State<SearchBar> {
           ),
           icon: GestureDetector(
             onTap: () {
+              print("sla0");
               widget.onTapIcon();
             },
             child: Icon(

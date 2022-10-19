@@ -216,10 +216,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                     List<Map<String, dynamic>> allData = await data.rawQuery(
                         "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY exdia,pressure,exdia");
 
-                    List<Map<String, dynamic>> searchData = [];
-
-                    await PipeModalBottomSheet(
-                        context, searchData, data, allData);
+                    await PipeModalBottomSheet(context, data, allData);
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(
@@ -282,211 +279,213 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
     );
   }
 
-  PipeModalBottomSheet(
-      BuildContext context,
-      List<Map<String, dynamic>> searchData,
-      Database data,
+  PipeModalBottomSheet(BuildContext context, Database data,
       List<Map<String, dynamic>> allData) async {
+    List<Map<String, dynamic>> searchData = [];
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return Center(
-            child: Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
-              ),
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        "فهرست لوله های قابل سفارش در شرکت صنایع",
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          color: kShadeDarkColor,
-                          fontFamily: "Vazir",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const Text(
-                        "پلی اتیلن کرمان",
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          color: kShadeDarkColor,
-                          fontFamily: "Vazir",
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text(
-                        "برای انتخاب هر یک  از لوله ها روی ردیف مورد نظر بزنید",
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: "Vazir",
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: const Text(
-                              "PE",
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                color: kShadeDarkColor,
-                                fontFamily: "Vazir",
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: const Center(
-                              child: Text(
-                                "فشار نامی",
-                                textAlign: TextAlign.center,
-                                textDirection: TextDirection.rtl,
-                                style: TextStyle(
-                                  color: kShadeDarkColor,
-                                  fontFamily: "Vazir",
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: const Center(
-                              child: Text(
-                                "قطر",
-                                textAlign: TextAlign.center,
-                                textDirection: TextDirection.rtl,
-                                style: TextStyle(
-                                  color: kShadeDarkColor,
-                                  fontFamily: "Vazir",
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 45,
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: SearchBar(
-                              onTapIcon: () async {
-                                //TODO: ASK FATHER : wont work on tap and on change!
-                                searchText = widget.sBarController.value.text
-                                    .replaceAll(",", "");
-                                if (widget
-                                    .sBarController.value.text.isNotEmpty) {
-                                  searchData = await data.rawQuery(
-                                      "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
-                                }
-                              },
-                              customController: widget.sBarController,
-                              hintText: "قطر...",
-                              onChangeCustom: () async {
-                                searchText = widget.sBarController.value.text
-                                    .replaceAll(",", "");
-                                if (widget
-                                    .sBarController.value.text.isNotEmpty) {
-                                  searchData = await data.rawQuery(
-                                      "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                  if (widget.sBarController.value.text.isEmpty)
-                    Expanded(
-                      child: SingleChildScrollView(
-                          child: Column(
-                              children: widgetReturnerAllPipes(
-                                  allData, widget.sBarController))),
-                    )
-                  else if (searchData.isEmpty)
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setState /*You can rename this!*/) {
+            return Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: Column(
+                  children: [
                     Column(
-                      children: const [
+                      children: [
                         SizedBox(
-                          height: 70,
+                          width: double.infinity,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                        Text(
-                          "برای این سایز لوله ای موجود نیست",
+                        const Text(
+                          "فهرست لوله های قابل سفارش در شرکت صنایع",
                           textAlign: TextAlign.center,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
                             color: kShadeDarkColor,
                             fontFamily: "Vazir",
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                      ],
-                    )
-                  else
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: widgetReturnerAllPipes(
-                              searchData, widget.sBarController),
+                        const Text(
+                          "پلی اتیلن کرمان",
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            color: kShadeDarkColor,
+                            fontFamily: "Vazir",
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                    )
-                ],
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "برای انتخاب هر یک  از لوله ها روی ردیف مورد نظر بزنید",
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "Vazir",
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: const Text(
+                                "PE",
+                                textAlign: TextAlign.center,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  color: kShadeDarkColor,
+                                  fontFamily: "Vazir",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: const Center(
+                                child: Text(
+                                  "فشار نامی",
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    color: kShadeDarkColor,
+                                    fontFamily: "Vazir",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: const Center(
+                                child: Text(
+                                  "قطر",
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    color: kShadeDarkColor,
+                                    fontFamily: "Vazir",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 45,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: SearchBar(
+                                onTapIcon: () async {
+                                  //TODO: ASK FATHER : wont work on tap and on change!
+                                  searchText = widget.sBarController.value.text
+                                      .replaceAll(",", "");
+                                  if (widget
+                                      .sBarController.value.text.isNotEmpty) {
+                                    searchData = await data.rawQuery(
+                                        "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia like  '$searchText%' ORDER By exdia,pressure,PE");
+                                    setState(() {});
+                                  }
+                                },
+                                customController: widget.sBarController,
+                                hintText: "قطر...",
+                                onChangeCustom: () async {
+                                  searchText = widget.sBarController.value.text
+                                      .replaceAll(",", "");
+                                  if (widget
+                                      .sBarController.value.text.isNotEmpty) {
+                                    searchData = await data.rawQuery(
+                                        "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia like  '$searchText%' ORDER By exdia,pressure,PE");
+                                  } else searchData=allData;
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    if (widget.sBarController.value.text.isEmpty)
+                      Expanded(
+                        child: SingleChildScrollView(
+                            child: Column(
+                                children: widgetReturnerAllPipes(
+                                    allData, widget.sBarController))),
+                      )
+                    else if (searchData.isEmpty)
+                      Column(
+                        children: const [
+                          SizedBox(
+                            height: 70,
+                          ),
+                          Text(
+                            "برای این سایز لوله ای موجود نیست",
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              color: kShadeDarkColor,
+                              fontFamily: "Vazir",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                              children: widgetReturnerAllPipes(
+                                  searchData, widget.sBarController)),
+                        ),
+                      )
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          });
         });
   }
 }

@@ -70,7 +70,7 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
           await loadingDataForList();
           final data = await service.createInvoice(
             calculatedAnswer,
-            "تاریخ: ${j.year}/${j.month}/${j.day}",
+            "تاریخ: ${j.day} / ${j.month} / ${j.year}",
             widget.name,
           );
 
