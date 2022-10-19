@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kpi_app/Engine/measuring.dart';
-import 'package:kpi_app/Screens/factorCreate/factor_create.dart';
+import 'package:kpi_app/Screens/factorCreate/factor_create_screen.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/add_button.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/search_bar.dart';
 import 'package:kpi_app/Widgets/input_measure.dart';
@@ -147,21 +147,66 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "اضافه کردن لوله",
-                        style: TextStyle(
-                          color: kShadeDarkColor,
-                          fontSize: 14,
-                          fontFamily: "Vazir",
-                          fontWeight: FontWeight.bold,
-                        ),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    "برای انتخاب لوله مستطیل زیر را لمس کنید",
+                                    style: TextStyle(
+                                      color: kShadeDarkColor,
+                                      fontSize: 14,
+                                      fontFamily: "Vazir",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "باشد",
+                                          style: TextStyle(
+                                            color: kShadeDarkColor,
+                                            fontSize: 12,
+                                            fontFamily: "Vazir",
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                        icon: Icon(Icons.help_outline),
+                        color: kShadeDarkColor,
                       ),
-                      Icon(
-                        Icons.add_outlined,
-                        color: kPrimaryColor,
-                      )
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            "اضافه کردن لوله",
+                            style: TextStyle(
+                              color: kShadeDarkColor,
+                              fontSize: 14,
+                              fontFamily: "Vazir",
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(
+                            Icons.add_outlined,
+                            color: kPrimaryColor,
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -188,7 +233,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: PIpeButtonContent(),
+                    child: PipeButtonContent(),
                   ),
                 ),
               ],
@@ -268,7 +313,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                               },
                               child: const Icon(
                                 Icons.close,
-                                color: kShadeDarkColor,
+                                color: Colors.white,
                               ),
                             )
                           ],
@@ -371,10 +416,20 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                         children: [
                           SizedBox(
                             height: 45,
-                            width: MediaQuery.of(context).size.width * 0.8,
+                            width: MediaQuery.of(context).size.width * 0.9,
                             child: SearchBar(
+                              onTapIcon: () async {
+                                //TODO: ASK FATHER : wont work on tap and on change!
+                                searchText = widget.sBarController.value.text
+                                    .replaceAll(",", "");
+                                if (widget
+                                    .sBarController.value.text.isNotEmpty) {
+                                  searchData = await data.rawQuery(
+                                      "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia = $searchText ORDER By exdia,pressure,PE");
+                                }
+                              },
                               customController: widget.sBarController,
-                              hintText: "جستجو...",
+                              hintText: "قطر...",
                               onChangeCustom: () async {
                                 searchText = widget.sBarController.value.text
                                     .replaceAll(",", "");
@@ -386,19 +441,6 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                               },
                             ),
                           ),
-                          Expanded(
-                              child: Center(
-                                  child: Text(
-                            "قطر",
-                            textAlign: TextAlign.center,
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              color: kShadeDarkColor.withOpacity(0.6),
-                              fontFamily: "Vazir",
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ))),
                         ],
                       ),
                       const SizedBox(
@@ -449,8 +491,8 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
   }
 }
 
-class PIpeButtonContent extends StatelessWidget {
-  const PIpeButtonContent({
+class PipeButtonContent extends StatelessWidget {
+  const PipeButtonContent({
     Key? key,
   }) : super(key: key);
 
@@ -486,7 +528,7 @@ class PIpeButtonContent extends StatelessWidget {
                 color: kPrimaryColor.withOpacity(0.1)),
             child: Center(
               child: Text(
-                exdia.toString(),
+                pressure.toString(),
                 style: const TextStyle(
                   color: kShadeDarkColor,
                   fontFamily: "Vazir",
@@ -505,7 +547,7 @@ class PIpeButtonContent extends StatelessWidget {
                 color: kPrimaryColor.withOpacity(0.1)),
             child: Center(
               child: Text(
-                pressure.toString(),
+                exdia.toString(),
                 style: const TextStyle(
                   color: kShadeDarkColor,
                   fontFamily: "Vazir",

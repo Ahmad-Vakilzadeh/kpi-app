@@ -9,12 +9,14 @@ class SearchBar extends StatefulWidget {
       {Key? key,
       required this.customController,
       required this.hintText,
-      required this.onChangeCustom})
+      required this.onChangeCustom,
+      required this.onTapIcon})
       : super(key: key);
 
   final TextEditingController customController;
   final String hintText;
   final Function onChangeCustom;
+  final Function onTapIcon;
 
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -48,9 +50,14 @@ class _SearchBarState extends State<SearchBar> {
               width: 1,
             ),
           ),
-          icon: Icon(
-            Icons.search,
-            color: kShadeDarkColor.withOpacity(0.5),
+          icon: GestureDetector(
+            onTap: () {
+              widget.onTapIcon();
+            },
+            child: Icon(
+              Icons.search,
+              color: kShadeDarkColor.withOpacity(0.5),
+            ),
           ),
           hintText: widget.hintText,
           hintTextDirection: TextDirection.rtl,

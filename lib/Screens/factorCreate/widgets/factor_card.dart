@@ -73,7 +73,7 @@ class _FactorCardState extends State<FactorCard> {
                       Row(
                         children: [
                           Text(
-                            "${element["exdia"]}/${element["peNumber"]}/${element["pressure"]}",
+                            "${element["peNumber"]}/${element["pressure"]}/${element["exdia"]}",
                             style: TextStyle(
                               fontFamily: "Vazir",
                               fontSize: 16,

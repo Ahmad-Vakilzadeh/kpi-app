@@ -70,7 +70,11 @@ class _InputMeasureState extends State<InputMeasure> {
           height: 10,
         ),
         TextFormField(
-          textAlign: isTypingNumber ? TextAlign.left : TextAlign.right,
+          textAlign: widget.numberOnly
+              ? isTypingNumber
+                  ? TextAlign.left
+                  : TextAlign.right
+              : TextAlign.right,
           onChanged: (value) {
             setState(() {
               widget.onChange();

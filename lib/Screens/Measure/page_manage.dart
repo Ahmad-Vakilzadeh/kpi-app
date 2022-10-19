@@ -4,7 +4,7 @@ import 'package:kpi_app/Screens/AboutUs/about_us.dart';
 import 'package:kpi_app/Screens/MeasureScreen/measure_screen.dart';
 import 'package:kpi_app/Screens/OnBoardingScreens/on_boarding.dart';
 import 'package:kpi_app/Screens/Standards/standards_screen.dart';
-import 'package:kpi_app/Screens/factorCreate/factor_create.dart';
+import 'package:kpi_app/Screens/factorCreate/factor_create_screen.dart';
 import 'package:kpi_app/Widgets/BottomNavigation/bottom_navigation.dart';
 import 'package:kpi_app/constants.dart';
 
