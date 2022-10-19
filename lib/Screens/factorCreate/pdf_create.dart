@@ -277,7 +277,7 @@ class PdfServices {
                             width: 70,
                             child: pw.Center(
                               child: pw.Text(
-                                "مبلغ واحد ریال",
+                                "مبلغ واحد",
                                 style: pw.TextStyle(
                                   font: iranSansFont,
                                   fontSize: 8,
@@ -454,7 +454,7 @@ class PdfServices {
                             ),
                             padding: const pw.EdgeInsets.all(5),
                             child: pw.Text(
-                              "محل تائید خریدار:",
+                              "محل امضاء خریدار:",
                               style: pw.TextStyle(
                                 font: iranSansFont,
                                 fontWeight: pw.FontWeight.bold,
