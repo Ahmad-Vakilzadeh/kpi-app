@@ -46,7 +46,7 @@ class PdfServices {
   }
 
   Future<Uint8List> createInvoice(List<Map<String, dynamic>> soldProducts,
-      String date, String buyername) async {
+      String date, String buyername, String excessText) async {
     final pdf = pw.Document();
 
     var data2 = await rootBundle.load("assets/fonts/Iran_sans.ttf");
@@ -465,6 +465,15 @@ class PdfServices {
                           ),
                         ),
                       ],
+                    ),
+                    pw.Text(
+                      excessText,
+                      style: pw.TextStyle(
+                        font: iranSansFont,
+                        fontWeight: pw.FontWeight.bold,
+                        fontSize: 10,
+                      ),
+                      textDirection: pw.TextDirection.rtl,
                     )
                   ],
                 ),

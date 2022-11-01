@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' as intl;
+import 'package:kpi_app/Screens/factorCreate/widgets/add_button.dart';
 
 import 'package:kpi_app/Screens/factorCreate/widgets/factor_card.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/factor_create_button.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/factor_create_card.dart';
+import 'package:kpi_app/Screens/factorCreate/widgets/search_bar.dart';
 
 import 'package:kpi_app/Widgets/input_measure.dart';
 import 'package:kpi_app/main.dart';
+import 'package:sqflite/sqflite.dart';
+import '../../Engine/measuring.dart';
 import '../../constants.dart';
 
 int peNumber = 100;
 int exdia = 250;
+int exdialoden = 20;
+double? pressureloden = 4;
 double? pressure = 4;
+bool openPagecheck = false;
+bool openPagecheckTwo = false;
 var formatter = intl.NumberFormat('###,###,###');
 
 class FactorCreate extends StatefulWidget {
@@ -22,12 +30,22 @@ class FactorCreate extends StatefulWidget {
   State<FactorCreate> createState() => _FactorCreateState();
 }
 
-class _FactorCreateState extends State<FactorCreate> {
+class _FactorCreateState extends State<FactorCreate>
+    with TickerProviderStateMixin {
   late TextEditingController nameController;
+  late TextEditingController addressController;
   late TextEditingController moneyCount;
+  late TextEditingController moneyCountSecond;
   late TextEditingController meterControllerMain;
+  late TextEditingController lodenPriceController;
+  late TextEditingController lodenMeterController;
+  late TextEditingController excessTextInformation;
+
   late List<Map<String, dynamic>> reciptList = [];
   late TextEditingController searchBarController;
+
+  late AnimationController lowDensAnimation;
+  late AnimationController excessTextAnimation;
 
   @override
   void initState() {
@@ -36,6 +54,15 @@ class _FactorCreateState extends State<FactorCreate> {
     meterControllerMain = TextEditingController();
     nameController = TextEditingController();
     moneyCount = TextEditingController();
+    excessTextInformation = TextEditingController();
+    addressController = TextEditingController();
+    lodenMeterController = TextEditingController();
+    lodenPriceController = TextEditingController();
+    moneyCountSecond = TextEditingController();
+    lowDensAnimation = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    excessTextAnimation = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
   }
 
   double getNumberFromController(TextEditingController c) {
@@ -90,7 +117,7 @@ class _FactorCreateState extends State<FactorCreate> {
                   Navigator.pop(context, false);
                 },
                 child: const Text(
-                  "باشد",
+                  "لغو",
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     color: kShadeDarkColor,
@@ -155,7 +182,7 @@ class _FactorCreateState extends State<FactorCreate> {
                             bottom: 25,
                           ),
                           child: const Text(
-                            "پارامتر ها",
+                            "مشخصات مشتری",
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               color: kShadeDarkColor,
@@ -168,6 +195,7 @@ class _FactorCreateState extends State<FactorCreate> {
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: InputMeasure(
+                              obligated: true,
                               numberOnly: false,
                               hintText: "اسم کامل مشتری",
                               icon: Icons.account_circle_outlined,
@@ -181,15 +209,13 @@ class _FactorCreateState extends State<FactorCreate> {
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: InputMeasure(
-                            numberOnly: true,
-                            hintText: "قیمت هر کیلوگرم لوله",
-                            icon: Icons.money_outlined,
-                            name: "قیمت هر کیلوگرم لوله",
-                            customController: moneyCount,
-                            onChange: () {
-                              setState(() {});
-                            },
-                          ),
+                              obligated: false,
+                              numberOnly: false,
+                              hintText: "ادرس مشتری",
+                              icon: Icons.home_outlined,
+                              name: "ادرس",
+                              customController: addressController,
+                              onChange: () {}),
                         ),
                         const SizedBox(
                           height: 20,
@@ -202,11 +228,28 @@ class _FactorCreateState extends State<FactorCreate> {
                   height: 15,
                 ),
                 FactorCreateCard(
+                  excessTextCard: () {
+                    excessTextAnimation.forward();
+                    if (excessTextAnimation.isCompleted) {
+                      excessTextAnimation.reverse();
+                    }
+                  },
+                  moneyCountSecond: moneyCountSecond,
+                  lowDensFunction: () {
+                    lowDensAnimation.forward();
+                    if (lowDensAnimation.isCompleted) {
+                      lowDensAnimation.reverse();
+                    }
+                  },
+                  moneyCountPass: moneyCount,
                   exdiaTextOne: exdia.toString(),
                   peNumberTextOne: peNumber.toString(),
                   pressureTextOne: pressure.toString(),
                   meterControllerMain: meterControllerMain,
                   addingFunction: () async {
+                    setState(() {
+                      openPagecheck = true;
+                    });
                     bool checker = true;
                     for (var element in reciptList) {
                       if (element["peNumber"] == peNumber &&
@@ -224,47 +267,11 @@ class _FactorCreateState extends State<FactorCreate> {
                                     color: kShadeDarkColor,
                                     fontSize: 18,
                                     fontFamily: "Vazir",
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 content: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (reciptList.length < 7) {
-                                          setState(() {
-                                            if (meterControllerMain
-                                                        .value.text !=
-                                                    "متراژ" &&
-                                                meterControllerMain
-                                                        .value.text !=
-                                                    "") {
-                                              reciptList.add({
-                                                "meter": meterControllerMain
-                                                    .value.text
-                                                    .replaceAll(",", "")
-                                                    .toString(),
-                                                "peNumber": peNumber,
-                                                "pressure": pressure,
-                                                "exdia": exdia,
-                                              });
-                                            }
-                                          });
-                                        }
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        "اضافه کردن لوله",
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 14,
-                                          fontFamily: "Vazir",
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
                                     const SizedBox(
                                       width: 10,
                                     ),
@@ -273,11 +280,11 @@ class _FactorCreateState extends State<FactorCreate> {
                                         Navigator.pop(context);
                                       },
                                       child: const Text(
-                                        "باشد",
+                                        "لغو",
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           color: kShadeDarkColor,
-                                          fontSize: 14,
+                                          fontSize: 16,
                                           fontFamily: "Vazir",
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -310,12 +317,266 @@ class _FactorCreateState extends State<FactorCreate> {
                 const SizedBox(
                   height: 10,
                 ),
+                SizeTransition(
+                  sizeFactor: lowDensAnimation,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 25,
+                          color: Color(0x200D6472),
+                        )
+                      ],
+                    ),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                              top: 25,
+                              right: 20,
+                              bottom: 25,
+                            ),
+                            child: const Text(
+                              "لوله لودن",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                color: kShadeDarkColor,
+                                fontSize: 24,
+                                fontFamily: "Vazir",
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Column(
+                              children: [
+                                MixedInput(
+                                  name: "مشخصات لوله لودن",
+                                  icon: Icons.gas_meter_outlined,
+                                  hintTextOne: "متراژ",
+                                  hintTextTwo: "قیمت هر متر",
+                                  controllerOne: lodenMeterController,
+                                  controllerTwo: lodenPriceController,
+                                  onChange: () {},
+                                  obligated: true,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    var data = await SqfL.open();
+                                    List<Map<String, dynamic>> allData =
+                                        await data.rawQuery(
+                                            "SELECT DISTINCT exdia,pressure FROM lowdens ORDER BY exdia,pressure");
+
+                                    // ignore: use_build_context_synchronously
+                                    await PipeModalBottomSheet(
+                                        context, data, allData);
+                                    if (openPagecheckTwo == false) {
+                                      setState(() {
+                                        openPagecheckTwo = true;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 55,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                        color: kShadeDarkColor.withOpacity(0.4),
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: PipeButtonContentLowDense(
+                                        openPageChecker: openPagecheckTwo),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              lowDensAnimation.reverse();
+                              setState(() {
+                                if (lodenMeterController
+                                        .value.text.isNotEmpty &&
+                                    openPagecheckTwo) {
+                                  addingFunction() async {
+                                    openPagecheckTwo = true;
+                                    bool checker = true;
+                                    for (var element in reciptList) {
+                                      if (element["pressure"] ==
+                                              pressureloden &&
+                                          element["exdia"] == exdialoden) {
+                                        checker = false;
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                  "لوله ای که اضافه کرده اید \nتکراری است",
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                    color: kShadeDarkColor,
+                                                    fontSize: 18,
+                                                    fontFamily: "Vazir",
+                                                  ),
+                                                ),
+                                                content: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text(
+                                                        "لغو",
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        style: TextStyle(
+                                                          color:
+                                                              kShadeDarkColor,
+                                                          fontSize: 16,
+                                                          fontFamily: "Vazir",
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      }
+                                    }
+                                    if (reciptList.length < 7 && checker) {
+                                      setState(() {
+                                        if (lodenMeterController.value.text !=
+                                                "متراژ" &&
+                                            lodenMeterController.value.text !=
+                                                "") {
+                                          reciptList.add({
+                                            "meter": lodenMeterController
+                                                .value.text
+                                                .replaceAll(",", "")
+                                                .toString(),
+                                            "peNumber": "LD",
+                                            "pressure": pressureloden,
+                                            "exdia": exdialoden,
+                                          });
+                                        }
+                                      });
+                                    }
+                                  }
+
+                                  setState(() {
+                                    addingFunction();
+                                  });
+
+                                  const snackBar = SnackBar(
+                                    duration: Duration(milliseconds: 800),
+                                    content: Text(
+                                      'لوله اضافه شد',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Vazir",
+                                          fontSize: 16),
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                  setState(() {
+                                    openPagecheckTwo = true;
+                                  });
+                                } else {}
+                              });
+                            },
+                            child: AddButtonLowDense(
+                              active: openPagecheckTwo,
+                              controllerMeter: lodenMeterController,
+                              controllerMoney: lodenPriceController,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 FactorCard(reciptList: reciptList),
                 const SizedBox(
-                  height: 20,
+                  height: 15,
+                ),
+                SizeTransition(
+                  sizeFactor: excessTextAnimation,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(
+                                top: 25,
+                                right: 20,
+                                bottom: 25,
+                              ),
+                              child: const Text(
+                                "توضیحات اضافه",
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  color: kShadeDarkColor,
+                                  fontSize: 24,
+                                  fontFamily: "Vazir",
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: InputMeasure(
+                                customController: excessTextInformation,
+                                icon: Icons.text_fields_outlined,
+                                hintText: "توضیحات اختیاری",
+                                name: "توضیحات اختیاری",
+                                numberOnly: false,
+                                obligated: false,
+                                onChange: () {},
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
                 ),
                 CompleteFactorButton(
-                  moneyCount: getNumberFromController(moneyCount),
+                  excessTextController: excessTextInformation,
+                  moneyCountOne: getNumberFromController(moneyCount),
+                  moneyCountTwo: moneyCountSecond.value.text.isNotEmpty
+                      ? getNumberFromController(moneyCountSecond)
+                      : 0,
                   name: nameController.value.text,
                   reciptListBottom: reciptList,
                 ),
@@ -328,5 +589,295 @@ class _FactorCreateState extends State<FactorCreate> {
         ),
       ),
     );
+  }
+
+  widgetReturnerAllPipes(
+      List<Map<String, dynamic>> allData, TextEditingController controller) {
+    List<Widget> mainResult = [];
+    for (var element in allData) {
+      mainResult.add(
+        GestureDetector(
+          onTap: () {
+            setState(
+              () {
+                pressureloden = double.tryParse(element["pressure"].toString());
+                exdialoden = element["exdia"];
+                controller.text = "";
+                Navigator.of(context).pop();
+              },
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: const Color(0xffC6E0E8),
+            ),
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: const Center(
+                      child: Text(
+                        "loden",
+                        style: TextStyle(
+                          color: kShadeDarkColor,
+                          fontFamily: "Vazir",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: Center(
+                      child: Text(
+                        "${element["pressure"]}",
+                        style: const TextStyle(
+                          color: kShadeDarkColor,
+                          fontFamily: "Vazir",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: Center(
+                      child: Text(
+                        "${element["exdia"]}",
+                        style: const TextStyle(
+                          color: kShadeDarkColor,
+                          fontFamily: "Vazir",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return mainResult;
+  }
+
+  late String searchText;
+  late String meterText;
+
+  PipeModalBottomSheet(BuildContext context, Database data,
+      List<Map<String, dynamic>> allData) async {
+    List<Map<String, dynamic>> searchData = [];
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setState /*You can rename this!*/) {
+            return Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Text(
+                          "فهرست لوله های قابل سفارش در شرکت صنایع",
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            color: kShadeDarkColor,
+                            fontFamily: "Vazir",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const Text(
+                          "پلی اتیلن کرمان",
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            color: kShadeDarkColor,
+                            fontFamily: "Vazir",
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "برای انتخاب هر یک  از لوله ها روی ردیف مورد نظر بزنید",
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "Vazir",
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: const Text(
+                                "PE",
+                                textAlign: TextAlign.center,
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  color: kShadeDarkColor,
+                                  fontFamily: "Vazir",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: const Center(
+                                child: Text(
+                                  "فشار نامی",
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    color: kShadeDarkColor,
+                                    fontFamily: "Vazir",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: const Center(
+                                child: Text(
+                                  "قطر",
+                                  textAlign: TextAlign.center,
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    color: kShadeDarkColor,
+                                    fontFamily: "Vazir",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 45,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: SearchBar(
+                                onTapIcon: () async {
+                                  searchText = searchBarController.value.text
+                                      .replaceAll(",", "");
+                                  if (searchBarController
+                                      .value.text.isNotEmpty) {
+                                    searchData = await data.rawQuery(
+                                        "SELECT DISTINCT exdia,pressure FROM lowdens WHERE exdia like  '$searchText%' ORDER By exdia,pressure");
+                                    setState(() {});
+                                  }
+                                },
+                                customController: searchBarController,
+                                hintText: "قطر...",
+                                onChangeCustom: () async {
+                                  searchText = searchBarController.value.text
+                                      .replaceAll(",", "");
+                                  if (searchBarController
+                                      .value.text.isNotEmpty) {
+                                    searchData = await data.rawQuery(
+                                        "SELECT DISTINCT exdia,pressure FROM lowdens WHERE exdia like  '$searchText%' ORDER By exdia,pressure");
+                                  } else
+                                    searchData = allData;
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    if (searchBarController.value.text.isEmpty)
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: widgetReturnerAllPipes(
+                              allData,
+                              searchBarController,
+                            ),
+                          ),
+                        ),
+                      )
+                    else if (searchData.isEmpty)
+                      Column(
+                        children: const [
+                          SizedBox(
+                            height: 70,
+                          ),
+                          Text(
+                            "برای این سایز لوله ای موجود نیست",
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              color: kShadeDarkColor,
+                              fontFamily: "Vazir",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                              children: widgetReturnerAllPipes(
+                                  searchData, searchBarController)),
+                        ),
+                      )
+                  ],
+                ),
+              ),
+            );
+          });
+        });
   }
 }

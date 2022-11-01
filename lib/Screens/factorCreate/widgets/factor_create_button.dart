@@ -7,14 +7,18 @@ import '../../../constants.dart';
 
 class CompleteFactorButton extends StatefulWidget {
   final List<Map<String, dynamic>> reciptListBottom;
+  final TextEditingController excessTextController;
   final String name;
-  final double moneyCount;
+  final double moneyCountOne;
+  final double moneyCountTwo;
 
   const CompleteFactorButton({
     Key? key,
     required this.reciptListBottom,
     required this.name,
-    required this.moneyCount,
+    required this.moneyCountOne,
+    required this.moneyCountTwo,
+    required this.excessTextController,
   }) : super(key: key);
   @override
   State<CompleteFactorButton> createState() => _CompleteFactorButtonState();
@@ -22,35 +26,48 @@ class CompleteFactorButton extends StatefulWidget {
 
 class _CompleteFactorButtonState extends State<CompleteFactorButton> {
   late int number = 0;
+  sortingFunction(List<Map<String, dynamic>> list) {
+    list.sort(
+        (a, b) => b["exdia"].toString().compareTo((a["exdia"].toString())));
+    return list;
+  }
 
   late List<Map<String, dynamic>> calculatedAnswer = [];
+  late List<Map<String, dynamic>> sortedList = [];
 
   Future<void> loadingDataForList() async {
-    late int index = 0;
     var data = await SqfL.open();
     List<Map<String, dynamic>> forLoopList;
-    for (var element in widget.reciptListBottom) {
-      forLoopList = await data.rawQuery(
-          "SELECT DISTINCT * FROM pe WHERE PE = ${element["peNumber"]} AND exdia= ${element["exdia"]} AND pressure = ${element["pressure"]}");
-      // calculatedAnswer.add(forLoopList[index]);
+    for (var element in sortedList) {
+      if (element["peNumber"] == "LD") {
+        forLoopList = await data.rawQuery(
+            "SELECT DISTINCT * FROM lowdens WHERE exdia= ${element["exdia"]} AND pressure = ${element["pressure"]}");
+      } else {
+        forLoopList = await data.rawQuery(
+            "SELECT DISTINCT * FROM pe WHERE PE = ${element["peNumber"]} AND exdia= ${element["exdia"]} AND pressure = ${element["pressure"]}");
+      }
       double weight = getField(forLoopList, "weight");
       double lenght =
           double.parse(element["meter"].toString().replaceAll(",", ""));
-      double eachMeterPrice = weight * widget.moneyCount;
-      double totalPrice = weight * lenght * widget.moneyCount;
+      double eachMeterPrice;
+      double totalPrice;
 
+      if (element["peNumber"] == 100 && widget.moneyCountTwo != 0) {
+        eachMeterPrice = weight * widget.moneyCountTwo;
+        totalPrice = weight * lenght * widget.moneyCountTwo;
+      } else {
+        eachMeterPrice = weight * widget.moneyCountOne;
+        totalPrice = weight * lenght * widget.moneyCountOne;
+      }
       calculatedAnswer.add({
-        "meter": widget.reciptListBottom[index]["meter"],
-        "peNumber": widget.reciptListBottom[index]["peNumber"],
-        "pressure": widget.reciptListBottom[index]["pressure"],
-        "exdia": widget.reciptListBottom[index]["exdia"],
+        "meter": element["meter"],
+        "peNumber": element["peNumber"],
+        "pressure": element["pressure"],
+        "exdia": element["exdia"],
         "priceEachMeter": eachMeterPrice.toStringAsFixed(0),
         "totalPrice": totalPrice.toStringAsFixed(0),
       });
-      index++;
     }
-
-    index = 0;
   }
 
   double getField(List data, String fieldName) {
@@ -64,7 +81,8 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        if (widget.name != "" && widget.moneyCount.toString() != "0.0") {
+        if (widget.name != "" && widget.moneyCountOne.toString() != "0.0") {
+          sortedList = sortingFunction(widget.reciptListBottom);
           DateTime dt = DateTime.now();
           Jalali j = dt.toJalali();
           await loadingDataForList();
@@ -72,6 +90,7 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
             calculatedAnswer,
             "تاریخ: ${j.day} / ${j.month} / ${j.year}",
             widget.name,
+            widget.excessTextController.value.text,
           );
 
           service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
@@ -94,7 +113,7 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
       child: Container(
         decoration: BoxDecoration(
           color: widget.name != "" &&
-                  widget.moneyCount.toString() != "0.0" &&
+                  widget.moneyCountOne.toString() != "0.0" &&
                   widget.reciptListBottom.isNotEmpty
               ? kPrimaryColor
               : Colors.grey,

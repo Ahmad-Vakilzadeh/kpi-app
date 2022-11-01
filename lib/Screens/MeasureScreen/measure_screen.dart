@@ -717,6 +717,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: InputMeasure(
+                                  obligated: true,
                                   numberOnly: true,
                                   hintText: "متراژ لوله به متر",
                                   icon: Icons.select_all_outlined,
@@ -734,6 +735,7 @@ class _MeasureScreenState extends State<MeasureScreen>
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: InputMeasure(
+                                  obligated: true,
                                   numberOnly: true,
                                   hintText: "قیمت هر کیلوگرم لوله",
                                   icon: Icons.money_outlined,

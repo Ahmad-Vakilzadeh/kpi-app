@@ -14,6 +14,7 @@ class InputMeasure extends StatefulWidget {
     required this.onChange,
     required this.numberOnly,
     Key? key,
+    required this.obligated,
   }) : super(key: key);
   final bool numberOnly;
 
@@ -22,6 +23,7 @@ class InputMeasure extends StatefulWidget {
   final String hintText;
   final TextEditingController customController;
   final Function onChange;
+  final bool obligated;
 
   @override
   State<InputMeasure> createState() => _InputMeasureState();
@@ -39,9 +41,11 @@ class _InputMeasureState extends State<InputMeasure> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Text(
+            Text(
               "*",
-              style: TextStyle(color: Colors.red, fontSize: 16),
+              style: TextStyle(
+                  color: widget.obligated ? Colors.red : Colors.white,
+                  fontSize: 16),
             ),
             const SizedBox(
               width: 5,
@@ -140,6 +144,169 @@ class ThousandsFormatter extends TextInputFormatter {
         }
         return output == "0" ? "" : output;
       },
+    );
+  }
+}
+
+class MixedInput extends StatefulWidget {
+  const MixedInput(
+      {Key? key,
+      required this.name,
+      required this.icon,
+      required this.hintTextOne,
+      required this.hintTextTwo,
+      required this.controllerOne,
+      required this.controllerTwo,
+      required this.onChange,
+      required this.obligated})
+      : super(key: key);
+  final String name;
+  final IconData icon;
+  final String hintTextOne;
+  final String hintTextTwo;
+  final TextEditingController controllerOne;
+  final TextEditingController controllerTwo;
+  final Function onChange;
+  final bool obligated;
+
+  @override
+  State<MixedInput> createState() => _MixedInputState();
+}
+
+var formatterValue = intl.NumberFormat('###,###,###');
+
+class _MixedInputState extends State<MixedInput> {
+  late bool isTypingNumberOne = false;
+  late bool isTypingNumberTwo = false;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              "*",
+              style: TextStyle(
+                  color: widget.obligated ? Colors.red : Colors.white,
+                  fontSize: 16),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              widget.name,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: kShadeDarkColor,
+                fontFamily: "Vazir",
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Icon(
+              widget.icon,
+              color: kPrimaryColor,
+              size: 24,
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 4,
+              child: TextFormField(
+                textAlign: isTypingNumberOne ? TextAlign.left : TextAlign.right,
+                onChanged: (value) {
+                  setState(() {
+                    widget.onChange();
+                    if (value.isNotEmpty) {
+                      isTypingNumberOne = true;
+                    } else if (value.isEmpty) {
+                      isTypingNumberOne = false;
+                    }
+                  });
+                },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ThousandsFormatter(),
+                  LengthLimitingTextInputFormatter(12),
+                ],
+                controller: widget.controllerOne,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(
+                      color: kShadeDarkColor,
+                      width: 1,
+                    ),
+                  ),
+                  hintText: widget.hintTextOne,
+                  hintTextDirection: TextDirection.rtl,
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "Vazir",
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Spacer(),
+            Expanded(
+              flex: 8,
+              child: TextFormField(
+                textAlign: isTypingNumberTwo ? TextAlign.left : TextAlign.right,
+                onChanged: (value) {
+                  setState(() {
+                    widget.onChange();
+                    if (value.isNotEmpty) {
+                      isTypingNumberTwo = true;
+                    } else if (value.isEmpty) {
+                      isTypingNumberTwo = false;
+                    }
+                  });
+                },
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ThousandsFormatter(),
+                  LengthLimitingTextInputFormatter(12),
+                ],
+                controller: widget.controllerTwo,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(
+                      color: kShadeDarkColor,
+                      width: 1,
+                    ),
+                  ),
+                  hintText: widget.hintTextTwo,
+                  hintTextDirection: TextDirection.rtl,
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "Vazir",
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        )
+      ],
     );
   }
 }

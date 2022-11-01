@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 import 'package:kpi_app/Engine/measuring.dart';
 import 'package:kpi_app/Screens/factorCreate/factor_create_screen.dart';
@@ -9,21 +10,29 @@ import 'package:kpi_app/constants.dart';
 import 'package:sqflite/sqflite.dart';
 
 class FactorCreateCard extends StatefulWidget {
-  const FactorCreateCard(
-      {Key? key,
-      required this.meterControllerMain,
-      required this.addingFunction,
-      required this.exdiaTextOne,
-      required this.peNumberTextOne,
-      required this.pressureTextOne,
-      required this.sBarController})
-      : super(key: key);
+  FactorCreateCard({
+    Key? key,
+    required this.meterControllerMain,
+    required this.addingFunction,
+    required this.exdiaTextOne,
+    required this.peNumberTextOne,
+    required this.pressureTextOne,
+    required this.sBarController,
+    required this.moneyCountPass,
+    required this.lowDensFunction,
+    required this.moneyCountSecond,
+    required this.excessTextCard,
+  }) : super(key: key);
   final TextEditingController meterControllerMain;
   final Function addingFunction;
   final String exdiaTextOne;
   final String peNumberTextOne;
   final String pressureTextOne;
   final TextEditingController sBarController;
+  final TextEditingController moneyCountPass;
+  final Function lowDensFunction;
+  final Function excessTextCard;
+  final TextEditingController moneyCountSecond;
 
   @override
   State<FactorCreateCard> createState() => _FactorCreateCardState();
@@ -217,6 +226,11 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                         "SELECT DISTINCT PE,exdia,pressure FROM pe ORDER BY exdia,pressure,exdia");
 
                     await PipeModalBottomSheet(context, data, allData);
+                    if (openPagecheck == false) {
+                      setState(() {
+                        openPagecheck = true;
+                      });
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(
@@ -230,7 +244,9 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                       ),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: PipeButtonContent(),
+                    child: PipeButtonContent(
+                      openPageChecker: openPagecheck,
+                    ),
                   ),
                 ),
               ],
@@ -241,6 +257,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: InputMeasure(
+                obligated: true,
                 hintText: "متراژ",
                 icon: Icons.numbers_outlined,
                 name: "متراژ لوله",
@@ -251,11 +268,82 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                 numberOnly: true,
               ),
             ),
+            const SizedBox(
+              height: 15,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: InputMeasure(
+                obligated: true,
+                numberOnly: true,
+                hintText: "قیمت هر کیلوگرم لوله" + "PE80",
+                icon: Icons.money_outlined,
+                name: "قیمت هر کیلوگرم لوله" + "PE80",
+                customController: widget.moneyCountPass,
+                onChange: () {
+                  setState(() {});
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: InputMeasure(
+                obligated: false,
+                numberOnly: true,
+                hintText: "قیمت هر کیلوگرم لوله" + " PE100",
+                icon: Icons.money_outlined,
+                name: "قیمت هر کیلوگرم لوله" + " PE100",
+                customController: widget.moneyCountSecond,
+                onChange: () {
+                  setState(() {});
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      widget.excessTextCard();
+                    },
+                    child: const Text(
+                      "اضافه کردن متن اختیاری",
+                      style: TextStyle(
+                        color: kShadeLiteColor,
+                        fontFamily: "Vazir",
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        widget.lowDensFunction();
+                      },
+                      child: const Text(
+                        "اضافه کردن لوله لودن",
+                        style: TextStyle(
+                          color: kShadeLiteColor,
+                          fontFamily: "Vazir",
+                          fontSize: 14,
+                        ),
+                      )),
+                ],
+              ),
+            ),
             GestureDetector(
               onTap: () {
                 setState(() {
-                  widget.addingFunction();
-                  if (widget.meterControllerMain.value.text.isNotEmpty) {
+                  if (widget.meterControllerMain.value.text.isNotEmpty &&
+                      openPagecheck) {
+                    widget.addingFunction();
                     const snackBar = SnackBar(
                       duration: Duration(milliseconds: 800),
                       content: Text(
@@ -268,10 +356,16 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                       ),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    setState(() {
+                      openPagecheck = true;
+                    });
                   } else {}
                 });
               },
-              child: AddButton(controller: widget.meterControllerMain),
+              child: AddButton(
+                controller: widget.meterControllerMain,
+                active: openPagecheck,
+              ),
             ),
           ],
         ),
@@ -435,7 +529,8 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                                       .sBarController.value.text.isNotEmpty) {
                                     searchData = await data.rawQuery(
                                         "SELECT DISTINCT exdia,pressure,PE FROM pe WHERE exdia like  '$searchText%' ORDER By exdia,pressure,PE");
-                                  } else searchData=allData;
+                                  } else
+                                    searchData = allData;
                                   setState(() {});
                                 },
                               ),
@@ -492,72 +587,184 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
 
 class PipeButtonContent extends StatelessWidget {
   const PipeButtonContent({
+    required this.openPageChecker,
     Key? key,
   }) : super(key: key);
 
+  final bool openPageChecker;
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.all(10),
+    return openPageChecker
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: kPrimaryColor.withOpacity(0.1)),
+                  child: Center(
+                    child: Text(
+                      peNumber.toString(),
+                      style: const TextStyle(
+                        color: kShadeDarkColor,
+                        fontFamily: "Vazir",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: kPrimaryColor.withOpacity(0.1)),
+                  child: Center(
+                    child: Text(
+                      pressure.toString(),
+                      style: const TextStyle(
+                        color: kShadeDarkColor,
+                        fontFamily: "Vazir",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: kPrimaryColor.withOpacity(0.1)),
+                  child: Center(
+                    child: Text(
+                      exdia.toString(),
+                      style: const TextStyle(
+                        color: kShadeDarkColor,
+                        fontFamily: "Vazir",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Container(
+            margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kPrimaryColor.withOpacity(0.1)),
-            child: Center(
+                color: kShadeLiteColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10)),
+            child: const Center(
               child: Text(
-                peNumber.toString(),
-                style: const TextStyle(
+                "جهت اضافه کردن لوله اینجا را لمس کنید",
+                style: TextStyle(
                   color: kShadeDarkColor,
-                  fontFamily: "Vazir",
-                  fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  fontFamily: "Vazir",
                 ),
               ),
             ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.all(10),
+          );
+  }
+}
+
+class PipeButtonContentLowDense extends StatelessWidget {
+  const PipeButtonContentLowDense({
+    required this.openPageChecker,
+    Key? key,
+  }) : super(key: key);
+
+  final bool openPageChecker;
+
+  @override
+  Widget build(BuildContext context) {
+    return openPageChecker
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: kPrimaryColor.withOpacity(0.1)),
+                  child: const Center(
+                    child: Text(
+                      "لودن",
+                      style: TextStyle(
+                        color: kShadeDarkColor,
+                        fontFamily: "Vazir",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: kPrimaryColor.withOpacity(0.1)),
+                  child: Center(
+                    child: Text(
+                      pressureloden.toString(),
+                      style: const TextStyle(
+                        color: kShadeDarkColor,
+                        fontFamily: "Vazir",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: kPrimaryColor.withOpacity(0.1)),
+                  child: Center(
+                    child: Text(
+                      exdialoden.toString(),
+                      style: const TextStyle(
+                        color: kShadeDarkColor,
+                        fontFamily: "Vazir",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Container(
+            margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kPrimaryColor.withOpacity(0.1)),
-            child: Center(
+                color: kShadeLiteColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10)),
+            child: const Center(
               child: Text(
-                pressure.toString(),
-                style: const TextStyle(
+                "جهت اضافه کردن لوله اینجا را لمس کنید",
+                style: TextStyle(
                   color: kShadeDarkColor,
-                  fontFamily: "Vazir",
-                  fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  fontFamily: "Vazir",
                 ),
               ),
             ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kPrimaryColor.withOpacity(0.1)),
-            child: Center(
-              child: Text(
-                exdia.toString(),
-                style: const TextStyle(
-                  color: kShadeDarkColor,
-                  fontFamily: "Vazir",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+          );
   }
 }
