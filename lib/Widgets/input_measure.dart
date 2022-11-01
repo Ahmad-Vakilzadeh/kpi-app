@@ -6,7 +6,8 @@ import 'package:kpi_app/Widgets/utils.dart';
 import '../constants.dart';
 
 class InputMeasure extends StatefulWidget {
-  const InputMeasure({
+  InputMeasure({
+    this.peText,
     required this.hintText,
     required this.icon,
     required this.name,
@@ -17,7 +18,7 @@ class InputMeasure extends StatefulWidget {
     required this.obligated,
   }) : super(key: key);
   final bool numberOnly;
-
+  late String? peText = "";
   final String name;
   final IconData icon;
   final String hintText;
@@ -48,6 +49,21 @@ class _InputMeasureState extends State<InputMeasure> {
                   fontSize: 16),
             ),
             const SizedBox(
+              width: 5,
+            ),
+            widget.peText != null
+                ? Text(
+                    widget.peText != "" ? widget.peText! : "",
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(
+                      color: kShadeDarkColor,
+                      fontFamily: "Vazir",
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : SizedBox(),
+            SizedBox(
               width: 5,
             ),
             Text(

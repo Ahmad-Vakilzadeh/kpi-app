@@ -274,11 +274,12 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: InputMeasure(
+                peText: "PE80",
                 obligated: true,
                 numberOnly: true,
-                hintText: "قیمت هر کیلوگرم لوله" + "PE80",
+                hintText: "قیمت هر کیلوگرم لوله",
                 icon: Icons.money_outlined,
-                name: "قیمت هر کیلوگرم لوله" + "PE80",
+                name: "قیمت هر کیلوگرم لوله",
                 customController: widget.moneyCountPass,
                 onChange: () {
                   setState(() {});
@@ -291,11 +292,12 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: InputMeasure(
+                peText: "PE100",
                 obligated: false,
                 numberOnly: true,
-                hintText: "قیمت هر کیلوگرم لوله" + " PE100",
+                hintText: "قیمت هر کیلوگرم لوله",
                 icon: Icons.money_outlined,
-                name: "قیمت هر کیلوگرم لوله" + " PE100",
+                name: "قیمت هر کیلوگرم لوله",
                 customController: widget.moneyCountSecond,
                 onChange: () {
                   setState(() {});
