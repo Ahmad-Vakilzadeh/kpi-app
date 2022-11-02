@@ -308,7 +308,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
               height: 20,
             ),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 25),
+              margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
