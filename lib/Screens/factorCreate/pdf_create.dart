@@ -46,7 +46,7 @@ class PdfServices {
   }
 
   Future<Uint8List> createInvoice(List<Map<String, dynamic>> soldProducts,
-      String date, String buyername, String excessText) async {
+      String date, String buyername, String excessText, String address) async {
     final pdf = pw.Document();
 
     var data2 = await rootBundle.load("assets/fonts/Iran_sans.ttf");
@@ -189,8 +189,21 @@ class PdfServices {
                     pw.Container(
                       margin: const pw.EdgeInsets.symmetric(horizontal: 5),
                       child: pw.Row(
-                        mainAxisAlignment: pw.MainAxisAlignment.end,
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
+                          pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.end,
+                            children: [
+                              pw.Text(
+                                "آدرس: $address",
+                                style: pw.TextStyle(
+                                  font: iranSansFont,
+                                  fontSize: 8,
+                                ),
+                                textDirection: pw.TextDirection.rtl,
+                              ),
+                            ],
+                          ),
                           pw.Column(
                             crossAxisAlignment: pw.CrossAxisAlignment.end,
                             children: [

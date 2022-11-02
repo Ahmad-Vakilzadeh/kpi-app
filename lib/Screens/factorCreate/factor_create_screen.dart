@@ -572,6 +572,7 @@ class _FactorCreateState extends State<FactorCreate>
                   height: 15,
                 ),
                 CompleteFactorButton(
+                  addressController: addressController,
                   excessTextController: excessTextInformation,
                   moneyCountOne: getNumberFromController(moneyCount),
                   moneyCountTwo: moneyCountSecond.value.text.isNotEmpty

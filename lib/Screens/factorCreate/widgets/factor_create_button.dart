@@ -8,6 +8,7 @@ import '../../../constants.dart';
 class CompleteFactorButton extends StatefulWidget {
   final List<Map<String, dynamic>> reciptListBottom;
   final TextEditingController excessTextController;
+  final TextEditingController addressController;
   final String name;
   final double moneyCountOne;
   final double moneyCountTwo;
@@ -19,6 +20,7 @@ class CompleteFactorButton extends StatefulWidget {
     required this.moneyCountOne,
     required this.moneyCountTwo,
     required this.excessTextController,
+    required this.addressController,
   }) : super(key: key);
   @override
   State<CompleteFactorButton> createState() => _CompleteFactorButtonState();
@@ -91,6 +93,7 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
             "تاریخ: ${j.day} / ${j.month} / ${j.year}",
             widget.name,
             widget.excessTextController.value.text,
+            widget.addressController.value.text,
           );
 
           service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
