@@ -29,8 +29,10 @@ class CompleteFactorButton extends StatefulWidget {
 class _CompleteFactorButtonState extends State<CompleteFactorButton> {
   late int number = 0;
   sortingFunction(List<Map<String, dynamic>> list) {
-    list.sort(
-        (a, b) => b["exdia"].toString().compareTo((a["exdia"].toString())));
+    list.sort((a, b) {
+      return b["exdia"].compareTo((a["exdia"]));
+    });
+
     return list;
   }
 

@@ -201,7 +201,9 @@ class _FactorCreateState extends State<FactorCreate>
                               icon: Icons.account_circle_outlined,
                               name: "اسم مشتری",
                               customController: nameController,
-                              onChange: () {}),
+                              onChange: () {
+                                setState(() {});
+                              }),
                         ),
                         const SizedBox(
                           height: 15,
@@ -215,7 +217,9 @@ class _FactorCreateState extends State<FactorCreate>
                               icon: Icons.home_outlined,
                               name: "ادرس",
                               customController: addressController,
-                              onChange: () {}),
+                              onChange: () {
+                                setState(() {});
+                              }),
                         ),
                         const SizedBox(
                           height: 20,
