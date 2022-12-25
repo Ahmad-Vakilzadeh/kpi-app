@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' as intl;
+import 'package:flutter/services.dart';
 import 'package:kpi_app/Screens/factorCreate/pdf_create.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/add_button.dart';
 
@@ -13,7 +14,6 @@ import 'package:kpi_app/Screens/factorCreate/widgets/factor_create_card.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/search_bar.dart';
 
 import 'package:kpi_app/Widgets/input_measure.dart';
-import 'package:kpi_app/main.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../Engine/measuring.dart';
@@ -82,6 +82,49 @@ class _FactorCreateState extends State<FactorCreate>
       return double.parse(c.text.replaceAll(",", ""));
     }
   }
+
+  Future showCustomerTextWarning(
+          BuildContext context, String text, String secondText) =>
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: Text(
+              text,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: kShadeDarkColor,
+                fontSize: 20,
+                fontFamily: "Vazir",
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              secondText,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: kShadeDarkColor,
+                fontSize: 14,
+                fontFamily: "Vazir",
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "باشد",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Vazir",
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ]),
+      );
 
   Future<bool?> showWarning(BuildContext context) async => showDialog<bool>(
       context: context,
@@ -237,21 +280,24 @@ class _FactorCreateState extends State<FactorCreate>
     return double.parse(data[0][fieldName].toString());
   }
 
-  processCsv(File file,double nOne , double nTwoL) async {
+  processCsv(List<String> result, double nOne, double nTwoL) async {
     late List<Map<String, dynamic>> loadingDataList = [];
     late List<Map<String, dynamic>> outputList = [];
     try {
-      String csv = await file.readAsString();
-      List<String> result = csv.split("\n");
+      result.removeAt(0);
       String nameAndDateText = result[0];
       result.removeAt(0);
-      String excessText = result[1];
-      result.removeAt(1);
+      String excessText = result[0];
+      result.removeAt(0);
+
       List<String> nameAndData = nameAndDateText.split(",");
       var data = await SqfL.open();
+      print("CHECK TWO");
       List<Map<String, dynamic>> forLoopList;
       for (var element in result) {
+        print("CHECK THREE");
         List<String> listed = element.split(",");
+
         if (listed[2] == "LD") {
           forLoopList = await data.rawQuery(
               "SELECT DISTINCT * FROM lowdens WHERE exdia= ${listed[0]} AND pressure = ${listed[1]}");
@@ -259,17 +305,17 @@ class _FactorCreateState extends State<FactorCreate>
           forLoopList = await data.rawQuery(
               "SELECT DISTINCT * FROM pe WHERE PE = ${listed[2]} AND exdia= ${listed[1]} AND pressure = ${listed[0]}");
         }
-
+        print("CHECK FOUR");
         double weight = getField(forLoopList, "weight");
         double length = double.parse(listed[3].toString().replaceAll(",", ""));
         double eachMeterPrice;
         double totalPrice;
-        double moneyCountSecondDialogTxt =
-            double.parse(moneyCountSecondDialog.value.text);
         double moneyCountDialogTxt = nOne;
+        double moneyCountSecondDialogTxt =
+            double.parse(moneyCountSecondDialog.value.text.replaceAll(",", ""));
+        print("Check");
         double lodenMoneyCount = nTwoL;
-
-
+        print("CHECK Five");
 
         if (element[2] == 100 && moneyCountSecondDialogTxt != 0) {
           eachMeterPrice = weight * moneyCountSecondDialogTxt;
@@ -281,6 +327,7 @@ class _FactorCreateState extends State<FactorCreate>
           totalPrice = weight * length * moneyCountDialogTxt;
           eachMeterPrice = weight * moneyCountDialogTxt;
         }
+        print("CHECK Six");
 
         loadingDataList.add({
           "meter": listed[3],
@@ -332,17 +379,22 @@ class _FactorCreateState extends State<FactorCreate>
           actions: [
             IconButton(
               onPressed: () async {
-                late double lodenMoneyCount = double.parse(lodenPriceController.value.text.replaceAll(",", ""));
-                late double moneyCountDialogTxt = double.parse(moneyCountDialog.value.text.replaceAll(",", ""));
-
-                FilePickerResult? result =
-                    await FilePicker.platform.pickFiles();
-                if (result != null) {
-                  File pickedFile = File(result.files.single.path!);
+                late double lodenMoneyCount = double.parse(
+                    lodenPriceController.value.text.replaceAll(",", ""));
+                late double moneyCountDialogTxt = double.parse(
+                    moneyCountDialog.value.text.replaceAll(",", ""));
+                ClipboardData? cdata =
+                    await Clipboard.getData(Clipboard.kTextPlain);
+                late String usingString = cdata!.text as String;
+                String check = "#%#KPITEXT#%#CUSTOMERREQUEST%#";
+                List<String> result = usingString.split("\n");
+                if (result[0].trim() == check) {
                   await showFileLoadDialog(context);
-                  await processCsv(pickedFile,moneyCountDialogTxt,lodenMoneyCount);
+                  await processCsv(
+                      result, moneyCountDialogTxt, lodenMoneyCount);
                 } else {
-                  // User canceled the picker
+                  showCustomerTextWarning(
+                      context, "مشکل متن", "متن کپی شده اشتباه میباشد");
                 }
               },
               icon: const Icon(
