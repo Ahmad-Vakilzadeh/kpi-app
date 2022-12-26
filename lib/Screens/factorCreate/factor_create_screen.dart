@@ -340,15 +340,15 @@ class _FactorCreateState extends State<FactorCreate>
       List<Map<String, dynamic>> forLoopList;
       for (var element in result) {
         List<String> listed = element.split(",");
-
         if (listed[2] == "LD") {
           forLoopList = await data.rawQuery(
               "SELECT DISTINCT * FROM lowdens WHERE exdia= ${listed[0]} AND pressure = ${listed[1]}");
         } else {
           forLoopList = await data.rawQuery(
-              "SELECT DISTINCT * FROM pe WHERE PE = ${listed[2]} AND exdia= ${listed[1]} AND pressure = ${listed[0]}");
+              "SELECT DISTINCT * FROM pe WHERE PE = ${listed[2]} AND exdia= ${listed[0]} AND pressure = ${listed[1]}");
         }
         double weight = getField(forLoopList, "weight");
+
         double length = double.parse(listed[3].toString().replaceAll(",", ""));
         double eachMeterPrice;
         double totalPrice;
