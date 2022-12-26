@@ -944,7 +944,7 @@ class _FactorCreateState extends State<FactorCreate>
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: const Center(
                       child: Text(
-                        "loden",
+                        "لودن",
                         style: TextStyle(
                           color: kShadeDarkColor,
                           fontFamily: "Vazir",
