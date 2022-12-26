@@ -7,6 +7,7 @@ import '../../../constants.dart';
 
 class CompleteFactorButton extends StatefulWidget {
   final List<Map<String, dynamic>> reciptListBottom;
+  final TextEditingController lowDenseTextController;
   final TextEditingController excessTextController;
   final TextEditingController addressController;
   final String name;
@@ -21,16 +22,20 @@ class CompleteFactorButton extends StatefulWidget {
     required this.moneyCountTwo,
     required this.excessTextController,
     required this.addressController,
+    required this.lowDenseTextController,
   }) : super(key: key);
+
   @override
   State<CompleteFactorButton> createState() => _CompleteFactorButtonState();
 }
 
 class _CompleteFactorButtonState extends State<CompleteFactorButton> {
-  late int number = 0;
+
   sortingFunction(List<Map<String, dynamic>> list) {
-    list.sort(
-        (a, b) => b["exdia"].toString().compareTo((a["exdia"].toString())));
+    list.sort((a, b) {
+      return b["exdia"].compareTo((a["exdia"]));
+    });
+
     return list;
   }
 
@@ -57,10 +62,17 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
       if (element["peNumber"] == 100 && widget.moneyCountTwo != 0) {
         eachMeterPrice = weight * widget.moneyCountTwo;
         totalPrice = weight * lenght * widget.moneyCountTwo;
+      } else if (element["peNumber"] == "LD") {
+        eachMeterPrice =
+            weight * double.parse(widget.lowDenseTextController.value.text);
+        totalPrice = weight *
+            lenght *
+            double.parse(widget.lowDenseTextController.value.text);
       } else {
         eachMeterPrice = weight * widget.moneyCountOne;
         totalPrice = weight * lenght * widget.moneyCountOne;
       }
+
       calculatedAnswer.add({
         "meter": element["meter"],
         "peNumber": element["peNumber"],
@@ -97,7 +109,6 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
           );
 
           service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
-          number++;
           calculatedAnswer = [];
         } else {
           const snackBar = SnackBar(

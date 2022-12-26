@@ -31,6 +31,7 @@ dependencies:
   bidi: ^2.0.0
   auto_direction: ^0.0.6
   flutter_launcher_icons: ^0.10.0
+  file_picker: any
 
 dev_dependencies:
   flutter_test:

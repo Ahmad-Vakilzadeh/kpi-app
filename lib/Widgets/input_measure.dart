@@ -62,8 +62,8 @@ class _InputMeasureState extends State<InputMeasure> {
                       fontWeight: FontWeight.bold,
                     ),
                   )
-                : SizedBox(),
-            SizedBox(
+                : const SizedBox(),
+            const SizedBox(
               width: 5,
             ),
             Text(
@@ -90,6 +90,7 @@ class _InputMeasureState extends State<InputMeasure> {
           height: 10,
         ),
         TextFormField(
+          scrollPadding: const EdgeInsets.only(bottom: 60),
           textAlign: widget.numberOnly
               ? isTypingNumber
                   ? TextAlign.left

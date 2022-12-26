@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' as intl;
+import 'package:flutter/services.dart';
+import 'package:kpi_app/Screens/factorCreate/pdf_create.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/add_button.dart';
 
 import 'package:kpi_app/Screens/factorCreate/widgets/factor_card.dart';
@@ -9,7 +14,7 @@ import 'package:kpi_app/Screens/factorCreate/widgets/factor_create_card.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/search_bar.dart';
 
 import 'package:kpi_app/Widgets/input_measure.dart';
-import 'package:kpi_app/main.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../Engine/measuring.dart';
 import '../../constants.dart';
@@ -41,6 +46,9 @@ class _FactorCreateState extends State<FactorCreate>
   late TextEditingController lodenMeterController;
   late TextEditingController excessTextInformation;
 
+  late TextEditingController moneyCountDialog;
+  late TextEditingController moneyCountSecondDialog;
+
   late List<Map<String, dynamic>> reciptList = [];
   late TextEditingController searchBarController;
 
@@ -53,12 +61,14 @@ class _FactorCreateState extends State<FactorCreate>
     searchBarController = TextEditingController();
     meterControllerMain = TextEditingController();
     nameController = TextEditingController();
-    moneyCount = TextEditingController();
     excessTextInformation = TextEditingController();
     addressController = TextEditingController();
     lodenMeterController = TextEditingController();
     lodenPriceController = TextEditingController();
+    moneyCount = TextEditingController();
     moneyCountSecond = TextEditingController();
+    moneyCountDialog = TextEditingController();
+    moneyCountSecondDialog = TextEditingController();
     lowDensAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
     excessTextAnimation = AnimationController(
@@ -72,6 +82,49 @@ class _FactorCreateState extends State<FactorCreate>
       return double.parse(c.text.replaceAll(",", ""));
     }
   }
+
+  Future showCustomerTextWarning(
+          BuildContext context, String text, String secondText) =>
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: Text(
+              text,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: kShadeDarkColor,
+                fontSize: 20,
+                fontFamily: "Vazir",
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              secondText,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: kShadeDarkColor,
+                fontSize: 14,
+                fontFamily: "Vazir",
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "باشد",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Vazir",
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ]),
+      );
 
   Future<bool?> showWarning(BuildContext context) async => showDialog<bool>(
       context: context,
@@ -130,6 +183,186 @@ class _FactorCreateState extends State<FactorCreate>
             ],
           ));
 
+  Future<bool?> showFileLoadDialog(BuildContext context) async => showDialog(
+      context: context,
+      builder: (BuildContext conetxt) => Dialog(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    InputMeasure(
+                      peText: "PE80",
+                      obligated: true,
+                      numberOnly: true,
+                      hintText: "قیمت هر کیلوگرم لوله",
+                      icon: Icons.money_outlined,
+                      name: "قیمت هر کیلوگرم لوله",
+                      customController: moneyCountDialog,
+                      onChange: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    InputMeasure(
+                      peText: "PE10",
+                      obligated: true,
+                      numberOnly: true,
+                      hintText: "قیمت هر کیلوگرم لوله",
+                      icon: Icons.money_outlined,
+                      name: "قیمت هر کیلوگرم لوله",
+                      customController: moneyCountSecondDialog,
+                      onChange: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    MixedInput(
+                      name: "مشخصات لوله لودن",
+                      icon: Icons.gas_meter_outlined,
+                      hintTextOne: "متراژ",
+                      hintTextTwo: "قیمت هر متر",
+                      controllerOne: lodenMeterController,
+                      controllerTwo: lodenPriceController,
+                      onChange: () {},
+                      obligated: true,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: moneyCount.toString() != "0.0"
+                              ? kPrimaryColor
+                              : Colors.grey,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 25,
+                              color: kPrimaryColor.withOpacity(0.2),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 35),
+                        height: 55,
+                        child: const Center(
+                          child: Text(
+                            "صدور پیش فاکتور",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Vazir",
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ));
+
+  double getField(List data, String fieldName) {
+    if (data.isEmpty) return -1.0;
+    return double.parse(data[0][fieldName].toString());
+  }
+
+  processCsv(List<String> result, double nOne, double nTwoL) async {
+    late List<Map<String, dynamic>> loadingDataList = [];
+    late List<Map<String, dynamic>> outputList = [];
+    try {
+      result.removeAt(0);
+      String nameAndDateText = result[0];
+      result.removeAt(0);
+      String excessText = result[0];
+      result.removeAt(0);
+
+      List<String> nameAndData = nameAndDateText.split(",");
+      var data = await SqfL.open();
+      print("CHECK TWO");
+      List<Map<String, dynamic>> forLoopList;
+      for (var element in result) {
+        print("CHECK THREE");
+        List<String> listed = element.split(",");
+
+        if (listed[2] == "LD") {
+          forLoopList = await data.rawQuery(
+              "SELECT DISTINCT * FROM lowdens WHERE exdia= ${listed[0]} AND pressure = ${listed[1]}");
+        } else {
+          forLoopList = await data.rawQuery(
+              "SELECT DISTINCT * FROM pe WHERE PE = ${listed[2]} AND exdia= ${listed[1]} AND pressure = ${listed[0]}");
+        }
+        print("CHECK FOUR");
+        double weight = getField(forLoopList, "weight");
+        double length = double.parse(listed[3].toString().replaceAll(",", ""));
+        double eachMeterPrice;
+        double totalPrice;
+        double moneyCountDialogTxt = nOne;
+        double moneyCountSecondDialogTxt =
+            double.parse(moneyCountSecondDialog.value.text.replaceAll(",", ""));
+        print("Check");
+        double lodenMoneyCount = nTwoL;
+        print("CHECK Five");
+
+        if (element[2] == 100 && moneyCountSecondDialogTxt != 0) {
+          eachMeterPrice = weight * moneyCountSecondDialogTxt;
+          totalPrice = weight * length * moneyCountDialogTxt;
+        } else if (element[2] == "LD") {
+          totalPrice = weight * length * lodenMoneyCount;
+          eachMeterPrice = weight * lodenMoneyCount;
+        } else {
+          totalPrice = weight * length * moneyCountDialogTxt;
+          eachMeterPrice = weight * moneyCountDialogTxt;
+        }
+        print("CHECK Six");
+
+        loadingDataList.add({
+          "meter": listed[3],
+          "peNumber": listed[2],
+          "pressure": listed[1],
+          "exdia": listed[0],
+          "priceEachMeter": eachMeterPrice.toStringAsFixed(0),
+          "totalPrice": totalPrice.toStringAsFixed(0),
+        });
+      }
+      await showPdfFromFile(
+        loadingDataList,
+        nameAndData[2],
+        nameAndData[0],
+        excessText,
+        nameAndData[1],
+      );
+    } catch (e) {}
+  }
+
+  showPdfFromFile(List<Map<String, dynamic>> list, String date, String name,
+      String excessText, String address) async {
+    final PdfServices service = PdfServices();
+    final data = await service.createInvoice(
+      list,
+      date,
+      name,
+      excessText,
+      address,
+    );
+    DateTime dt = DateTime.now();
+    Jalali j = dt.toJalali();
+    service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -143,6 +376,33 @@ class _FactorCreateState extends State<FactorCreate>
           backgroundColor: Colors.white,
           elevation: 5,
           centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () async {
+                late double lodenMoneyCount = double.parse(
+                    lodenPriceController.value.text.replaceAll(",", ""));
+                late double moneyCountDialogTxt = double.parse(
+                    moneyCountDialog.value.text.replaceAll(",", ""));
+                ClipboardData? cdata =
+                    await Clipboard.getData(Clipboard.kTextPlain);
+                late String usingString = cdata!.text as String;
+                String check = "#%#KPITEXT#%#CUSTOMERREQUEST%#";
+                List<String> result = usingString.split("\n");
+                if (result[0].trim() == check) {
+                  await showFileLoadDialog(context);
+                  await processCsv(
+                      result, moneyCountDialogTxt, lodenMoneyCount);
+                } else {
+                  showCustomerTextWarning(
+                      context, "مشکل متن", "متن کپی شده اشتباه میباشد");
+                }
+              },
+              icon: const Icon(
+                Icons.file_download_outlined,
+                color: kShadeDarkColor,
+              ),
+            ),
+          ],
           title: const Text(
             "صدور پیش فاکتور",
             style: TextStyle(
@@ -201,7 +461,9 @@ class _FactorCreateState extends State<FactorCreate>
                               icon: Icons.account_circle_outlined,
                               name: "اسم مشتری",
                               customController: nameController,
-                              onChange: () {}),
+                              onChange: () {
+                                setState(() {});
+                              }),
                         ),
                         const SizedBox(
                           height: 15,
@@ -215,7 +477,9 @@ class _FactorCreateState extends State<FactorCreate>
                               icon: Icons.home_outlined,
                               name: "ادرس",
                               customController: addressController,
-                              onChange: () {}),
+                              onChange: () {
+                                setState(() {});
+                              }),
                         ),
                         const SizedBox(
                           height: 20,
@@ -580,6 +844,7 @@ class _FactorCreateState extends State<FactorCreate>
                       : 0,
                   name: nameController.value.text,
                   reciptListBottom: reciptList,
+                  lowDenseTextController: lodenMeterController,
                 ),
                 const SizedBox(
                   height: 20,
