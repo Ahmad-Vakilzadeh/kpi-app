@@ -225,16 +225,14 @@ class _FactorCreateState extends State<FactorCreate>
                     const SizedBox(
                       height: 10,
                     ),
-                    MixedInput(
-                      name: "مشخصات لوله لودن",
-                      icon: Icons.gas_meter_outlined,
-                      hintTextOne: "متراژ",
-                      hintTextTwo: "قیمت هر متر",
-                      controllerOne: lodenMeterController,
-                      controllerTwo: lodenPriceController,
-                      onChange: () {},
-                      obligated: true,
-                    ),
+                    InputMeasure(
+                        hintText: "قیمت لوله لودن",
+                        icon: Icons.gas_meter_outlined,
+                        name: "قیمت لوله لودن",
+                        customController: lodenPriceController,
+                        onChange: () {},
+                        numberOnly: true,
+                        obligated: true),
                     const SizedBox(
                       height: 20,
                     ),
