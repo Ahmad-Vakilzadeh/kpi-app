@@ -30,7 +30,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="KPI">
+        android:label="KPI Sales">
 
         <provider
             android:name="androidx.core.content.FileProvider"
