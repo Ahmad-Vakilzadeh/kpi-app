@@ -211,7 +211,7 @@ class _FactorCreateState extends State<FactorCreate>
                       height: 10,
                     ),
                     InputMeasure(
-                      peText: "PE10",
+                      peText: "PE100",
                       obligated: true,
                       numberOnly: true,
                       hintText: "قیمت هر کیلوگرم لوله",
@@ -238,7 +238,52 @@ class _FactorCreateState extends State<FactorCreate>
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        if (moneyCountDialog.value.text.isEmpty ||
+                            moneyCountSecondDialog.value.text.isEmpty ||
+                            lodenPriceController.value.text.isEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    "لطفا فرم ها را پر کنید",
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: kShadeDarkColor,
+                                      fontSize: 20,
+                                      fontFamily: "Vazir",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    "پر کردن فرم ها الزامی است",
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: kShadeDarkColor,
+                                      fontSize: 14,
+                                      fontFamily: "Vazir",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text(
+                                        "باشد",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: "Vazir",
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              });
+                        } else {
+                          Navigator.pop(context);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -279,7 +324,8 @@ class _FactorCreateState extends State<FactorCreate>
     return double.parse(data[0][fieldName].toString());
   }
 
-  processCsv(List<String> result, double nOne, double nTwoL) async {
+  processCsv(
+      List<String> result, double nOne, double nTwoL, double nThree) async {
     late List<Map<String, dynamic>> loadingDataList = [];
     late List<Map<String, dynamic>> outputList = [];
     try {
@@ -291,10 +337,8 @@ class _FactorCreateState extends State<FactorCreate>
 
       List<String> nameAndData = nameAndDateText.split(",");
       var data = await SqfL.open();
-      print("CHECK TWO");
       List<Map<String, dynamic>> forLoopList;
       for (var element in result) {
-        print("CHECK THREE");
         List<String> listed = element.split(",");
 
         if (listed[2] == "LD") {
@@ -304,17 +348,13 @@ class _FactorCreateState extends State<FactorCreate>
           forLoopList = await data.rawQuery(
               "SELECT DISTINCT * FROM pe WHERE PE = ${listed[2]} AND exdia= ${listed[1]} AND pressure = ${listed[0]}");
         }
-        print("CHECK FOUR");
         double weight = getField(forLoopList, "weight");
         double length = double.parse(listed[3].toString().replaceAll(",", ""));
         double eachMeterPrice;
         double totalPrice;
         double moneyCountDialogTxt = nOne;
-        double moneyCountSecondDialogTxt =
-            double.parse(moneyCountSecondDialog.value.text.replaceAll(",", ""));
-        print("Check");
+        double moneyCountSecondDialogTxt = nThree;
         double lodenMoneyCount = nTwoL;
-        print("CHECK Five");
 
         if (element[2] == 100 && moneyCountSecondDialogTxt != 0) {
           eachMeterPrice = weight * moneyCountSecondDialogTxt;
@@ -326,7 +366,6 @@ class _FactorCreateState extends State<FactorCreate>
           totalPrice = weight * length * moneyCountDialogTxt;
           eachMeterPrice = weight * moneyCountDialogTxt;
         }
-        print("CHECK Six");
 
         loadingDataList.add({
           "meter": listed[3],
@@ -390,6 +429,8 @@ class _FactorCreateState extends State<FactorCreate>
               onPressed: () async {
                 late double lodenMoneyCount = double.parse(
                     lodenPriceController.value.text.replaceAll(",", ""));
+                late double moneyCountSecondDialogTxt = double.parse(
+                    moneyCountSecondDialog.value.text.replaceAll(",", ""));
                 late double moneyCountDialogTxt = double.parse(
                     moneyCountDialog.value.text.replaceAll(",", ""));
                 ClipboardData? cdata =
@@ -401,10 +442,15 @@ class _FactorCreateState extends State<FactorCreate>
                 String check = "#%#KPITEXT#%#CUSTOMERREQUEST%#";
                 List<String> result = usingString.split("\n");
                 if (result[0].trim() == check) {
+                  // ignore: use_build_context_synchronously
                   await showFileLoadDialog(context);
-                  await processCsv(
-                      result, moneyCountDialogTxt, lodenMoneyCount);
+                  await processCsv(result, moneyCountDialogTxt, lodenMoneyCount,
+                      moneyCountDialogTxt);
+                  moneyCountDialog.clear();
+                  lodenPriceController.clear();
+                  moneyCountSecondDialog.clear();
                 } else {
+                  // ignore: use_build_context_synchronously
                   showCustomerTextWarning(
                       context, "مشکل متن", "متن کپی شده اشتباه میباشد");
                 }
