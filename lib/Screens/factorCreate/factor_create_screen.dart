@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:encrypt/encrypt.dart' as e;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -363,6 +364,16 @@ class _FactorCreateState extends State<FactorCreate>
     service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
   }
 
+  String _decryptMessage(String encryptedMessage) {
+    final key = e.Key.fromUtf8('1234574677475848283748374833373a');
+    final iv = e.IV.fromLength(16);
+
+    final encrypted = e.Encrypted.from64(encryptedMessage);
+
+    final encrypter = e.Encrypter(e.AES(key));
+    return encrypter.decrypt(encrypted, iv: iv);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -385,7 +396,10 @@ class _FactorCreateState extends State<FactorCreate>
                     moneyCountDialog.value.text.replaceAll(",", ""));
                 ClipboardData? cdata =
                     await Clipboard.getData(Clipboard.kTextPlain);
-                late String usingString = cdata!.text as String;
+                final String encryptedMessage = cdata!.text as String;
+
+                final String usingString = _decryptMessage(encryptedMessage);
+
                 String check = "#%#KPITEXT#%#CUSTOMERREQUEST%#";
                 List<String> result = usingString.split("\n");
                 if (result[0].trim() == check) {
