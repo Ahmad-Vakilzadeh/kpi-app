@@ -30,7 +30,6 @@ class CompleteFactorButton extends StatefulWidget {
 }
 
 class _CompleteFactorButtonState extends State<CompleteFactorButton> {
-
   sortingFunction(List<Map<String, dynamic>> list) {
     list.sort((a, b) {
       return b["exdia"].compareTo((a["exdia"]));
@@ -63,11 +62,14 @@ class _CompleteFactorButtonState extends State<CompleteFactorButton> {
         eachMeterPrice = weight * widget.moneyCountTwo;
         totalPrice = weight * lenght * widget.moneyCountTwo;
       } else if (element["peNumber"] == "LD") {
-        eachMeterPrice =
-            weight * double.parse(widget.lowDenseTextController.value.text);
+        print(element);
+        eachMeterPrice = weight *
+            double.parse(
+                widget.lowDenseTextController.value.text.replaceAll(",", ""));
         totalPrice = weight *
             lenght *
-            double.parse(widget.lowDenseTextController.value.text);
+            double.parse(
+                widget.lowDenseTextController.value.text.replaceAll(",", ""));
       } else {
         eachMeterPrice = weight * widget.moneyCountOne;
         totalPrice = weight * lenght * widget.moneyCountOne;
