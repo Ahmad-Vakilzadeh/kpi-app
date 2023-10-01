@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kpi_app/Screens/AboutUs/about_us.dart';
@@ -7,7 +8,7 @@ import 'package:kpi_app/Screens/Standards/standards_screen.dart';
 import 'package:kpi_app/Screens/factorCreate/factor_create_screen.dart';
 import 'package:kpi_app/Widgets/BottomNavigation/bottom_navigation.dart';
 import 'package:kpi_app/constants.dart';
-
+@RoutePage()
 class PageMange extends StatefulWidget {
   const PageMange({Key? key}) : super(key: key);
 

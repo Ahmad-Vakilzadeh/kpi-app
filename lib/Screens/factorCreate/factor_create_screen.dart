@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:encrypt/encrypt.dart' as e;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:kpi_app/Screens/factorCreate/widgets/factor_create_card.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/search_bar.dart';
 
 import 'package:kpi_app/Widgets/input_measure.dart';
+import 'package:kpi_app/main.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../Engine/measuring.dart';
@@ -28,9 +30,10 @@ double? pressure = 4;
 bool openPagecheck = false;
 bool openPagecheckTwo = false;
 var formatter = intl.NumberFormat('###,###,###');
-
+@RoutePage()
 class FactorCreate extends StatefulWidget {
-  const FactorCreate({Key? key}) : super(key: key);
+   const FactorCreate({Key? key}) : super(key: key);
+
 
   @override
   State<FactorCreate> createState() => _FactorCreateState();
@@ -74,7 +77,38 @@ class _FactorCreateState extends State<FactorCreate>
         vsync: this, duration: const Duration(milliseconds: 300));
     excessTextAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
+    if(isLink){_checkIfLink(UrlPath);}
   }
+
+
+
+  _checkIfLink(String input) async{
+    late double lodenMoneyCount = double.parse(
+        lodenPriceController.value.text.replaceAll(",", ""));
+    late double moneyCountSecondDialogTxt = double.parse(
+        moneyCountSecondDialog.value.text.replaceAll(",", ""));
+    late double moneyCountDialogTxt = double.parse(
+        moneyCountDialog.value.text.replaceAll(",", ""));
+
+    final String decryptedText = _decryptMessage(input);
+
+    String check = "";
+    List<String> result = decryptedText.split("\n");
+    if (result[0].trim() == check) {
+      // ignore: use_build_context_synchronously
+      await showFileLoadDialog(context);
+      await processCsv(result, moneyCountDialogTxt, lodenMoneyCount,
+      moneyCountDialogTxt);
+      moneyCountDialog.clear();
+      lodenPriceController.clear();
+      moneyCountSecondDialog.clear();
+    } else {
+      // ignore: use_build_context_synchronously
+      showCustomerTextWarning(
+          context, "مشکل متن", "متن لینک  اشتباه میباشد");
+    }
+  }
+
 
   double getNumberFromController(TextEditingController c) {
     if (c.text == "") {
@@ -439,7 +473,7 @@ class _FactorCreateState extends State<FactorCreate>
 
                 final String usingString = _decryptMessage(encryptedMessage);
 
-                String check = "#%#KPITEXT#%#CUSTOMERREQUEST%#";
+                String check = "";
                 List<String> result = usingString.split("\n");
                 if (result[0].trim() == check) {
                   // ignore: use_build_context_synchronously
@@ -452,7 +486,7 @@ class _FactorCreateState extends State<FactorCreate>
                 } else {
                   // ignore: use_build_context_synchronously
                   showCustomerTextWarning(
-                      context, "مشکل متن", "متن کپی شده اشتباه میباشد");
+                      context, "مشکل متن", "متن لینک  اشتباه میباشد");
                 }
               },
               icon: const Icon(
@@ -1126,7 +1160,7 @@ class _FactorCreateState extends State<FactorCreate>
                             SizedBox(
                               height: 45,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              child: SearchBar(
+                              child: SearchBarCustom(
                                 onTapIcon: () async {
                                   searchText = searchBarController.value.text
                                       .replaceAll(",", "");

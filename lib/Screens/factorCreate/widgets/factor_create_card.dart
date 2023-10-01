@@ -510,7 +510,7 @@ class _FactorCreateCardState extends State<FactorCreateCard> {
                             SizedBox(
                               height: 45,
                               width: MediaQuery.of(context).size.width * 0.9,
-                              child: SearchBar(
+                              child: SearchBarCustom(
                                 onTapIcon: () async {
                                   //TODO: ASK FATHER : wont work on tap and on change!
                                   searchText = widget.sBarController.value.text

@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import '../../../Widgets/input_measure.dart';
 import '../../../constants.dart';
 
-class SearchBar extends StatefulWidget {
-  const SearchBar(
+class SearchBarCustom extends StatefulWidget {
+  const SearchBarCustom(
       {Key? key,
       required this.customController,
       required this.hintText,
@@ -19,10 +19,10 @@ class SearchBar extends StatefulWidget {
   final Function onTapIcon;
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<SearchBarCustom> createState() => _SearchBarCustomState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _SearchBarCustomState extends State<SearchBarCustom> {
   @override
   Widget build(BuildContext context) {
     return Center(
