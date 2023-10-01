@@ -104,9 +104,10 @@ class _FactorCreateState extends State<FactorCreate>
     input = input.replaceAll("bbb","\n");
     input = input.replaceAll("ccc"," ");
 
-
+    print(input);
     List<String> result = input.split("\n");
     print(result);
+    print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 
 
       // ignore: use_build_context_synchronously
@@ -372,11 +373,11 @@ class _FactorCreateState extends State<FactorCreate>
     late List<Map<String, dynamic>> loadingDataList = [];
     late List<Map<String, dynamic>> outputList = [];
     try {
-      result.removeAt(0);
       String nameAndDateText = result[0];
       result.removeAt(0);
       String excessText = result[0];
       result.removeAt(0);
+      print(result);
 
       List<String> nameAndData = nameAndDateText.split(",");
       var data = await SqfL.open();
@@ -426,7 +427,9 @@ class _FactorCreateState extends State<FactorCreate>
         excessText,
         nameAndData[1],
       );
-    } catch (e) {}
+    } catch (e) {
+      print("error $e");
+    }
   }
 
   showPdfFromFile(List<Map<String, dynamic>> list, String date, String name,
