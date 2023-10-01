@@ -14,7 +14,6 @@ bool isLink = false;
 String UrlPath = '';
 void main() {
   final _appLinks = AppLinks();
-
 // Subscribe to all events when app is started.
 // (Use allStringLinkStream to get it as [String])
   _appLinks.allUriLinkStream.listen((uri) {

@@ -21,6 +21,8 @@ import 'package:shamsi_date/shamsi_date.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../Engine/measuring.dart';
 import '../../constants.dart';
+import 'dart:convert';
+
 
 int peNumber = 100;
 int exdia = 250;
@@ -77,36 +79,43 @@ class _FactorCreateState extends State<FactorCreate>
         vsync: this, duration: const Duration(milliseconds: 300));
     excessTextAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
-    if(isLink){_checkIfLink(UrlPath);}
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if(isLink){
+      _checkIfLink(UrlPath);
+        }
+      }
+    );
   }
 
 
 
+
   _checkIfLink(String input) async{
+    String encrypt1 = _encryptCsvString(csvString: "This is working");
+    print(encrypt1);
+    print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+    String decrypt1 = _decryptMessage(encrypt1);
+    print(decrypt1);
     late double lodenMoneyCount = double.parse(
         lodenPriceController.value.text.replaceAll(",", ""));
     late double moneyCountSecondDialogTxt = double.parse(
         moneyCountSecondDialog.value.text.replaceAll(",", ""));
     late double moneyCountDialogTxt = double.parse(
         moneyCountDialog.value.text.replaceAll(",", ""));
-
-    // final String decryptedText = _decryptMessage(input);
-
+    final String decryptedText = _decryptMessage(input);
     String check = "";
-    List<String> result = input.split("\n");
-    if (result[0].trim() == check) {
+    List<String> result = decryptedText.split("\n");
+
+
       // ignore: use_build_context_synchronously
+      print("before show");
       await showFileLoadDialog(context);
+      print("After show");
       await processCsv(result, moneyCountDialogTxt, lodenMoneyCount,
       moneyCountDialogTxt);
       moneyCountDialog.clear();
       lodenPriceController.clear();
       moneyCountSecondDialog.clear();
-    } else {
-      // ignore: use_build_context_synchronously
-      showCustomerTextWarning(
-          context, "مشکل متن", "متن لینک  اشتباه میباشد");
-    }
   }
 
 
@@ -220,7 +229,7 @@ class _FactorCreateState extends State<FactorCreate>
 
   Future<bool?> showFileLoadDialog(BuildContext context) async => showDialog(
       context: context,
-      builder: (BuildContext conetxt) => Dialog(
+      builder: (BuildContext secondContext) => Dialog(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
               decoration: BoxDecoration(
@@ -316,7 +325,7 @@ class _FactorCreateState extends State<FactorCreate>
                                 );
                               });
                         } else {
-                          Navigator.pop(context);
+                          Navigator.pop(secondContext);
                         }
                       },
                       child: Container(
@@ -435,15 +444,31 @@ class _FactorCreateState extends State<FactorCreate>
     service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
   }
 
-  // String _decryptMessage(String encryptedMessage) {
-  //   final key = e.Key.fromUtf8('1234574677475848283748374833373a');
-  //   final iv = e.IV.fromLength(16);
-  //
-  //   final encrypted = e.Encrypted.from64(encryptedMessage);
-  //
-  //   final encrypter = e.Encrypter(e.AES(key));
-  //   return encrypter.decrypt(encrypted, iv: iv);
-  // }
+  String _encryptCsvString({
+    required String csvString,
+  }) {
+    final key = e.Key.fromUtf8('1234574677475848283748374833373a');
+    final iv = e.IV.fromLength(16);
+    final encrypter = e.Encrypter(e.AES(key));
+    var ec= encrypter.encrypt(csvString, iv: iv).base64;
+    final encrypted = e.Encrypted.from64(ec);
+
+    var ts= encrypter.decrypt(encrypted, iv: iv);
+    return ec;
+  }
+
+  String _decryptMessage(String encryptedMessage) {
+    encryptedMessage = _encryptCsvString(csvString: "salam");
+    // decode from base64
+
+    final key = e.Key.fromUtf8('1234574677475848283748374833373a');
+    final iv = e.IV.fromLength(16);
+
+    final encrypter = e.Encrypter(e.AES(key));
+    final encrypted = e.Encrypted.from64(encryptedMessage);
+
+    return encrypter.decrypt(encrypted, iv: iv);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -471,23 +496,19 @@ class _FactorCreateState extends State<FactorCreate>
                     await Clipboard.getData(Clipboard.kTextPlain);
                 final String encryptedMessage = cdata!.text as String;
 
-                //final String usingString = _decryptMessage(encryptedMessage);
+                final String usingString = _decryptMessage(encryptedMessage);
 
-                String check = "";
-                List<String> result = encryptedMessage.split("\n");
-                if (result[0].trim() == check) {
+                List<String> result = usingString.split("\n");
+
                   // ignore: use_build_context_synchronously
                   await showFileLoadDialog(context);
+                  print("zzzz");
                   await processCsv(result, moneyCountDialogTxt, lodenMoneyCount,
                       moneyCountDialogTxt);
                   moneyCountDialog.clear();
                   lodenPriceController.clear();
                   moneyCountSecondDialog.clear();
-                } else {
-                  // ignore: use_build_context_synchronously
-                  showCustomerTextWarning(
-                      context, "مشکل متن", "متن لینک  اشتباه میباشد");
-                }
+
               },
               icon: const Icon(
                 Icons.file_download_outlined,
