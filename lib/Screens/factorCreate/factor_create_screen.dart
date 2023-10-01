@@ -101,8 +101,12 @@ class _FactorCreateState extends State<FactorCreate>
         moneyCountDialog.value.text.replaceAll(",", ""));
 
     String check = "";
-    input = input.replaceAll("*#*#","\n");
+    input = input.replaceAll("bbb","\n");
+    input = input.replaceAll("ccc"," ");
+
+
     List<String> result = input.split("\n");
+    print(result);
 
 
       // ignore: use_build_context_synchronously
