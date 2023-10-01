@@ -90,10 +90,10 @@ class _FactorCreateState extends State<FactorCreate>
     late double moneyCountDialogTxt = double.parse(
         moneyCountDialog.value.text.replaceAll(",", ""));
 
-    final String decryptedText = _decryptMessage(input);
+    // final String decryptedText = _decryptMessage(input);
 
     String check = "";
-    List<String> result = decryptedText.split("\n");
+    List<String> result = input.split("\n");
     if (result[0].trim() == check) {
       // ignore: use_build_context_synchronously
       await showFileLoadDialog(context);
@@ -435,15 +435,15 @@ class _FactorCreateState extends State<FactorCreate>
     service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
   }
 
-  String _decryptMessage(String encryptedMessage) {
-    final key = e.Key.fromUtf8('1234574677475848283748374833373a');
-    final iv = e.IV.fromLength(16);
-
-    final encrypted = e.Encrypted.from64(encryptedMessage);
-
-    final encrypter = e.Encrypter(e.AES(key));
-    return encrypter.decrypt(encrypted, iv: iv);
-  }
+  // String _decryptMessage(String encryptedMessage) {
+  //   final key = e.Key.fromUtf8('1234574677475848283748374833373a');
+  //   final iv = e.IV.fromLength(16);
+  //
+  //   final encrypted = e.Encrypted.from64(encryptedMessage);
+  //
+  //   final encrypter = e.Encrypter(e.AES(key));
+  //   return encrypter.decrypt(encrypted, iv: iv);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -471,10 +471,10 @@ class _FactorCreateState extends State<FactorCreate>
                     await Clipboard.getData(Clipboard.kTextPlain);
                 final String encryptedMessage = cdata!.text as String;
 
-                final String usingString = _decryptMessage(encryptedMessage);
+                //final String usingString = _decryptMessage(encryptedMessage);
 
                 String check = "";
-                List<String> result = usingString.split("\n");
+                List<String> result = encryptedMessage.split("\n");
                 if (result[0].trim() == check) {
                   // ignore: use_build_context_synchronously
                   await showFileLoadDialog(context);
