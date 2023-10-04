@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:encrypt/encrypt.dart' as e;
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' as intl;
-import 'package:flutter/services.dart';
 import 'package:kpi_app/Screens/factorCreate/pdf_create.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/add_button.dart';
 
@@ -21,8 +16,6 @@ import 'package:shamsi_date/shamsi_date.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../Engine/measuring.dart';
 import '../../constants.dart';
-import 'dart:convert';
-
 
 int peNumber = 100;
 int exdia = 250;
@@ -32,16 +25,17 @@ double? pressure = 4;
 bool openPagecheck = false;
 bool openPagecheckTwo = false;
 var formatter = intl.NumberFormat('###,###,###');
-@RoutePage()
-class FactorCreate extends StatefulWidget {
-   const FactorCreate({Key? key}) : super(key: key);
 
+@RoutePage()
+class FactorCreateScreen extends StatefulWidget {
+  final String? urlPath;
+  const FactorCreateScreen({Key? key, this.urlPath}) : super(key: key);
 
   @override
-  State<FactorCreate> createState() => _FactorCreateState();
+  State<FactorCreateScreen> createState() => _FactorCreateScreenState();
 }
 
-class _FactorCreateState extends State<FactorCreate>
+class _FactorCreateScreenState extends State<FactorCreateScreen>
     with TickerProviderStateMixin {
   late TextEditingController nameController;
   late TextEditingController addressController;
@@ -80,45 +74,37 @@ class _FactorCreateState extends State<FactorCreate>
     excessTextAnimation = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if(isLink){
-      _checkIfLink(UrlPath);
-        }
+      if (widget.urlPath != null) {
+        _checkIfLink(widget.urlPath!);
       }
-    );
+    });
   }
 
-
-
-
-  _checkIfLink(String input) async{
-
-
-    late double lodenMoneyCount = double.parse(
-        lodenPriceController.value.text.replaceAll(",", ""));
-    late double moneyCountSecondDialogTxt = double.parse(
-        moneyCountSecondDialog.value.text.replaceAll(",", ""));
-    late double moneyCountDialogTxt = double.parse(
-        moneyCountDialog.value.text.replaceAll(",", ""));
+  _checkIfLink(String input) async {
+    late double lodenMoneyCount =
+        double.parse(lodenPriceController.value.text.replaceAll(",", ""));
+    late double moneyCountSecondDialogTxt =
+        double.parse(moneyCountSecondDialog.value.text.replaceAll(",", ""));
+    late double moneyCountDialogTxt =
+        double.parse(moneyCountDialog.value.text.replaceAll(",", ""));
 
     String check = "";
-    input = input.replaceAll("bbb","\n");
-    input = input.replaceAll("ccc"," ");
+    input = input.replaceAll("bbb", "\n");
+    input = input.replaceAll("ccc", " ");
 
     print(input);
     List<String> result = input.split("\n");
     print(result);
     print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 
-
-      // ignore: use_build_context_synchronously
-      await showFileLoadDialog(context);
-      await processCsv(result, moneyCountDialogTxt, lodenMoneyCount,
-      moneyCountDialogTxt);
-      moneyCountDialog.clear();
-      lodenPriceController.clear();
-      moneyCountSecondDialog.clear();
+    // ignore: use_build_context_synchronously
+    await showFileLoadDialog(context);
+    await processCsv(
+        result, moneyCountDialogTxt, lodenMoneyCount, moneyCountDialogTxt);
+    moneyCountDialog.clear();
+    lodenPriceController.clear();
+    moneyCountSecondDialog.clear();
   }
-
 
   double getNumberFromController(TextEditingController c) {
     if (c.text == "") {
@@ -447,7 +433,6 @@ class _FactorCreateState extends State<FactorCreate>
     service.savePdfFile(j.toString().replaceAll("Jalali", "KPI "), data);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -461,7 +446,6 @@ class _FactorCreateState extends State<FactorCreate>
           backgroundColor: Colors.white,
           elevation: 5,
           centerTitle: true,
-
           title: const Text(
             "صدور پیش فاکتور",
             style: TextStyle(
@@ -1147,8 +1131,9 @@ class _FactorCreateState extends State<FactorCreate>
                                       .value.text.isNotEmpty) {
                                     searchData = await data.rawQuery(
                                         "SELECT DISTINCT exdia,pressure FROM lowdens WHERE exdia like  '$searchText%' ORDER By exdia,pressure");
-                                  } else
+                                  } else {
                                     searchData = allData;
+                                  }
                                   setState(() {});
                                 },
                               ),
@@ -1172,8 +1157,8 @@ class _FactorCreateState extends State<FactorCreate>
                         ),
                       )
                     else if (searchData.isEmpty)
-                      Column(
-                        children: const [
+                      const Column(
+                        children: [
                           SizedBox(
                             height: 70,
                           ),

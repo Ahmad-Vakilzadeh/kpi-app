@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'package:kpi_app/Screens/Standards/standards_screen.dart';
 import 'package:kpi_app/Screens/factorCreate/factor_create_screen.dart';
 import 'package:kpi_app/Widgets/BottomNavigation/bottom_navigation.dart';
 import 'package:kpi_app/constants.dart';
+import 'package:kpi_app/main.dart';
+import 'package:kpi_app/routes/app_router.gr.dart';
+
 @RoutePage()
 class PageMange extends StatefulWidget {
   const PageMange({Key? key}) : super(key: key);
@@ -41,6 +45,23 @@ class _PageMangeState extends State<PageMange>
       },
     );
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _routeIfFromLink();
+    });
+  }
+
+  Future<void> _routeIfFromLink() async {
+    final appLinks = AppLinks();
+    appLinks.allUriLinkStream.listen((uri) {
+      // Do something (navigation, ...)
+      print('**************************************************');
+      print(uri);
+      print('**************************************************');
+      final urlPath = uri.path.replaceFirst('/', '');
+      appRouter.push(FactorCreateRoute(
+        urlPath: urlPath,
+      ));
+    });
   }
 
   void changePage(int newPage) {
@@ -110,7 +131,7 @@ class _PageMangeState extends State<PageMange>
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const FactorCreate()));
+                          builder: (context) => const FactorCreateScreen()));
                 },
               ),
               ListTile(

@@ -9,6 +9,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i4;
+import 'package:flutter/material.dart' as _i5;
 import 'package:kpi_app/Screens/factorCreate/factor_create_screen.dart' as _i1;
 import 'package:kpi_app/Screens/Measure/page_manage.dart' as _i3;
 import 'package:kpi_app/Screens/OnBoardingScreens/on_boarding.dart' as _i2;
@@ -18,10 +19,15 @@ abstract class $AppRouter extends _i4.RootStackRouter {
 
   @override
   final Map<String, _i4.PageFactory> pagesMap = {
-    FactorCreate.name: (routeData) {
+    FactorCreateRoute.name: (routeData) {
+      final args = routeData.argsAs<FactorCreateRouteArgs>(
+          orElse: () => const FactorCreateRouteArgs());
       return _i4.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i1.FactorCreate(),
+        child: _i1.FactorCreateScreen(
+          key: args.key,
+          urlPath: args.urlPath,
+        ),
       );
     },
     OnBoardingRoute.name: (routeData) {
@@ -40,17 +46,41 @@ abstract class $AppRouter extends _i4.RootStackRouter {
 }
 
 /// generated route for
-/// [_i1.FactorCreate]
-class FactorCreate extends _i4.PageRouteInfo<void> {
-  const FactorCreate({List<_i4.PageRouteInfo>? children})
-      : super(
-          FactorCreate.name,
+/// [_i1.FactorCreateScreen]
+class FactorCreateRoute extends _i4.PageRouteInfo<FactorCreateRouteArgs> {
+  FactorCreateRoute({
+    _i5.Key? key,
+    String? urlPath,
+    List<_i4.PageRouteInfo>? children,
+  }) : super(
+          FactorCreateRoute.name,
+          args: FactorCreateRouteArgs(
+            key: key,
+            urlPath: urlPath,
+          ),
           initialChildren: children,
         );
 
-  static const String name = 'FactorCreate';
+  static const String name = 'FactorCreateRoute';
 
-  static const _i4.PageInfo<void> page = _i4.PageInfo<void>(name);
+  static const _i4.PageInfo<FactorCreateRouteArgs> page =
+      _i4.PageInfo<FactorCreateRouteArgs>(name);
+}
+
+class FactorCreateRouteArgs {
+  const FactorCreateRouteArgs({
+    this.key,
+    this.urlPath,
+  });
+
+  final _i5.Key? key;
+
+  final String? urlPath;
+
+  @override
+  String toString() {
+    return 'FactorCreateRouteArgs{key: $key, urlPath: $urlPath}';
+  }
 }
 
 /// generated route for

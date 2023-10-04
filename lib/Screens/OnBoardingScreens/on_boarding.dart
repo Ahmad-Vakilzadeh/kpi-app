@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:kpi_app/Screens/Measure/page_manage.dart';
 import 'package:kpi_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 @RoutePage()
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -14,6 +16,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   late bool isFirstOneOpen = false;
   late bool isSecondOneOpen = false;
   late bool isLastOneOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _onBoardingChecked();
+    });
+  }
+
+  Future<void> _onBoardingChecked() async {
+    SharedPreferences checked = await SharedPreferences.getInstance();
+    // bool checker = checked.getBool("checked") ?? false;
+    // if (checker) {
+    //   appRouter.replace(const RouteMange());
+    // } else {
+    await checked.setBool('checked', true);
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +115,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(
                                             vertical: 30, horizontal: 25),
-                                        child: Column(
+                                        child: const Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
-                                          children: const [
+                                          children: [
                                             Text(
                                               "در صفحه اندازه گیری میتوانید مشخصات لوله مورد نظر خود را وارد نموده و نتیجه آن را ملاحظه نمایید",
                                               textAlign: TextAlign.right,
@@ -157,8 +177,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                           width: double.infinity,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 30),
-                                          child: Column(
-                                            children: const [
+                                          child: const Column(
+                                            children: [
                                               Text(
                                                 "از تمام استاندارد های لوله های پلی اتیلن باخبر شوید",
                                                 textAlign: TextAlign.right,
@@ -216,10 +236,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 20, vertical: 30),
-                                        child: Column(
+                                        child: const Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
-                                          children: const [
+                                          children: [
                                             Text(
                                               "شرکت پلی اتیلن کرمان",
                                               textAlign: TextAlign.right,
@@ -282,7 +302,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 25,),
+                    const SizedBox(
+                      width: 25,
+                    ),
                     const Text(
                       "ورود به برنامه",
                       textAlign: TextAlign.right,
