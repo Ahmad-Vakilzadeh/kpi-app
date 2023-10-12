@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:encrypt/encrypt.dart' as e;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:intl/intl.dart' as intl;
 import 'package:kpi_app/Screens/factorCreate/pdf_create.dart';
@@ -12,7 +13,6 @@ import 'package:kpi_app/Screens/factorCreate/widgets/factor_create_card.dart';
 import 'package:kpi_app/Screens/factorCreate/widgets/search_bar.dart';
 
 import 'package:kpi_app/Widgets/input_measure.dart';
-import 'package:kpi_app/main.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../Engine/measuring.dart';
@@ -451,6 +451,46 @@ class _FactorCreateScreenState extends State<FactorCreateScreen>
           backgroundColor: Colors.white,
           elevation: 5,
           centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () async {
+                late double lodenMoneyCount = double.parse(
+                    lodenPriceController.value.text.replaceAll(",", ""));
+                late double moneyCountSecondDialogTxt = double.parse(
+                    moneyCountSecondDialog.value.text.replaceAll(",", ""));
+                late double moneyCountDialogTxt = double.parse(
+                    moneyCountDialog.value.text.replaceAll(",", ""));
+                ClipboardData? cdata =
+                await Clipboard.getData(Clipboard.kTextPlain);
+                final String encryptedMessage = cdata!.text as String;
+                String linkChecker = "${encryptedMessage.split("/").sublist(0,3).join("/")}/";
+                String requestEncrypted = encryptedMessage.split("/").sublist(2).join("/").replaceFirst("kpi.link/", "");
+                print(linkChecker);
+                print(requestEncrypted);
+                final String usingString = _decryptMessage(requestEncrypted);
+
+                String check = "Https://kpi.link/";
+                List<String> result = usingString.split("\n");
+                if (linkChecker == check) {
+                  // ignore: use_build_context_synchronously
+                  await showFileLoadDialog(context);
+                  await processCsv(result, moneyCountDialogTxt, lodenMoneyCount,
+                      moneyCountDialogTxt);
+                  moneyCountDialog.clear();
+                  lodenPriceController.clear();
+                  moneyCountSecondDialog.clear();
+                } else {
+                  // ignore: use_build_context_synchronously
+                  showCustomerTextWarning(
+                      context, "مشکل متن", "متن کپی شده اشتباه میباشد");
+                }
+              },
+              icon: const Icon(
+                Icons.file_download_outlined,
+                color: kShadeDarkColor,
+              ),
+            ),
+          ],
           title: const Text(
             "صدور پیش فاکتور",
             style: TextStyle(
