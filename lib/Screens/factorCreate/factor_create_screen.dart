@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:encrypt/encrypt.dart' as e;
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' as intl;
@@ -79,6 +80,15 @@ class _FactorCreateScreenState extends State<FactorCreateScreen>
       }
     });
   }
+  String _decryptMessage(String encryptedMessage) {
+    final key = e.Key.fromUtf8('1234574677475848283748374833373a');
+    final iv = e.IV.fromUtf8("khersNeverDie");
+
+    final encrypter = e.Encrypter(e.AES(key));
+    final encrypted = e.Encrypted.from64(encryptedMessage);
+
+    return encrypter.decrypt(encrypted, iv: iv);
+  }
 
   _checkIfLink(String input) async {
     late double lodenMoneyCount =
@@ -88,14 +98,9 @@ class _FactorCreateScreenState extends State<FactorCreateScreen>
     late double moneyCountDialogTxt =
         double.parse(moneyCountDialog.value.text.replaceAll(",", ""));
 
-    String check = "";
-    input = input.replaceAll("bbb", "\n");
-    input = input.replaceAll("ccc", " ");
+    input = _decryptMessage(input);
 
-    print(input);
     List<String> result = input.split("\n");
-    print(result);
-    print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 
     // ignore: use_build_context_synchronously
     await showFileLoadDialog(context);
