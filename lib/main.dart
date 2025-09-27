@@ -12,10 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 final AppRouter appRouter = AppRouter();
 
 void main() {
-// Subscribe to all events when app is started.
-// (Use allStringLinkStream to get it as [String])
-
   WidgetsFlutterBinding.ensureInitialized();
+  //what is this chrome
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(const MyApp());
